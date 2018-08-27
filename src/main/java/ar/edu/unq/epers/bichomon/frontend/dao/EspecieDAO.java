@@ -1,8 +1,8 @@
 package ar.edu.unq.epers.bichomon.frontend.dao;
 
-import ar.edu.unq.epers.bichomon.backend.dao.ConnectionBlock;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
+import ar.edu.unq.epers.bichomon.backend.service.ConectionService;
 
 import java.sql.*;
 import java.util.List;
@@ -13,7 +13,7 @@ public class EspecieDAO implements ar.edu.unq.epers.bichomon.backend.dao.Especie
     public void guardar(Especie especie)
     {
         //Llama al Mensaje de ejecutar conexion y se le pasa el pedazo de codigo a ejecutar con el parametro que va a recibir
-        this.executeWithConnection (conn -> {
+        new ConectionService().executeWithConnection (conn -> {
                                             PreparedStatement ps = conn.prepareStatement("INSERT INTO especie (id, nombre, altura, peso, energiaInicial, tipo, urlFoto, cantidadBichos) VALUES (?,?,?,?,?,?,?, ?)");
                                             ps.setInt   (1, especie.getId());
                                             ps.setString(2, especie.getNombre());
@@ -41,7 +41,7 @@ public class EspecieDAO implements ar.edu.unq.epers.bichomon.backend.dao.Especie
     @Override
     public Especie recuperar(String nombreEspecie)
     {
-        return this.executeWithConnection(
+        return new ConectionService().executeWithConnection(
                                     conn ->{
                                             PreparedStatement ps = conn.prepareStatement("SELECT id, nombre, altura, peso, energiaInicial, tipo, urlFoto, cantidadBichos FROM especie WHERE nombre = ?");
                                             ps.setString(1, nombreEspecie); //Se setea el dato a utilizar en la busqueda
@@ -79,8 +79,9 @@ public class EspecieDAO implements ar.edu.unq.epers.bichomon.backend.dao.Especie
 
     public void borrarEspecie(String especieABorrar)
     {
+
         //Llama al Mensaje de ejecutar conexion y se le pasa el pedazo de codigo a ejecutar con el parametro que va a recibir
-        this.executeWithConnection (conn -> {
+        new ConectionService().executeWithConnection (conn -> {
                     PreparedStatement ps = conn.prepareStatement("DELETE FROM especie WHERE nombre = ?");
                     ps.setString(1, especieABorrar); //Se setea el dato a utilizar en la busqueda
                     ps.execute();
@@ -95,44 +96,7 @@ public class EspecieDAO implements ar.edu.unq.epers.bichomon.backend.dao.Especie
 
 
 
-    /**
-     * Ejecuta un bloque de codigo contra una conexion.
-     */
-    private <T> T executeWithConnection(ConnectionBlock<T> bloque)
-    {
-        Connection connection = this.openConnection();
-        try
-        {   return bloque.executeWith(connection);  }
-        catch (SQLException e)
-        {   throw new RuntimeException("Error no esperado", e); }
-        finally
-        {   this.closeConnection(connection);   }
-    }
 
-    /**
-     * Establece una conexion a la url especificada
-     * @return la conexion establecida
-     */
-    private Connection openConnection() {
-        try {
-            //La url de conexion no deberia estar harcodeada aca
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/bichomon_tp1_jdbc?user=root&password=root&serverTimezone=UTC");
-        } catch (SQLException e) {
-            throw new RuntimeException("No se puede establecer una conexion", e);
-        }
-    }
-
-    /**
-     * Cierra una conexion con la base de datos (libera los recursos utilizados por la misma)
-     * @param connection - la conexion a cerrar.
-     */
-    private void closeConnection(Connection connection) {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al cerrar la conexion", e);
-        }
-    }
 
 
 }

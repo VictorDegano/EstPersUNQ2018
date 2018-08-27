@@ -68,5 +68,8 @@ public class EspecieDAOTest {
         assertEquals(especiePrueba.getUrlFoto(), especieDesdeBD.getUrlFoto());
         assertEquals(especiePrueba.getEnergiaInicial(), especieDesdeBD.getEnergiaInicial());
         assertEquals(especiePrueba.getCantidadBichos(), especieDesdeBD.getCantidadBichos());
+
+        //TEAR DOWN
+        especieDAOSut.borrarEspecie("Nievemon");
     }
 }
