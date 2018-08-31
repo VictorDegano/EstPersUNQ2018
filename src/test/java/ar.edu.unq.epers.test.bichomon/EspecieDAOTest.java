@@ -72,4 +72,30 @@ public class EspecieDAOTest {
         //TEAR DOWN
         especieDAOSut.borrarEspecie("Nievemon");
     }
+
+    @Test
+    public void cuandoSeActualizaUnaEspecieSeHaceDeFormaCorrecta(){
+        //Nueva especie para actualizar
+        Especie especieTest = new Especie(15,"pikachu", TipoBicho.ELECTRICIDAD);
+        especieTest.setAltura(12);
+        especieTest.setPeso(100);
+        especieTest.setEnergiaIncial(99);
+        especieTest.setUrlFoto("/image/Nievemon.jpg");
+
+        // Exercise(Then)
+        especieDAOSut.guardar(especiePrueba);
+        especieDAOSut.actualizar(especieTest);
+        Especie especieDesdeDB = especieDAOSut.recuperar("pikachu");
+
+        //Test (WHEN)
+        assertEquals(especieTest.getId(),especieDesdeDB.getId());
+        assertEquals(especieTest.getNombre(),especieDesdeDB.getNombre());
+        assertEquals(especieTest.getAltura(),especieDesdeDB.getAltura());
+        assertEquals(especieTest.getPeso(),especieDesdeDB.getPeso());
+        assertEquals(especieTest.getTipo(),especieDesdeDB.getTipo());
+        assertEquals(especieTest.getUrlFoto(),especieDesdeDB.getUrlFoto());
+        assertEquals(especieTest.getEnergiaInicial(),especieDesdeDB.getEnergiaInicial());
+        assertEquals(especieTest.getCantidadBichos(),especieDesdeDB.getCantidadBichos());
+        especieDAOSut.borrarEspecie("pikachu");
+    }
 }

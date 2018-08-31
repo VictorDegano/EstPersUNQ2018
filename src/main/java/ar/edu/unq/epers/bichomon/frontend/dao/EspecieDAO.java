@@ -35,9 +35,26 @@ public class EspecieDAO implements ar.edu.unq.epers.bichomon.backend.dao.Especie
     }
 
     @Override
-    public void actualizar(Especie especie)
-    {   throw new UnsupportedOperationException("Not Yet Implemented"); }
+    public void actualizar(Especie especie) {
+        new ConectionService().executeWithConnection (conn -> { PreparedStatement ps = conn.prepareStatement("UPDATE especie SET nombre = ?, altura = ?, peso = ?, energiaInicial =?, tipo = ? , urlFoto = ? ,cantidadBichos = ? WHERE id = ? " );
 
+                    ps.setString(1,especie.getNombre());
+                    ps.setInt(2,especie.getAltura());
+                    ps.setInt(3,especie.getPeso());
+                    ps.setInt(4,especie.getEnergiaInicial());
+                    ps.setString(5,especie.getTipo().name());
+                    ps.setString(6,especie.getUrlFoto());
+                    ps.setInt(7,especie.getCantidadBichos());
+                    ps.setInt(8,especie.getId());
+
+                    ps.execute();
+                    if (ps.getUpdateCount() != 1)
+                    {   throw new RuntimeException("No se inserto la Especie" + especie.getNombre());  }
+                    ps.close();
+                    return null;
+                }
+        );
+    }
     @Override
     public Especie recuperar(String nombreEspecie)
     {
