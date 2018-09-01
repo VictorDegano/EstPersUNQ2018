@@ -1,7 +1,7 @@
 DROP SCHEMA IF EXISTS bichomon_tp1_jdbc;
 CREATE SCHEMA bichomon_tp1_jdbc;
 
-USE bichomon_tp1_jdbc;
+USE bichomon_tp1_jdbc ;
 
 CREATE TABLE especie (
   id int NOT NULL UNIQUE,

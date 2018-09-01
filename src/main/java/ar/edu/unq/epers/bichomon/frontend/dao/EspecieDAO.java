@@ -5,6 +5,7 @@ import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.service.ConectionService;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EspecieDAO implements ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO {
@@ -90,7 +91,37 @@ public class EspecieDAO implements ar.edu.unq.epers.bichomon.backend.dao.Especie
 
     @Override
     public List<Especie> recuperarTodos()
-    {   throw new UnsupportedOperationException("Not Yet Implemented"); }
+    {
+        return new ConectionService().executeWithConnection(
+                conn ->{
+                    PreparedStatement ps = conn.prepareStatement("SELECT * FROM especie");
+
+                    ResultSet resultSet = ps.executeQuery();
+
+                    List<Especie> especiesRecuperadas = new ArrayList<Especie>();
+                    Especie especie;
+                    while (resultSet.next())
+                    {   //si personaje no es null aca significa que el while dio mas de una vuelta, eso
+                        //suele pasar cuando el resultado (resultset) tiene mas de un elemento.
+                        especie = new Especie(resultSet.getInt("id"),resultSet.getString("nombre"),
+
+                                TipoBicho.valueOf(resultSet.getString("tipo")));
+
+                        especie.setAltura(resultSet.getInt("altura"));
+                        especie.setPeso(resultSet.getInt("peso"));
+                        especie.setEnergiaIncial(resultSet.getInt("energiaInicial"));
+                        especie.setUrlFoto(resultSet.getString("urlFoto"));
+                        especie.setCantidadBichos(resultSet.getInt("cantidadBichos"));
+                        especiesRecuperadas.add(especie);
+
+
+                    }
+
+                    ps.close();
+                    return especiesRecuperadas;
+                }
+        );
+    }
 
 
 

@@ -7,18 +7,20 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class EspecieDAOTest {
 
-    private EspecieDAO  especieDAOSut;
-    private Especie     especiePrueba;
+    private EspecieDAO especieDAOSut;
+    private Especie especiePrueba;
 
     @Before
-    public void setUp() throws Exception
-    {
-        especieDAOSut   = new EspecieDAO();
-        especiePrueba   = new Especie(15, "Nievemon", TipoBicho.AGUA);
+    public void setUp() throws Exception {
+        especieDAOSut = new EspecieDAO();
+        especiePrueba = new Especie(15, "Nievemon", TipoBicho.AGUA);
         especiePrueba.setAltura(12);
         especiePrueba.setPeso(100);
         especiePrueba.setEnergiaIncial(99);
@@ -26,17 +28,16 @@ public class EspecieDAOTest {
     }
 
     @After
-    public void tearDown() throws Exception
-    {   }
+    public void tearDown() throws Exception {
+    }
 
     @Test
-    public void cuando_se_recupera_una_especie_esta_tiene_los_datos_correctos()
-    {
+    public void cuando_se_recupera_una_especie_esta_tiene_los_datos_correctos() {
         // Setup(Given)
         Especie especieDesdeBD;
 
         // Exercise(Then)
-        especieDesdeBD  = especieDAOSut.recuperar("Fortmon");
+        especieDesdeBD = especieDAOSut.recuperar("Fortmon");
 
         // Test(When)
         assertEquals(Integer.valueOf(7), especieDesdeBD.getId());
@@ -50,14 +51,13 @@ public class EspecieDAOTest {
     }
 
     @Test
-    public void cuando_se_guarda_una_especie_se_hace_de_forma_correcta()
-    {
+    public void cuando_se_guarda_una_especie_se_hace_de_forma_correcta() {
         // Setup(Given)
         Especie especieDesdeBD = null;
 
         // Exercise(Then)
         especieDAOSut.guardar(especiePrueba);
-        especieDesdeBD  = especieDAOSut.recuperar("Nievemon");
+        especieDesdeBD = especieDAOSut.recuperar("Nievemon");
 
         // Test(When)
         assertEquals(especiePrueba.getId(), especieDesdeBD.getId());
@@ -74,9 +74,9 @@ public class EspecieDAOTest {
     }
 
     @Test
-    public void cuandoSeActualizaUnaEspecieSeHaceDeFormaCorrecta(){
+    public void cuandoSeActualizaUnaEspecieSeHaceDeFormaCorrecta() {
         //Nueva especie para actualizar
-        Especie especieTest = new Especie(15,"pikachu", TipoBicho.ELECTRICIDAD);
+        Especie especieTest = new Especie(15, "pikachu", TipoBicho.ELECTRICIDAD);
         especieTest.setAltura(12);
         especieTest.setPeso(100);
         especieTest.setEnergiaIncial(99);
@@ -88,14 +88,41 @@ public class EspecieDAOTest {
         Especie especieDesdeDB = especieDAOSut.recuperar("pikachu");
 
         //Test (WHEN)
-        assertEquals(especieTest.getId(),especieDesdeDB.getId());
-        assertEquals(especieTest.getNombre(),especieDesdeDB.getNombre());
-        assertEquals(especieTest.getAltura(),especieDesdeDB.getAltura());
-        assertEquals(especieTest.getPeso(),especieDesdeDB.getPeso());
-        assertEquals(especieTest.getTipo(),especieDesdeDB.getTipo());
-        assertEquals(especieTest.getUrlFoto(),especieDesdeDB.getUrlFoto());
-        assertEquals(especieTest.getEnergiaInicial(),especieDesdeDB.getEnergiaInicial());
-        assertEquals(especieTest.getCantidadBichos(),especieDesdeDB.getCantidadBichos());
+        assertEquals(especieTest.getId(), especieDesdeDB.getId());
+        assertEquals(especieTest.getNombre(), especieDesdeDB.getNombre());
+        assertEquals(especieTest.getAltura(), especieDesdeDB.getAltura());
+        assertEquals(especieTest.getPeso(), especieDesdeDB.getPeso());
+        assertEquals(especieTest.getTipo(), especieDesdeDB.getTipo());
+        assertEquals(especieTest.getUrlFoto(), especieDesdeDB.getUrlFoto());
+        assertEquals(especieTest.getEnergiaInicial(), especieDesdeDB.getEnergiaInicial());
+        assertEquals(especieTest.getCantidadBichos(), especieDesdeDB.getCantidadBichos());
         especieDAOSut.borrarEspecie("pikachu");
     }
+
+    @Test
+    public void seRecuperanTodasLasEspeciesDeLaBaseDeDatos(){
+        List<Especie> especies = especieDAOSut.recuperarTodos();
+        List<String> nombreEspecies = new ArrayList<String>();
+        nombreEspecies.add("Amarillomon");
+        nombreEspecies.add("Dientemon");
+        nombreEspecies.add("Fantasmon");
+        nombreEspecies.add("Fortmon");
+        nombreEspecies.add("Rojomon");
+        nombreEspecies.add("Tierramon");
+        nombreEspecies.add("Vampiron");
+        nombreEspecies.add("Verdemon");
+        assertTrue(nombreEspecies.contains(especies.get(0).getNombre()));
+        assertTrue(nombreEspecies.contains(especies.get(1).getNombre()));
+        assertTrue(nombreEspecies.contains(especies.get(2).getNombre()));
+        assertTrue(nombreEspecies.contains(especies.get(3).getNombre()));
+        assertTrue(nombreEspecies.contains(especies.get(4).getNombre()));
+        assertTrue(nombreEspecies.contains(especies.get(5).getNombre()));
+        assertTrue(nombreEspecies.contains(especies.get(6).getNombre()));
+        assertTrue(nombreEspecies.contains(especies.get(7).getNombre()));
+
+
+
+        assertEquals(8,especies.size());
+    }
 }
+
