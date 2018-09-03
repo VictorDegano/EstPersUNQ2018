@@ -2,6 +2,7 @@ package ar.edu.unq.epers.test.bichomon;
 
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
+import ar.edu.unq.epers.bichomon.backend.service.data.DataServiceImplementation;
 import ar.edu.unq.epers.bichomon.frontend.dao.EspecieDAO;
 import org.junit.After;
 import org.junit.Before;
@@ -14,22 +15,27 @@ import static org.junit.Assert.*;
 
 public class EspecieDAOTest {
 
-    private EspecieDAO especieDAOSut;
-    private Especie especiePrueba;
+    private EspecieDAO  especieDAOSut;
+    private Especie     especiePrueba;
+    private DataServiceImplementation dataService;
 
     @Before
-    public void setUp() throws Exception {
-        especieDAOSut = new EspecieDAO();
-        especiePrueba = new Especie(15, "Nievemon", TipoBicho.AGUA);
+    public void setUp() throws Exception
+    {
+        dataService     = new DataServiceImplementation();
+        especieDAOSut   = new EspecieDAO();
+        especiePrueba   = new Especie(15, "Nievemon", TipoBicho.AGUA);
         especiePrueba.setAltura(12);
         especiePrueba.setPeso(100);
         especiePrueba.setEnergiaIncial(99);
         especiePrueba.setUrlFoto("/image/Nievemon.jpg");
+        dataService.crearSetDatosIniciales();
     }
 
     @After
-    public void tearDown() throws Exception {
-    }
+    public void tearDown() throws Exception
+    {   dataService.eliminarDatos();    }
+
 
     @Test
     public void cuando_se_recupera_una_especie_esta_tiene_los_datos_correctos() {
