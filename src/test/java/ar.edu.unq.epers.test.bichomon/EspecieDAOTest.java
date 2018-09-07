@@ -22,8 +22,8 @@ public class EspecieDAOTest {
     @Before
     public void setUp() throws Exception
     {
-        dataService     = new DataServiceImplementation();
         especieDAOSut   = new EspecieDAO();
+        dataService     = new DataServiceImplementation(especieDAOSut);
         especiePrueba   = new Especie(15, "Nievemon", TipoBicho.AGUA);
         especiePrueba.setAltura(12);
         especiePrueba.setPeso(100);
@@ -105,6 +105,32 @@ public class EspecieDAOTest {
         especieDAOSut.borrarEspecie("pikachu");
     }
 
+    @Test(expected = RuntimeException.class)
+    public void cuando_se_guarda_una_especie_existente_la_Base_Chilla() {
+        // Setup(Given)
+        Especie especieDesdeBD = null;
+
+        // Exercise(Then)
+        especieDAOSut.guardar(especiePrueba);
+        Especie copiaE=especiePrueba;
+        especieDAOSut.guardar(copiaE);
+        //especieDesdeBD = especieDAOSut.recuperar("Nievemon");
+
+        // Test(When)
+        assertTrue(true);
+        /*assertEquals(especiePrueba.getId(), especieDesdeBD.getId());
+        assertEquals(especiePrueba.getNombre(), especieDesdeBD.getNombre());
+        assertEquals(especiePrueba.getAltura(), especieDesdeBD.getAltura());
+        assertEquals(especiePrueba.getPeso(), especieDesdeBD.getPeso());
+        assertEquals(especiePrueba.getTipo(), especieDesdeBD.getTipo());
+        assertEquals(especiePrueba.getUrlFoto(), especieDesdeBD.getUrlFoto());
+        assertEquals(especiePrueba.getEnergiaInicial(), especieDesdeBD.getEnergiaInicial());
+        assertEquals(especiePrueba.getCantidadBichos(), especieDesdeBD.getCantidadBichos());
+        */
+        //TEAR DOWN
+        especieDAOSut.borrarEspecie("Nievemon");
+    }
+
     @Test
     public void seRecuperanTodasLasEspeciesDeLaBaseDeDatos(){
         List<Especie> especies = especieDAOSut.recuperarTodos();
@@ -130,5 +156,6 @@ public class EspecieDAOTest {
 
         assertEquals(8,especies.size());
     }
+
 }
 

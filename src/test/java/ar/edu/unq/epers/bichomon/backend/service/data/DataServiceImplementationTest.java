@@ -18,8 +18,9 @@ public class DataServiceImplementationTest {
     @Before
     public void setUp() throws Exception
     {
-        dataServiceSUT  = new DataServiceImplementation();
+
         especieDao      = new EspecieDAO();
+        dataServiceSUT  = new DataServiceImplementation(especieDao);
         especiePrueba   = new Especie(15, "Nievemon", TipoBicho.AGUA);
         especiePrueba.setAltura(12);
         especiePrueba.setPeso(100);
