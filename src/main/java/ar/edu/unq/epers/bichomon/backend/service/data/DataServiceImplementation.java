@@ -6,8 +6,8 @@ public class DataServiceImplementation implements DataService
 {
     private EspecieDAO especieDAO;
 
-    public DataServiceImplementation()
-    {   especieDAO = new EspecieDAO();  }
+    public DataServiceImplementation(EspecieDAO unEspecieDao)
+    {   especieDAO = unEspecieDao;  }
 
     @Override
     public void eliminarDatos()
