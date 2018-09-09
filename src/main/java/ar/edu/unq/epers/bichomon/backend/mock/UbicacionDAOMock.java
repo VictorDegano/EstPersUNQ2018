@@ -28,11 +28,16 @@ public class UbicacionDAOMock implements UbicacionDAO
         DATA.put(unaUbicacionDojo.getNombre(), unaUbicacionDojo);
     }
 
+    @Override
     public void guardar(Ubicacion unaUbicacion) {
         DATA.put(unaUbicacion.getNombre(), unaUbicacion);
     }
 
+    @Override
     public Ubicacion recuperar(String nombre) {
         return DATA.get(nombre);
     }
+
+    @Override
+    public void actualizar(Ubicacion ubicacion)  { DATA.put(ubicacion.getNombre(), ubicacion);}
 }

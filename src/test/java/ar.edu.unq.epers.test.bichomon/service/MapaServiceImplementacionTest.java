@@ -19,6 +19,7 @@ public class MapaServiceImplementacionTest
     private EntrenadorDAO entrenadorDAO;
     private UbicacionDAO ubicacionDAO;
     private Ubicacion unaUbicacion;
+    private Ubicacion unaUbicacionNueva;
     private Entrenador pepePrueba;
 
     @Before
@@ -30,6 +31,8 @@ public class MapaServiceImplementacionTest
         pepePrueba      = new Entrenador();
         unaUbicacion    = new Ubicacion();
         unaUbicacion.setNombre("El Origen 2");
+        unaUbicacionNueva = new Ubicacion();
+        unaUbicacionNueva.setNombre("Volcano");
 
         pepePrueba.setNombre("Pepe DePrueba");
         pepePrueba.setUbicacion(unaUbicacion);
@@ -37,19 +40,16 @@ public class MapaServiceImplementacionTest
 
         entrenadorDAO.guardar(pepePrueba);
         ubicacionDAO.guardar(unaUbicacion);
+        ubicacionDAO.guardar(unaUbicacionNueva);
     }
 
     @After
     public void tearDown() throws Exception {   }
 
     @Test
-    public void siElMapaServiceMueveUnEntrenadorAUnaNuevaUbicacionLaViejaUbicacion()
+    public void siElMapaServiceMueveUnEntrenadorAUnaNuevaUbicacionSeActualizanSusDatos()
     {
         //Setup(Given)
-        Ubicacion unaUbicacionNueva = new Ubicacion();
-        unaUbicacionNueva.setNombre("Volcano");
-        ubicacionDAO.guardar(unaUbicacionNueva);
-
         //Exercise(When)
         mapaServiceSUT.mover("Pepe DePrueba", "Volcano");
 
@@ -58,6 +58,47 @@ public class MapaServiceImplementacionTest
         assertEquals(1, unaUbicacionNueva.getEntrenadores().size());
         assertTrue(unaUbicacion.getEntrenadores().isEmpty());
         assertEquals("Volcano", pepePrueba.getUbicacion().getNombre() );
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void siElMapaServiceIntentaMoverAUnEntrenadorAUnaUbicacionQueNoExisteTiraUnaExcepcion()
+    {
+        //Setup(Given)
+        //Exercise(When)
+        mapaServiceSUT.mover("Pepe DePrueba", "Volcanos");
+
+        //Test(Then)
+        assertTrue(unaUbicacion.getEntrenadores().isEmpty());
+        assertEquals("Volcanos", pepePrueba.getUbicacion().getNombre() );
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void siElMapaServiceIntentaMoverAUnEntrenadorQueNoExisteTiraUnaExcepcion()
+    {
+        //Setup(Given)
+        //Exercise(When)
+        mapaServiceSUT.mover("Pepe", "Volcano");
+
+        //Test(Then)
+        assertTrue(unaUbicacion.getEntrenadores().isEmpty());
+        assertEquals("Volcano", pepePrueba.getUbicacion().getNombre() );
+    }
+
+    @Test
+    public void siOcurreUnaExcepcionAlMoverElEntrenadorYLasUbicacionesNoSonAfectadas()
+    {
+        //Setup(Given)
+        String mensajeDeError    = "";
+        //Exercise(When)
+        try
+        {   mapaServiceSUT.mover("Pepe", "Volcanos");    }
+        catch (RuntimeException e)
+        {   mensajeDeError  = e.getMessage();   }
+
+        //Test(Then)
+        assertFalse(unaUbicacion.getEntrenadores().isEmpty());
+        assertEquals("El Origen 2", pepePrueba.getUbicacion().getNombre() );
+        assertEquals("Nombre de entrenador: Pepe o nombre de ubicacion: Volcanos incorrectos", mensajeDeError);
     }
 
     @Test

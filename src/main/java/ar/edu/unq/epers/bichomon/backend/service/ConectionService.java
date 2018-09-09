@@ -30,7 +30,7 @@ public class ConectionService
     private Connection openConnection() {
         try {
             //La url de conexion no deberia estar harcodeada aca
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/bichomon_tp1_jdbc?user=root&password=Anhur3496&serverTimezone=UTC&useSSL=false");
+            return DriverManager.getConnection("jdbc:mysql://localhost:3306/bichomon_tp1_jdbc?user=root&password=root&serverTimezone=UTC&useSSL=false");
         } catch (SQLException e) {
             throw new RuntimeException("No se puede establecer una conexion", e);
         }

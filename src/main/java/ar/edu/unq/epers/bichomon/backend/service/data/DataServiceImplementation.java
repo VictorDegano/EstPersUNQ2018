@@ -1,19 +1,19 @@
 package ar.edu.unq.epers.bichomon.backend.service.data;
 
-import ar.edu.unq.epers.bichomon.frontend.dao.EspecieDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.jdbc.EspecieDAOJDBC;
 
 public class DataServiceImplementation implements DataService
 {
-    private EspecieDAO especieDAO;
+    private EspecieDAOJDBC especieDAOJDBC;
 
-    public DataServiceImplementation(EspecieDAO unEspecieDao)
-    {   especieDAO = unEspecieDao;  }
+    public DataServiceImplementation(EspecieDAOJDBC unEspecieDAOJDBC)
+    {   especieDAOJDBC = unEspecieDAOJDBC;  }
 
     @Override
     public void eliminarDatos()
-    {   especieDAO.limpiarTabla();  }
+    {   especieDAOJDBC.limpiarTabla();  }
 
     @Override
     public void crearSetDatosIniciales()
-    {   especieDAO.crerDatosIniciales();    }
+    {   especieDAOJDBC.crerDatosIniciales();    }
 }

@@ -21,9 +21,9 @@
 		
 		<property name="hibernate.hbm2ddl.auto">create-drop</property>
 
-<!--	Aca se le dice que clases vamos a querer persistir
-		<mapping class="ar.edu.unq.unidad3.wop.modelo.Personaje" />
-		<mapping class="ar.edu.unq.unidad3.wop.modelo.Item" />-->
+<!--	Aca se le dice que clases vamos a querer persistir -->
+		<mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion" />
+		<mapping class="ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador" />
 	
 	</session-factory>
 </hibernate-configuration>

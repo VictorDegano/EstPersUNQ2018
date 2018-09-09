@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.bichomon.frontend.dao;
+package ar.edu.unq.epers.bichomon.backend.dao.jdbc;
 
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EspecieDAO implements ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO {
+public class EspecieDAOJDBC implements ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO {
 
     @Override
     public void guardar(Especie especie)
