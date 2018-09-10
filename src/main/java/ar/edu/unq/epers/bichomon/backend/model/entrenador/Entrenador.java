@@ -8,9 +8,9 @@ import javax.persistence.*;
 public class Entrenador
 {
     @Id
-    private String nombre       = "";
-    private int experiencia     = 0;
-    private int nivel           = 1;
+    private String nombre;
+    private int experiencia;
+    private int nivel;
 
     @ManyToOne
     private Ubicacion ubicacion = null;

@@ -13,7 +13,7 @@ import java.util.List;
 public class Ubicacion
 {
     @Id
-    private String nombre                   = "";
+    private String nombre;
     @OneToMany(mappedBy="ubicacion", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Entrenador> entrenadores   = new ArrayList<>();
 

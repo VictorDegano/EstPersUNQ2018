@@ -5,6 +5,7 @@ import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 import ar.edu.unq.epers.bichomon.backend.service.runner.SessionFactoryProvider;
+import extra.Bootstrap;
 import extra.Limpiador;
 import org.junit.After;
 import org.junit.Before;
@@ -17,14 +18,16 @@ import static org.junit.Assert.*;
 public class UbicacionDAOHibernateTest {
 
     UbicacionDAOHibernate   ubicacionDAOSut;
+    private Bootstrap bootstraper;
 
     @Before
     public void setUp() throws Exception
     {
         SessionFactoryProvider.getInstance();
         ubicacionDAOSut     = new UbicacionDAOHibernate();
+        bootstraper         = new Bootstrap();
 
-        Runner.runInSession(()-> {ubicacionDAOSut.crerDatosIniciales();
+        Runner.runInSession(()-> {bootstraper.crearDatos();
                                   return null;});
     }
 
@@ -45,7 +48,7 @@ public class UbicacionDAOHibernateTest {
 
         //Test(Then)
         assertEquals("El Origen", ubicacionRecuperada.getNombre());
-        assertTrue(ubicacionRecuperada.getEntrenadores().isEmpty());
+        assertTrue(! ubicacionRecuperada.getEntrenadores().isEmpty());
     }
 
     @Test
@@ -106,13 +109,13 @@ public class UbicacionDAOHibernateTest {
     }
 
     @Test(expected = PersistenceException.class)
-    public void siSeintentaModificarElNombreUnaUbicacionGuardadaLanzaUnaExcepcion()
+    public void siSeIntentaModificarElNombreDeUnaUbicacionGuardadaLanzaUnaExcepcion()
     {
         //Setup(Given)
         Runner.runInSession(()-> {
                                     Ubicacion aModificar    = ubicacionDAOSut.recuperar("El Origen");
                                     aModificar.setNombre("Missing Name");
-                                    ubicacionDAOSut.guardar(aModificar);
+                                    ubicacionDAOSut.actualizar(aModificar);
                                     return null;
                                  });
         //Exercise(When)

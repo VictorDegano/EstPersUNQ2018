@@ -29,11 +29,16 @@ public class EntrenadorDAOMock implements EntrenadorDAO
                 ubicacionDaoMock.guardar(elOrigen);
             }
 
+    @Override
     public void guardar(Entrenador entrenador) {
         DATA.put(entrenador.getNombre(), entrenador);
     }
 
+    @Override
     public Entrenador recuperar(String nombreDelEntrenador) {
         return DATA.get(nombreDelEntrenador);
     }
+
+    @Override
+    public void actualizar(Entrenador entrenador) { DATA.put(entrenador.getNombre(), entrenador);   }
 }

@@ -47,15 +47,4 @@ public class UbicacionDAOHibernate implements UbicacionDAO
         session.update(ubicacion);
     }
 
-    public void crerDatosIniciales()
-    {
-        Ubicacion ubicacion1  = new Ubicacion();
-        ubicacion1.setNombre("El Origen");
-        Ubicacion ubicacion2  = new Ubicacion();
-        ubicacion2.setNombre("Volcano");
-
-        Session session = Runner.getCurrentSession();
-        session.save(ubicacion1);
-        session.save(ubicacion2);
-    }
 }

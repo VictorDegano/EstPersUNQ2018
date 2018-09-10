@@ -34,9 +34,9 @@ public class MapaServiceImplementacion implements MapaService
 
                                         entrenadorAMoverse.moverse(ubicacionAMoverse);
 
-                                        this.getEntrenadorDAO().guardar(entrenadorAMoverse);
-                                        this.getUbicacionDAO().guardar(ubicacionVieja);
-                                        this.getUbicacionDAO().guardar(ubicacionAMoverse);
+                                        this.getEntrenadorDAO().actualizar(entrenadorAMoverse);
+                                        this.getUbicacionDAO().actualizar(ubicacionVieja);
+                                        this.getUbicacionDAO().actualizar(ubicacionAMoverse);
                                     }
                                     else
                                     {   throw new RuntimeException("Nombre de entrenador: " + entrenador + " o nombre de ubicacion: "+ ubicacion +" incorrectos");  }

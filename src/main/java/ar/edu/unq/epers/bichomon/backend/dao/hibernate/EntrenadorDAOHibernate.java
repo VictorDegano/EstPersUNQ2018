@@ -10,22 +10,22 @@ public class EntrenadorDAOHibernate implements EntrenadorDAO {
     @Override
     public void guardar(Entrenador entrenador)
     {
-
+        Session session = Runner.getCurrentSession();
+        session.save(entrenador);
     }
 
     @Override
-    public Entrenador recuperar(String nombre) {
-        return null;
-    }
-
-    public void crerDatosIniciales()
+    public Entrenador recuperar(String nombre)
     {
-        Entrenador entrenador1  = new Entrenador();
-        entrenador1.setNombre("Pepe Pepon");
-        entrenador1.setExperiencia(0);
-        entrenador1.setNivel(1);
-
         Session session = Runner.getCurrentSession();
-        session.save(entrenador1);
+        return session.get(Entrenador.class, nombre);
     }
+
+    @Override
+    public void actualizar(Entrenador entrenador)
+    {
+        Session session = Runner.getCurrentSession();
+        session.update(entrenador);
+    }
+
 }

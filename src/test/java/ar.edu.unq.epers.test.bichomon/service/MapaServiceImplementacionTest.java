@@ -2,11 +2,15 @@ package ar.edu.unq.epers.test.bichomon.service;
 
 import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EntrenadorDAOHibernate;
+import ar.edu.unq.epers.bichomon.backend.dao.hibernate.UbicacionDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.mock.EntrenadorDAOMock;
 import ar.edu.unq.epers.bichomon.backend.mock.UbicacionDAOMock;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.MapaServiceImplementacion;
+import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
+import extra.Limpiador;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,8 +29,10 @@ public class MapaServiceImplementacionTest
     @Before
     public void setUp() throws Exception
     {
-        entrenadorDAO   = new EntrenadorDAOMock();
-        ubicacionDAO    = new UbicacionDAOMock();
+//        entrenadorDAO   = new EntrenadorDAOMock();
+//        ubicacionDAO    = new UbicacionDAOMock();
+        entrenadorDAO   = new EntrenadorDAOHibernate();
+        ubicacionDAO    = new UbicacionDAOHibernate();
         mapaServiceSUT  = new MapaServiceImplementacion(entrenadorDAO, ubicacionDAO);
         pepePrueba      = new Entrenador();
         unaUbicacion    = new Ubicacion();
@@ -38,26 +44,34 @@ public class MapaServiceImplementacionTest
         pepePrueba.setUbicacion(unaUbicacion);
         unaUbicacion.agregarEntrenador(pepePrueba);
 
-        entrenadorDAO.guardar(pepePrueba);
-        ubicacionDAO.guardar(unaUbicacion);
-        ubicacionDAO.guardar(unaUbicacionNueva);
+        Runner.runInSession(()-> {  entrenadorDAO.guardar(pepePrueba);
+                                    ubicacionDAO.guardar(unaUbicacion);
+                                    ubicacionDAO.guardar(unaUbicacionNueva);
+                                    return null; });
     }
 
     @After
-    public void tearDown() throws Exception {   }
+    public void tearDown() throws Exception
+    {   Limpiador.getInstance().limpiarTabla(); }
 
     @Test
     public void siElMapaServiceMueveUnEntrenadorAUnaNuevaUbicacionSeActualizanSusDatos()
     {
         //Setup(Given)
+        Ubicacion ubicacionNuevaBD;
+        Ubicacion ubicacionViejaBD;
+        Entrenador entrenador;
         //Exercise(When)
         mapaServiceSUT.mover("Pepe DePrueba", "Volcano");
+        ubicacionNuevaBD= Runner.runInSession(() -> { return ubicacionDAO.recuperar("Volcano");});
+        ubicacionViejaBD= Runner.runInSession(() -> { return ubicacionDAO.recuperar("El Origen 2");});
+        entrenador      = Runner.runInSession(() -> { return entrenadorDAO.recuperar("Pepe DePrueba");});
 
         //Test(Then)
-        assertFalse(unaUbicacionNueva.getEntrenadores().isEmpty());
-        assertEquals(1, unaUbicacionNueva.getEntrenadores().size());
-        assertTrue(unaUbicacion.getEntrenadores().isEmpty());
-        assertEquals("Volcano", pepePrueba.getUbicacion().getNombre() );
+        assertFalse(ubicacionNuevaBD.getEntrenadores().isEmpty());
+        assertEquals(1, ubicacionNuevaBD.getEntrenadores().size());
+        assertTrue(ubicacionViejaBD.getEntrenadores().isEmpty());
+        assertEquals("Volcano", entrenador.getUbicacion().getNombre() );
     }
 
     @Test(expected = RuntimeException.class)
@@ -68,8 +82,6 @@ public class MapaServiceImplementacionTest
         mapaServiceSUT.mover("Pepe DePrueba", "Volcanos");
 
         //Test(Then)
-        assertTrue(unaUbicacion.getEntrenadores().isEmpty());
-        assertEquals("Volcanos", pepePrueba.getUbicacion().getNombre() );
     }
 
     @Test(expected = RuntimeException.class)
@@ -80,12 +92,10 @@ public class MapaServiceImplementacionTest
         mapaServiceSUT.mover("Pepe", "Volcano");
 
         //Test(Then)
-        assertTrue(unaUbicacion.getEntrenadores().isEmpty());
-        assertEquals("Volcano", pepePrueba.getUbicacion().getNombre() );
     }
 
     @Test
-    public void siOcurreUnaExcepcionAlMoverElEntrenadorYLasUbicacionesNoSonAfectadas()
+    public void siOcurreUnaExcepcionAlMoverElEntrenadorLasUbicacionesNoSonAfectadas()
     {
         //Setup(Given)
         String mensajeDeError    = "";
