@@ -52,8 +52,18 @@ public class MapaServiceImplementacion implements MapaService
      * @return Int - Cantidad de entrenadores en la ubicacion especificada
      */
     @Override
-    public int cantidadEntrenadores(String ubicacion) {
-        return 0;
+    public int cantidadEntrenadores(String ubicacion)
+    {
+        //TODO: ¿Hacer que devuelva 0 o una excepcion si no encuentra la Ubicacion?
+        return Runner.runInSession(() -> {
+                    Ubicacion unaUbicacion = this.getUbicacionDAO().recuperar(ubicacion);
+
+                    if( unaUbicacion != null)
+                    {   return unaUbicacion.cantidadDeEntrenadores();   }
+                    else
+                    {   throw new RuntimeException("Nombre de ubicacion: "+ ubicacion +" incorrecto");  }
+                }
+        );
     }
 
     /**

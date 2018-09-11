@@ -29,8 +29,6 @@ public class MapaServiceImplementacionTest
     @Before
     public void setUp() throws Exception
     {
-//        entrenadorDAO   = new EntrenadorDAOMock();
-//        ubicacionDAO    = new UbicacionDAOMock();
         entrenadorDAO   = new EntrenadorDAOHibernate();
         ubicacionDAO    = new UbicacionDAOHibernate();
         mapaServiceSUT  = new MapaServiceImplementacion(entrenadorDAO, ubicacionDAO);
@@ -99,20 +97,58 @@ public class MapaServiceImplementacionTest
     {
         //Setup(Given)
         String mensajeDeError    = "";
+        Ubicacion ubicacionViejaBD;
+        Entrenador entrenador;
         //Exercise(When)
         try
-        {   mapaServiceSUT.mover("Pepe", "Volcanos");    }
+        {   mapaServiceSUT.mover("Pepe DePrueba", "Volcanos");    }
+        catch (RuntimeException e)
+        {   mensajeDeError  = e.getMessage();   }
+        ubicacionViejaBD= Runner.runInSession(() -> { return ubicacionDAO.recuperar("El Origen 2");});
+        entrenador      = Runner.runInSession(() -> { return entrenadorDAO.recuperar("Pepe DePrueba");});
+
+        //Test(Then)
+        assertFalse(ubicacionViejaBD.getEntrenadores().isEmpty());
+        assertEquals("El Origen 2", entrenador.getUbicacion().getNombre() );
+        assertEquals("Nombre de entrenador: Pepe DePrueba o nombre de ubicacion: Volcanos incorrectos", mensajeDeError);
+    }
+
+    @Test
+    public void siSePideLaCantidadEntrenadoresEnUnaUbicacionExistenteQueNoTieneEntrenadoresDevuelve0()
+    {
+        //Setup(Given)
+        int cantidadDeEntrenadores;
+        //Exercise(When)
+        cantidadDeEntrenadores = Runner.runInSession(() -> { return mapaServiceSUT.cantidadEntrenadores("Volcano");});
+        //Test(Then)
+        assertEquals(0, cantidadDeEntrenadores);
+    }
+
+    @Test
+    public void siSePideLaCantidadEntrenadoresEnUnaUbicacionExistenteQueTieneEntrenadoresDevuelveLaCantidadCorrespondiente()
+    {
+        //Setup(Given)
+        int cantidadDeEntrenadores;
+        //Exercise(When)
+        cantidadDeEntrenadores  = Runner.runInSession(() -> { return mapaServiceSUT.cantidadEntrenadores("El Origen 2");});
+        //Test(Then)
+        assertEquals(1, cantidadDeEntrenadores);
+    }
+
+    @Test
+    public void siSePideLaCantidadEntrenadoresEnUnaUbicacionInexistenteHayUnaExcepcion()
+    {
+        //Setup(Given)
+        String mensajeDeError    = "";
+        //Exercise(When)
+        try
+        {   mapaServiceSUT.cantidadEntrenadores("Missing Field");    }
         catch (RuntimeException e)
         {   mensajeDeError  = e.getMessage();   }
 
         //Test(Then)
-        assertFalse(unaUbicacion.getEntrenadores().isEmpty());
-        assertEquals("El Origen 2", pepePrueba.getUbicacion().getNombre() );
-        assertEquals("Nombre de entrenador: Pepe o nombre de ubicacion: Volcanos incorrectos", mensajeDeError);
+        assertEquals("Nombre de ubicacion: Missing Field incorrecto", mensajeDeError);
     }
-
-    @Test
-    public void cantidadEntrenadores() {    }
 
     @Test
     public void campeon() { }

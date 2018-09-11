@@ -34,6 +34,13 @@ public class Ubicacion
                                                         // si no tiene al elemento no hace nada
     }
 
+    /**
+     * Retorna la Cantidad de Entrenadores que se encuentran en su ubicacion.
+     * @return int - el numero de entrenadores que se encuentra en el.
+     */
+    public int cantidadDeEntrenadores()
+    {   return this.getEntrenadores().size(); }
+
 /*[--------]Constructors[--------]*/
     public Ubicacion() {    }
 
