@@ -1,8 +1,9 @@
-package ar.edu.unq.epers.bichomon.backend.service.data;
+package ar.edu.unq.epers.test.bichomon.service;
 
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
-import ar.edu.unq.epers.bichomon.frontend.dao.EspecieDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.jdbc.EspecieDAOJDBC;
+import ar.edu.unq.epers.bichomon.backend.service.data.DataServiceImplementation;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,14 +13,15 @@ import static org.junit.Assert.*;
 public class DataServiceImplementationTest {
 
     private Especie especiePrueba;
-    private EspecieDAO especieDao;
+    private EspecieDAOJDBC especieDAOJDBC;
     private DataServiceImplementation dataServiceSUT;
 
     @Before
     public void setUp() throws Exception
     {
-        dataServiceSUT  = new DataServiceImplementation();
-        especieDao      = new EspecieDAO();
+
+        especieDAOJDBC = new EspecieDAOJDBC();
+        dataServiceSUT  = new DataServiceImplementation(especieDAOJDBC);
         especiePrueba   = new Especie(15, "Nievemon", TipoBicho.AGUA);
         especiePrueba.setAltura(12);
         especiePrueba.setPeso(100);
@@ -35,11 +37,11 @@ public class DataServiceImplementationTest {
     public void dada_Una_Tabla_Con_Un_Elemento_Si_Limpio_La_Tabla_Y_Luego_Pido_El_Elemento_Devuelve_Null()
     {
         // Setup(Given)
-        especieDao.guardar(especiePrueba);
+        especieDAOJDBC.guardar(especiePrueba);
         // Exercise(When)
         dataServiceSUT.eliminarDatos();
         // Test(Then)
-        assertNull(especieDao.recuperar("Nievemon"));
+        assertNull(especieDAOJDBC.recuperar("Nievemon"));
     }
 
     @Test
@@ -56,14 +58,14 @@ public class DataServiceImplementationTest {
         Especie dientemon;
         // Exercise(When)
         dataServiceSUT.crearSetDatosIniciales();
-        rojomon     = especieDao.recuperar("Rojomon");
-        amarillomon = especieDao.recuperar("Amarillomon");
-        verdemon    = especieDao.recuperar("Verdemon");
-        tierramon   = especieDao.recuperar("Tierramon");
-        fantasmon   = especieDao.recuperar("Fantasmon");
-        vampiron    = especieDao.recuperar("Vampiron");
-        fortmon     = especieDao.recuperar("Fortmon");
-        dientemon   = especieDao.recuperar("Dientemon");
+        rojomon     = especieDAOJDBC.recuperar("Rojomon");
+        amarillomon = especieDAOJDBC.recuperar("Amarillomon");
+        verdemon    = especieDAOJDBC.recuperar("Verdemon");
+        tierramon   = especieDAOJDBC.recuperar("Tierramon");
+        fantasmon   = especieDAOJDBC.recuperar("Fantasmon");
+        vampiron    = especieDAOJDBC.recuperar("Vampiron");
+        fortmon     = especieDAOJDBC.recuperar("Fortmon");
+        dientemon   = especieDAOJDBC.recuperar("Dientemon");
         // Test(Then)
         assertEquals(Integer.valueOf(1), rojomon.getId());
         assertEquals("Rojomon", rojomon.getNombre());
