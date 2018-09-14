@@ -1,24 +1,19 @@
 package ar.edu.unq.epers.bichomon.backend.service.data;
 
-import ar.edu.unq.epers.bichomon.backend.service.ConectionService;
-
-import java.sql.PreparedStatement;
+import ar.edu.unq.epers.bichomon.backend.dao.jdbc.EspecieDAOJDBC;
 
 public class DataServiceImplementation implements DataService
 {
+    private EspecieDAOJDBC especieDAOJDBC;
+
+    public DataServiceImplementation(EspecieDAOJDBC unEspecieDAOJDBC)
+    {   especieDAOJDBC = unEspecieDAOJDBC;  }
+
     @Override
     public void eliminarDatos()
-    {
-        new ConectionService().executeWithConnection (
-                                        conn -> {
-                                                    PreparedStatement ps = conn.prepareStatement("TRUNCATE TABLE especie");
-                                                    ps.execute();
-                                                    ps.close();
-                                                    return null;
-                                                }    );
-    }
+    {   especieDAOJDBC.limpiarTabla();  }
 
     @Override
     public void crearSetDatosIniciales()
-    {   }
+    {   especieDAOJDBC.crerDatosIniciales();    }
 }

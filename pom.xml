@@ -25,13 +25,14 @@
 	</developers>
 
 	<dependencies>
+		<!--Hibernate-->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>5.2.2.Final</version>
 		</dependency>
 
-		<!-- Conectores-->
+        <!-- Conectores-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -45,8 +46,24 @@
 			<version>4.12</version>
 		</dependency>
 
-		<!-- Dependencias de frontend -->
+        <!-- Lombok (Getter and Setters annotation) -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.2</version>
+            <scope>provided</scope>
+        </dependency>
 
+		<!-- Mockito -->
+		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.10.19</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Dependencias de frontend -->
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet</artifactId>
@@ -101,12 +118,12 @@
 				<version>9.3.11.v20160721</version>
 				<configuration>
 					<scanIntervalSeconds>10</scanIntervalSeconds>
-					<connectors>
+					<!--<connectors>
 						<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
 							<port>8080</port>
 							<maxIdleTime>60000</maxIdleTime>
 						</connector>
-					</connectors>
+					</connectors>-->
 				</configuration>
 			</plugin>
 		</plugins>

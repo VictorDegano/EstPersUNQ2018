@@ -1,8 +1,9 @@
-package ar.edu.unq.epers.test.bichomon;
+package ar.edu.unq.epers.test.bichomon.dao.jdbc;
 
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
-import ar.edu.unq.epers.bichomon.frontend.dao.EspecieDAO;
+import ar.edu.unq.epers.bichomon.backend.service.data.DataServiceImplementation;
+import ar.edu.unq.epers.bichomon.backend.dao.jdbc.EspecieDAOJDBC;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,24 +13,29 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class EspecieDAOTest {
+public class EspecieDAOJDBCTest {
 
-    private EspecieDAO especieDAOSut;
-    private Especie especiePrueba;
+    private EspecieDAOJDBC especieDAOJDBCSut;
+    private Especie     especiePrueba;
+    private DataServiceImplementation dataService;
 
     @Before
-    public void setUp() throws Exception {
-        especieDAOSut = new EspecieDAO();
-        especiePrueba = new Especie(15, "Nievemon", TipoBicho.AGUA);
+    public void setUp() throws Exception
+    {
+        especieDAOJDBCSut = new EspecieDAOJDBC();
+        dataService     = new DataServiceImplementation(especieDAOJDBCSut);
+        especiePrueba   = new Especie(15, "Nievemon", TipoBicho.AGUA);
         especiePrueba.setAltura(12);
         especiePrueba.setPeso(100);
         especiePrueba.setEnergiaIncial(99);
         especiePrueba.setUrlFoto("/image/Nievemon.jpg");
+        dataService.crearSetDatosIniciales();
     }
 
     @After
-    public void tearDown() throws Exception {
-    }
+    public void tearDown() throws Exception
+    {   dataService.eliminarDatos();    }
+
 
     @Test
     public void cuando_se_recupera_una_especie_esta_tiene_los_datos_correctos() {
@@ -37,7 +43,7 @@ public class EspecieDAOTest {
         Especie especieDesdeBD;
 
         // Exercise(Then)
-        especieDesdeBD = especieDAOSut.recuperar("Fortmon");
+        especieDesdeBD = especieDAOJDBCSut.recuperar("Fortmon");
 
         // Test(When)
         assertEquals(Integer.valueOf(7), especieDesdeBD.getId());
@@ -56,8 +62,8 @@ public class EspecieDAOTest {
         Especie especieDesdeBD = null;
 
         // Exercise(Then)
-        especieDAOSut.guardar(especiePrueba);
-        especieDesdeBD = especieDAOSut.recuperar("Nievemon");
+        especieDAOJDBCSut.guardar(especiePrueba);
+        especieDesdeBD = especieDAOJDBCSut.recuperar("Nievemon");
 
         // Test(When)
         assertEquals(especiePrueba.getId(), especieDesdeBD.getId());
@@ -68,9 +74,6 @@ public class EspecieDAOTest {
         assertEquals(especiePrueba.getUrlFoto(), especieDesdeBD.getUrlFoto());
         assertEquals(especiePrueba.getEnergiaInicial(), especieDesdeBD.getEnergiaInicial());
         assertEquals(especiePrueba.getCantidadBichos(), especieDesdeBD.getCantidadBichos());
-
-        //TEAR DOWN
-        especieDAOSut.borrarEspecie("Nievemon");
     }
 
     @Test
@@ -83,9 +86,9 @@ public class EspecieDAOTest {
         especieTest.setUrlFoto("/image/Nievemon.jpg");
 
         // Exercise(Then)
-        especieDAOSut.guardar(especiePrueba);
-        especieDAOSut.actualizar(especieTest);
-        Especie especieDesdeDB = especieDAOSut.recuperar("pikachu");
+        especieDAOJDBCSut.guardar(especiePrueba);
+        especieDAOJDBCSut.actualizar(especieTest);
+        Especie especieDesdeDB = especieDAOJDBCSut.recuperar("pikachu");
 
         //Test (WHEN)
         assertEquals(especieTest.getId(), especieDesdeDB.getId());
@@ -96,12 +99,24 @@ public class EspecieDAOTest {
         assertEquals(especieTest.getUrlFoto(), especieDesdeDB.getUrlFoto());
         assertEquals(especieTest.getEnergiaInicial(), especieDesdeDB.getEnergiaInicial());
         assertEquals(especieTest.getCantidadBichos(), especieDesdeDB.getCantidadBichos());
-        especieDAOSut.borrarEspecie("pikachu");
+        especieDAOJDBCSut.borrarEspecie("pikachu");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void cuando_se_guarda_una_especie_existente_la_Base_Chilla() {
+        // Setup(Given)
+        // Exercise(Then)
+        especieDAOJDBCSut.guardar(especiePrueba);
+        Especie copiaE  = especiePrueba;
+        especieDAOJDBCSut.guardar(copiaE);
+
+        // Test(When)
+        assertTrue(true);
     }
 
     @Test
     public void seRecuperanTodasLasEspeciesDeLaBaseDeDatos(){
-        List<Especie> especies = especieDAOSut.recuperarTodos();
+        List<Especie> especies = especieDAOJDBCSut.recuperarTodos();
         List<String> nombreEspecies = new ArrayList<String>();
         nombreEspecies.add("Amarillomon");
         nombreEspecies.add("Dientemon");
@@ -119,10 +134,8 @@ public class EspecieDAOTest {
         assertTrue(nombreEspecies.contains(especies.get(5).getNombre()));
         assertTrue(nombreEspecies.contains(especies.get(6).getNombre()));
         assertTrue(nombreEspecies.contains(especies.get(7).getNombre()));
-
-
-
         assertEquals(8,especies.size());
     }
+
 }
 
