@@ -12,7 +12,9 @@ import java.util.List;
 @Entity
 public class Ubicacion
 {
-    @Id
+    @Id @GeneratedValue
+    private int id;
+    @Column(unique = true, nullable = false)
     private String nombre;
     @OneToMany(mappedBy="ubicacion", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Entrenador> entrenadores   = new ArrayList<>();
@@ -51,4 +53,6 @@ public class Ubicacion
     public List<Entrenador> getEntrenadores() { return entrenadores;    }
     public void setEntrenadores(List<Entrenador> entrenadores) {    this.entrenadores = entrenadores;   }
 
+    public int getId() {    return id;  }
+    public void setId(int id) { this.id = id;   }
 }

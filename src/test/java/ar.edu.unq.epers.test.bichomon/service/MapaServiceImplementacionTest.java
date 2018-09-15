@@ -110,7 +110,7 @@ public class MapaServiceImplementacionTest
         //Test(Then)
         assertFalse(ubicacionViejaBD.getEntrenadores().isEmpty());
         assertEquals("El Origen 2", entrenador.getUbicacion().getNombre() );
-        assertEquals("Nombre de entrenador: Pepe DePrueba o nombre de ubicacion: Volcanos incorrectos", mensajeDeError);
+        assertEquals("No entity found for query", mensajeDeError);
     }
 
     @Test
@@ -147,7 +147,7 @@ public class MapaServiceImplementacionTest
         {   mensajeDeError  = e.getMessage();   }
 
         //Test(Then)
-        assertEquals("Nombre de ubicacion: Missing Field incorrecto", mensajeDeError);
+        assertEquals("No entity found for query", mensajeDeError);
     }
 
     @Test
