@@ -4,6 +4,7 @@ import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import javax.persistence.PersistenceException;
 
@@ -32,13 +33,16 @@ public class UbicacionDAOHibernate implements UbicacionDAO
     public Ubicacion recuperar(String nombre)
     {
         Session session = Runner.getCurrentSession();
-        return session.get(Ubicacion.class, nombre);
+        String hql = "FROM Ubicacion u WHERE u.nombre = :unNombre";
+        Query<Ubicacion> query = session.createQuery(hql, Ubicacion.class);
+        query.setParameter("unNombre", nombre);
+        return query.getSingleResult();
     }
 
     /**
      * Actualiza una {@link Ubicacion} en la base de datos. Si no existe la ubicacion, no hace nada.
      * @param ubicacion - La {@link Ubicacion} que se va a actualizar.
-     * @throws {@link PersistenceException} - si se cambia el nombre de la ubicacion.
+     * @throws {@link PersistenceException} - si se cambia el nombre de la ubicacion por una que ya esta o si se altera la id.
      */
     @Override
     public void actualizar(Ubicacion ubicacion)

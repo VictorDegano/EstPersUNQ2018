@@ -4,14 +4,16 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 
 import javax.persistence.*;
 
+// TODO: 14/09/2018 Plantear si nivel, ubicacion y experiencia pueden ser null
 @Entity
 public class Entrenador
 {
-    @Id
+    @Id @GeneratedValue
+    private int id;
+    @Column(unique = true, nullable = false)
     private String nombre;
     private int experiencia;
     private int nivel;
-
     @ManyToOne
     private Ubicacion ubicacion = null;
 

@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 
 import static org.junit.Assert.*;
@@ -33,7 +34,7 @@ public class EntrenadorDAOHibernateTest {
         Limpiador.getInstance().limpiarTabla();
     }
 
-    @Test
+    @Test(expected = NoResultException.class)
     public void siSeRecuperaUnEntrenadorQueNoEstaEnLaBaseDeDatosDevuelveNull() {
         //Setup(Given)
         Entrenador entrenadorRecuperado;
@@ -42,7 +43,6 @@ public class EntrenadorDAOHibernateTest {
             return entrenadorDAOSut.recuperar("El Irrecuperable");
         });
         //Test(Then)
-        assertNull(entrenadorRecuperado);
     }
 
     @Test
