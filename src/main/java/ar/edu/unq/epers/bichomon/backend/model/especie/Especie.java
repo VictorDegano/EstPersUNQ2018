@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Entity
 public class Especie {
 
-    @Id
+    @Id @GeneratedValue
 	private Integer id;
     @Column(unique=true)
 	private String nombre;
@@ -23,7 +23,6 @@ public class Especie {
 	private int peso;
 
     @Enumerated
-    //@Transient
 	private TipoBicho tipo;
 
 	private int energiaInicial;

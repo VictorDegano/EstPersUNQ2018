@@ -1,5 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 
 import javax.persistence.*;
@@ -9,8 +10,9 @@ import java.util.List;
 /**
  * Representacion generica de una ubicacion. Una ubicacion puede tener varios {@link Entrenador} que se encuentren merodeando en ella.
  */
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity
-public class Ubicacion
+public abstract class Ubicacion
 {
     @Id @GeneratedValue
     private int id;
@@ -42,6 +44,8 @@ public class Ubicacion
      */
     public int cantidadDeEntrenadores()
     {   return this.getEntrenadores().size(); }
+
+    public Bicho campeonActual(){ return null;    }
 
 /*[--------]Constructors[--------]*/
     public Ubicacion() {    }

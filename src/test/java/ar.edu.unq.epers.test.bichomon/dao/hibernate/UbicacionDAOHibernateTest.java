@@ -2,14 +2,13 @@ package ar.edu.unq.epers.test.bichomon.dao.hibernate;
 
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.UbicacionDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 import ar.edu.unq.epers.bichomon.backend.service.runner.SessionFactoryProvider;
 import extra.Bootstrap;
-import extra.Limpiador;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.persistence.NoResultException;
@@ -34,10 +33,7 @@ public class UbicacionDAOHibernateTest {
     }
 
     @After
-    public void tearDown() throws Exception
-    {
-        Limpiador.getInstance().limpiarTabla();
-    }
+    public void tearDown() throws Exception {   bootstraper.limpiarTabla(); }
 
     @Test
     public void siSeRecuperaUnaUbicacionDeLaBaseDeDatosEstaEsConsistente()
@@ -74,7 +70,7 @@ public class UbicacionDAOHibernateTest {
     public void siSeGuardaUnaUbicacionNuevaEstaSeGuardaCorrectamente()
     {
         //Setup(Given)
-        Ubicacion nuevaUbicacion    = new Ubicacion();
+        Ubicacion nuevaUbicacion    = new Pueblo();
         nuevaUbicacion.setNombre("Volcanus");
         Ubicacion ubicacionRecuperada;
 
@@ -114,7 +110,6 @@ public class UbicacionDAOHibernateTest {
         assertEquals(ubicacionRecuperada.getEntrenadores(), ubicacionAModificar.getEntrenadores());
     }
 
-    //@Ignore //TODO cambiar el test, tiene que cambiar el id y/o cambiar a un nombre que ya existe.
     @Test(expected = PersistenceException.class)
     public void siSeIntentaModificarElIdDeUnaUbicacionGuardadaPorUnaQueYaEstaLanzaUnaExcepcion()
     {

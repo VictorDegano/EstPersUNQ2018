@@ -1,6 +1,8 @@
 package ar.edu.unq.epers.test.bichomon.model;
 
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import org.junit.After;
 import org.junit.Before;
@@ -20,10 +22,10 @@ public class EntrenadorTest {
         entrenadorSUT   = new Entrenador();
         entrenadorSUT.setNombre("Sutter");
 
-        unaUbicacion    = new Ubicacion();
+        unaUbicacion    = new Pueblo();
         unaUbicacion.setNombre("El Origen");
 
-        unaUbicacion2   = new Ubicacion();
+        unaUbicacion2   = new Dojo();
         unaUbicacion2.setNombre("Dojo el Origen");
 
         entrenadorSUT.setUbicacion(unaUbicacion);
