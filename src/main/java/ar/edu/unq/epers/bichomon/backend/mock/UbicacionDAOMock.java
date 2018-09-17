@@ -1,6 +1,8 @@
 package ar.edu.unq.epers.bichomon.backend.mock;
 
 import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 
 import java.util.HashMap;
@@ -15,15 +17,15 @@ public class UbicacionDAOMock implements UbicacionDAO
     private static Map<String, Ubicacion> DATA = new HashMap<>();
 
     static  {
-        Ubicacion elOrigen = new Ubicacion();
+        Ubicacion elOrigen = new Pueblo();
         elOrigen.setNombre("El Origen");
         DATA.put(elOrigen.getNombre(), elOrigen);
 
-        Ubicacion unaUbicacion = new Ubicacion();
+        Ubicacion unaUbicacion = new Pueblo();
         unaUbicacion.setNombre("Delta");
         DATA.put(unaUbicacion.getNombre(), unaUbicacion);
 
-        Ubicacion unaUbicacionDojo = new Ubicacion();
+        Ubicacion unaUbicacionDojo = new Dojo();
         unaUbicacionDojo.setNombre("Dojo Delta");
         DATA.put(unaUbicacionDojo.getNombre(), unaUbicacionDojo);
     }

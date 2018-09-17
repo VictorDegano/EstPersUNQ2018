@@ -2,15 +2,16 @@ package ar.edu.unq.epers.test.bichomon.dao.hibernate;
 
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.UbicacionDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 import ar.edu.unq.epers.bichomon.backend.service.runner.SessionFactoryProvider;
 import extra.Bootstrap;
-import extra.Limpiador;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 
 import static org.junit.Assert.*;
@@ -32,10 +33,7 @@ public class UbicacionDAOHibernateTest {
     }
 
     @After
-    public void tearDown() throws Exception
-    {
-        Limpiador.getInstance().limpiarTabla();
-    }
+    public void tearDown() throws Exception {   bootstraper.limpiarTabla(); }
 
     @Test
     public void siSeRecuperaUnaUbicacionDeLaBaseDeDatosEstaEsConsistente()
@@ -52,23 +50,27 @@ public class UbicacionDAOHibernateTest {
     }
 
     @Test
-    public void siSeIntentaRecuperarUnaUbicacionQueNoExisteRetornaNull()
+    public void siSeIntentaRecuperarUnaUbicacionQueNoExisteDaUnaExepcion()
     {
         //Setup(Given)
+        String mensaje  = "";
         Ubicacion ubicacionRecuperada;
 
         //Exercise(When)
-        ubicacionRecuperada = Runner.runInSession(()-> { return ubicacionDAOSut.recuperar("El Original"); });
+        try
+        {   ubicacionRecuperada = Runner.runInSession(()-> { return ubicacionDAOSut.recuperar("El Original"); });   }
+        catch(NoResultException e)
+        {   mensaje = e.getMessage();   }
 
         //Test(Then)
-        assertNull(ubicacionRecuperada);
+        assertEquals("No entity found for query", mensaje);
     }
 
     @Test
     public void siSeGuardaUnaUbicacionNuevaEstaSeGuardaCorrectamente()
     {
         //Setup(Given)
-        Ubicacion nuevaUbicacion    = new Ubicacion();
+        Ubicacion nuevaUbicacion    = new Pueblo();
         nuevaUbicacion.setNombre("Volcanus");
         Ubicacion ubicacionRecuperada;
 
@@ -109,16 +111,58 @@ public class UbicacionDAOHibernateTest {
     }
 
     @Test(expected = PersistenceException.class)
-    public void siSeIntentaModificarElNombreDeUnaUbicacionGuardadaLanzaUnaExcepcion()
+    public void siSeIntentaModificarElIdDeUnaUbicacionGuardadaPorUnaQueYaEstaLanzaUnaExcepcion()
     {
         //Setup(Given)
-        Runner.runInSession(()-> {
-                                    Ubicacion aModificar    = ubicacionDAOSut.recuperar("El Origen");
-                                    aModificar.setNombre("Missing Name");
-                                    ubicacionDAOSut.actualizar(aModificar);
-                                    return null;
-                                 });
         //Exercise(When)
+        Runner.runInSession(()-> {
+            Ubicacion aModificar    = ubicacionDAOSut.recuperar("El Origen");
+            aModificar.setId(2);
+            ubicacionDAOSut.actualizar(aModificar);
+            return null;
+        });
+        //Test(Then)
+    }
+
+    @Test(expected = PersistenceException.class)
+    public void siSeIntentaModificarElIdDeUnaUbicacionGuardadaLanzaUnaExcepcion()
+    {
+        //Setup(Given)
+        //Exercise(When)
+        Runner.runInSession(()-> {
+            Ubicacion aModificar    = ubicacionDAOSut.recuperar("El Origen");
+            aModificar.setId(30);
+            ubicacionDAOSut.actualizar(aModificar);
+            return null;
+        });
+        //Test(Then)
+    }
+
+    @Test(expected = PersistenceException.class)
+    public void siSeIntentaModificarElNombreDeUnaUbicacionGuardadaPorUnaQueYaEstaLanzaUnaExcepcion()
+    {
+        //Setup(Given)
+        //Exercise(When)
+        Runner.runInSession(()-> {
+            Ubicacion aModificar    = ubicacionDAOSut.recuperar("El Origen");
+            aModificar.setNombre("Desert");
+            ubicacionDAOSut.actualizar(aModificar);
+            return null;
+        });
+        //Test(Then)
+    }
+
+    @Test
+    public void siSeIntentaModificarElNombreDeUnaUbicacionGuardadaPorUnaQueNoEstaLaModifica()
+    {
+        //Setup(Given)
+        //Exercise(When)
+        Runner.runInSession(()-> {
+            Ubicacion aModificar    = ubicacionDAOSut.recuperar("El Origen");
+            aModificar.setNombre("El Nuevo Origen");
+            ubicacionDAOSut.actualizar(aModificar);
+            return null;
+        });
         //Test(Then)
     }
 }

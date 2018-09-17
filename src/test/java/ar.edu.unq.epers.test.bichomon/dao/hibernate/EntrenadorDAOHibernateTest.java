@@ -4,11 +4,11 @@ import extra.Bootstrap;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EntrenadorDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
-import extra.Limpiador;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 
 import static org.junit.Assert.*;
@@ -22,18 +22,14 @@ public class EntrenadorDAOHibernateTest {
     public void setUp() throws Exception {
         bootstraper = new Bootstrap();
         entrenadorDAOSut = new EntrenadorDAOHibernate();
-        Runner.runInSession(() -> {
-            bootstraper.crearDatos();
-            return null;
-        });
+        Runner.runInSession(() -> { bootstraper.crearDatos();
+                                    return null;});
     }
 
     @After
-    public void tearDown() throws Exception {
-        Limpiador.getInstance().limpiarTabla();
-    }
+    public void tearDown() throws Exception {   bootstraper.limpiarTabla(); }
 
-    @Test
+    @Test(expected = NoResultException.class)
     public void siSeRecuperaUnEntrenadorQueNoEstaEnLaBaseDeDatosDevuelveNull() {
         //Setup(Given)
         Entrenador entrenadorRecuperado;
@@ -42,7 +38,6 @@ public class EntrenadorDAOHibernateTest {
             return entrenadorDAOSut.recuperar("El Irrecuperable");
         });
         //Test(Then)
-        assertNull(entrenadorRecuperado);
     }
 
     @Test

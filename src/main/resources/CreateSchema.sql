@@ -12,6 +12,6 @@ CREATE TABLE especie (
   tipo varchar(255) NOT NULL,
   urlFoto varchar(255) NOT NULL,
   cantidadBichos int NOT NULL,
-  PRIMARY KEY (nombre)
+  PRIMARY KEY (id)
 )
 ENGINE = InnoDB;

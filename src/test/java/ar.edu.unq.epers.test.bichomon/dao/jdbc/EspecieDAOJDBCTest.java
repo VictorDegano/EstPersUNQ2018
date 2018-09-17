@@ -1,5 +1,8 @@
 package ar.edu.unq.epers.test.bichomon.dao.jdbc;
 
+import ar.edu.unq.epers.bichomon.backend.excepcion.EspecieDeleteException;
+import ar.edu.unq.epers.bichomon.backend.excepcion.EspecieInsertException;
+import ar.edu.unq.epers.bichomon.backend.excepcion.EspecieUpdateException;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.service.data.DataServiceImplementation;
@@ -102,7 +105,7 @@ public class EspecieDAOJDBCTest {
         especieDAOJDBCSut.borrarEspecie("pikachu");
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = EspecieInsertException.class)
     public void cuando_se_guarda_una_especie_existente_la_Base_Chilla() {
         // Setup(Given)
         // Exercise(Then)
@@ -111,31 +114,54 @@ public class EspecieDAOJDBCTest {
         especieDAOJDBCSut.guardar(copiaE);
 
         // Test(When)
-        assertTrue(true);
+        fail("No Hubo Exepcion");
     }
 
     @Test
     public void seRecuperanTodasLasEspeciesDeLaBaseDeDatos(){
         List<Especie> especies = especieDAOJDBCSut.recuperarTodos();
         List<String> nombreEspecies = new ArrayList<String>();
-        nombreEspecies.add("Amarillomon");
-        nombreEspecies.add("Dientemon");
-        nombreEspecies.add("Fantasmon");
-        nombreEspecies.add("Fortmon");
-        nombreEspecies.add("Rojomon");
-        nombreEspecies.add("Tierramon");
-        nombreEspecies.add("Vampiron");
-        nombreEspecies.add("Verdemon");
-        assertTrue(nombreEspecies.contains(especies.get(0).getNombre()));
-        assertTrue(nombreEspecies.contains(especies.get(1).getNombre()));
-        assertTrue(nombreEspecies.contains(especies.get(2).getNombre()));
-        assertTrue(nombreEspecies.contains(especies.get(3).getNombre()));
-        assertTrue(nombreEspecies.contains(especies.get(4).getNombre()));
-        assertTrue(nombreEspecies.contains(especies.get(5).getNombre()));
-        assertTrue(nombreEspecies.contains(especies.get(6).getNombre()));
-        assertTrue(nombreEspecies.contains(especies.get(7).getNombre()));
+        assertEquals("Amarillomon",especies.get(0).getNombre());
+        assertEquals("Dientemon",especies.get(1).getNombre());
+        assertEquals("Fantasmon",especies.get(2).getNombre());
+        assertEquals("Fortmon",especies.get(3).getNombre());
+        assertEquals("Rojomon",especies.get(4).getNombre());
+        assertEquals("Tierramon",especies.get(5).getNombre());
+        assertEquals("Vampiron",especies.get(6).getNombre());
+        assertEquals("Verdemon",especies.get(7).getNombre());
         assertEquals(8,especies.size());
     }
 
+    @Test(expected = EspecieDeleteException.class)
+    public void CuandoSeIntentaBorrarUnaEspecieQueNoExisteHayUnaExcepcion() {
+        // Setup(Given)
+        // Exercise(Then)
+        especieDAOJDBCSut.borrarEspecie("Preguntamon");
+        // Test(When)
+        fail("No Hubo Exepcion");
+    }
+
+    @Test
+    public void CuandoSeBorrarUnaEspecieExistenteYaNoEstaMasEnLaBase() {
+        // Setup(Given)
+        // Exercise(Then)
+        especieDAOJDBCSut.borrarEspecie("Fortmon");
+        // Test(When)
+        assertNull(especieDAOJDBCSut.recuperar("Fortmon"));
+    }
+
+    @Test(expected = EspecieUpdateException.class)
+    public void cuandoSeIntentaActualizarUnaEspecieYSeLeCambiaLaIdDaUnaExcepcion()
+    {
+        //Setup(Given)
+        especieDAOJDBCSut.guardar(especiePrueba);
+        especiePrueba.setId(66);
+
+        // Exercise(Then)
+        especieDAOJDBCSut.actualizar(especiePrueba);
+
+        //Test (WHEN)
+        fail("No hubo excepcion");
+    }
 }
 
