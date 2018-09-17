@@ -12,31 +12,29 @@ import static org.junit.Assert.*;
 
 public class DataServiceImplementationTest {
 
-    private Especie especiePrueba;
     private EspecieDAOJDBC especieDAOJDBC;
     private DataServiceImplementation dataServiceSUT;
 
     @Before
     public void setUp() throws Exception
     {
-
-        especieDAOJDBC = new EspecieDAOJDBC();
+        especieDAOJDBC  = new EspecieDAOJDBC();
         dataServiceSUT  = new DataServiceImplementation(especieDAOJDBC);
-        especiePrueba   = new Especie(15, "Nievemon", TipoBicho.AGUA);
-        especiePrueba.setAltura(12);
-        especiePrueba.setPeso(100);
-        especiePrueba.setEnergiaIncial(99);
-        especiePrueba.setUrlFoto("/image/Nievemon.jpg");
     }
 
     @After
     public void tearDown() throws Exception
-    {   }
+    {   dataServiceSUT.eliminarDatos();   }
 
     @Test
     public void dada_Una_Tabla_Con_Un_Elemento_Si_Limpio_La_Tabla_Y_Luego_Pido_El_Elemento_Devuelve_Null()
     {
         // Setup(Given)
+        Especie especiePrueba = new Especie(15, "Nievemon", TipoBicho.AGUA);
+        especiePrueba.setAltura(12);
+        especiePrueba.setPeso(100);
+        especiePrueba.setEnergiaIncial(99);
+        especiePrueba.setUrlFoto("/image/Nievemon.jpg");
         especieDAOJDBC.guardar(especiePrueba);
         // Exercise(When)
         dataServiceSUT.eliminarDatos();
@@ -138,8 +136,5 @@ public class DataServiceImplementationTest {
         assertEquals(TipoBicho.AGUA, dientemon.getTipo());
         assertEquals("/image/dientemon.jpg", dientemon.getUrlFoto());
         assertEquals(0, dientemon.getCantidadBichos());
-
-        //TearDown
-        dataServiceSUT.eliminarDatos();
     }
 }

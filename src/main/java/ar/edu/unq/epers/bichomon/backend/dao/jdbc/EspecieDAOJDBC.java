@@ -1,5 +1,9 @@
 package ar.edu.unq.epers.bichomon.backend.dao.jdbc;
 
+import ar.edu.unq.epers.bichomon.backend.excepcion.EspecieDeleteException;
+import ar.edu.unq.epers.bichomon.backend.excepcion.EspecieInsertException;
+import ar.edu.unq.epers.bichomon.backend.excepcion.EspecieRecuperarException;
+import ar.edu.unq.epers.bichomon.backend.excepcion.EspecieUpdateException;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.service.ConectionService;
@@ -13,26 +17,25 @@ public class EspecieDAOJDBC implements ar.edu.unq.epers.bichomon.backend.dao.Esp
     @Override
     public void guardar(Especie especie)
     {
+
         //Llama al Mensaje de ejecutar conexion y se le pasa el pedazo de codigo a ejecutar con el parametro que va a recibir
         new ConectionService().executeWithConnection (conn -> {
-                                            PreparedStatement ps = conn.prepareStatement("INSERT INTO especie (id, nombre, altura, peso, energiaInicial, tipo, urlFoto, cantidadBichos) VALUES (?,?,?,?,?,?,?, ?)");
-                                            ps.setInt   (1, especie.getId());
-                                            ps.setString(2, especie.getNombre());
-                                            ps.setInt   (3, especie.getAltura());
-                                            ps.setInt   (4, especie.getPeso());
-                                            ps.setInt   (5, especie.getEnergiaInicial());
-                                            ps.setString(6, especie.getTipo().name());
-                                            ps.setString(7, especie.getUrlFoto());
-                                            ps.setInt   (8, especie.getCantidadBichos());
-
-                                            ps.execute();
-
-                                            if (ps.getUpdateCount() != 1)
-                                            {   throw new RuntimeException("No se inserto la Especie" + especie.getNombre());  }
-                                            ps.close();
-                                            return null;
-                                           }
-                                    );
+                    PreparedStatement ps = conn.prepareStatement("INSERT INTO especie (id, nombre, altura, peso, energiaInicial, tipo, urlFoto, cantidadBichos) VALUES (?,?,?,?,?,?,?, ?)");
+                    ps.setInt(1, especie.getId());
+                    ps.setString(2, especie.getNombre());
+                    ps.setInt(3, especie.getAltura());
+                    ps.setInt(4, especie.getPeso());
+                    ps.setInt(5, especie.getEnergiaInicial());
+                    ps.setString(6, especie.getTipo().name());
+                    ps.setString(7, especie.getUrlFoto());
+                    ps.setInt(8, especie.getCantidadBichos());
+                    try{    ps.execute();   }
+                    catch(SQLException e)
+                    {   throw new EspecieInsertException(especie.getNombre(), e.getMessage());  }
+                    finally
+                    {   ps.close(); }
+                    return null;
+                    });
     }
 
     @Override
@@ -50,7 +53,7 @@ public class EspecieDAOJDBC implements ar.edu.unq.epers.bichomon.backend.dao.Esp
 
                     ps.execute();
                     if (ps.getUpdateCount() != 1)
-                    {   throw new RuntimeException("No se inserto la Especie" + especie.getNombre());  }
+                    {   throw new EspecieUpdateException(especie.getNombre());  }
                     ps.close();
                     return null;
                 }
@@ -71,7 +74,7 @@ public class EspecieDAOJDBC implements ar.edu.unq.epers.bichomon.backend.dao.Esp
                                             {   //si personaje no es null aca significa que el while dio mas de una vuelta, eso
                                                 //suele pasar cuando el resultado (resultset) tiene mas de un elemento.
                                                 if (especieRecuperada != null)
-                                                {   throw new RuntimeException("Existe mas de un personaje con el nombre " + nombreEspecie);   }
+                                                {   throw new EspecieRecuperarException(nombreEspecie, "Existe mas de un personaje con el nombre ");   }
 
                                                 especieRecuperada = new Especie(    resultSet.getInt("id"),
                                                                                     nombreEspecie,
@@ -94,8 +97,8 @@ public class EspecieDAOJDBC implements ar.edu.unq.epers.bichomon.backend.dao.Esp
     {
         return new ConectionService().executeWithConnection(
                 conn ->{
-                    PreparedStatement ps = conn.prepareStatement("SELECT * FROM especie");
-
+//                    PreparedStatement ps = conn.prepareStatement("SELECT * FROM especie");
+                    PreparedStatement ps = conn.prepareStatement("SELECT * FROM especie ORDER BY nombre ASC");
                     ResultSet resultSet = ps.executeQuery();
 
                     List<Especie> especiesRecuperadas = new ArrayList<Especie>();
@@ -135,7 +138,7 @@ public class EspecieDAOJDBC implements ar.edu.unq.epers.bichomon.backend.dao.Esp
                     ps.execute();
 
                     if (ps.getUpdateCount() != 1)
-                    {   throw new RuntimeException("No se elimino la Especie" + especieABorrar);  }
+                    {   throw new EspecieDeleteException(especieABorrar);  }
                     ps.close();
                     return null;
                 }
