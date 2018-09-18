@@ -15,6 +15,7 @@ public class Especie {
 
     @Id @GeneratedValue
 	private Integer id;
+
     @Column(unique=true)
 	private String nombre;
 
@@ -22,7 +23,7 @@ public class Especie {
 
 	private int peso;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
 	private TipoBicho tipo;
 
 	private int energiaInicial;

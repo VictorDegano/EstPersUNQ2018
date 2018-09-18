@@ -38,6 +38,9 @@ public class EspecieDAOHibernate implements ar.edu.unq.epers.bichomon.backend.da
 
     @Override
     public List<Especie> recuperarTodos() {
-        return null;
+        Session session =Runner.getCurrentSession();
+        String hql = "FROM Especie e order by e.nombre asc";
+        Query<Especie> query = session.createQuery(hql,  Especie.class);
+        return query.getResultList();
     }
 }

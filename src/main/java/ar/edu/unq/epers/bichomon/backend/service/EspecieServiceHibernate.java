@@ -18,13 +18,6 @@ public class EspecieServiceHibernate implements EspecieService {
         this.especieDAO = especieDAO;
     }
 
-    public void obtenerEspecie(String nombreEspecie) {
-        Runner.runInSession(() -> {
-            Especie personaje = this.especieDAO.recuperar(nombreEspecie);
-            return null;
-        });
-    }
-
     @Override
     public void crearEspecie(Especie especie) {
         Runner.runInSession(() -> {
@@ -42,7 +35,9 @@ public class EspecieServiceHibernate implements EspecieService {
 
     @Override
     public List<Especie> getAllEspecies() {
-        return null;
+        return Runner.runInSession(()->{
+           return this.especieDAO.recuperarTodos();
+        });
     }
 
     @Override

@@ -8,6 +8,8 @@ import ar.edu.unq.epers.bichomon.backend.service.EspecieServiceHibernate;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -16,19 +18,35 @@ public class EspecieDAOHibernateTest {
     private EspecieServiceHibernate testService;
     EspecieDAOHibernate especieDAO;
     Especie especie;
+    Especie especie2;
+    Especie especie3;
 
     @Before
     public void setUp() throws Exception {
         especieDAO = new EspecieDAOHibernate();
         this.testService = new EspecieServiceHibernate(especieDAO);
-        TipoBicho tipo = TipoBicho.AGUA;
-        especie = new Especie(11, "arromon", tipo);
+
+        especie = new Especie(1, "arromon", TipoBicho.AGUA);
         especie.setAltura(12);
         especie.setPeso(100);
         especie.setEnergiaIncial(99);
         especie.setUrlFoto("/image/arromon.jpg");
-        this.testService.crearEspecie(especie);
 
+        especie2 = new Especie(2, "ajimon", TipoBicho.FUEGO);
+        especie2.setAltura(13);
+        especie2.setPeso(110);
+        especie2.setEnergiaIncial(98);
+        especie2.setUrlFoto("/image/ajimon.jpg");
+
+        especie3 = new Especie(3, "mugreomon", TipoBicho.TIERRA);
+        especie3.setAltura(14);
+        especie3.setPeso(120);
+        especie3.setEnergiaIncial(97);
+        especie3.setUrlFoto("/image/mugreomon.jpg");
+
+        this.testService.crearEspecie(especie);
+        this.testService.crearEspecie(especie2);
+        this.testService.crearEspecie(especie3);
 
     }
 
@@ -48,7 +66,16 @@ public class EspecieDAOHibernateTest {
         assertEquals( especie2.getPeso(), especie.getPeso());
         assertEquals( especie2.getEnergiaInicial(), especie.getEnergiaInicial());
         assertEquals( especie2.getUrlFoto(), especie.getUrlFoto());
+    }
 
+    @Test
+    public void es_service_recupera_todas_las_especies(){
+        List<Especie> especiesRecuperadas = this.testService.getAllEspecies();
+
+        assertEquals(3,especiesRecuperadas.size());
+        assertEquals("ajimon", especiesRecuperadas.get(0).getNombre());
+        assertEquals("arromon", especiesRecuperadas.get(1).getNombre());
+        assertEquals("mugreomon", especiesRecuperadas.get(2).getNombre());
 
     }
 
