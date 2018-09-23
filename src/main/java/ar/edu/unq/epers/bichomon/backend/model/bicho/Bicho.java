@@ -2,18 +2,27 @@ package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 
+import javax.persistence.*;
+
 /**
  * Un {@link Bicho} existente en el sistema, el mismo tiene un nombre
  * y pertenece a una {@link Especie} en particular.
  * 
  * @author Charly Backend
  */
+@Entity
 public class Bicho {
 
+    @Id @GeneratedValue
+    private int id;
+    @Transient
 	private String nombre;
+    @ManyToOne(cascade = CascadeType.ALL)
 	private Especie especie;
 	private int energia;
-	
+
+	public Bicho() {}
+
 	public Bicho(Especie especie, String nombre) {
 		this.especie = especie;
 		this.nombre = nombre;
@@ -46,4 +55,10 @@ public class Bicho {
 		this.energia = energia;
 	}
 
+    public int getId() {    return id;  }
+    public void setId(int id) { this.id = id;   }
+
+    public void setNombre(String nombre) {  this.nombre = nombre;   }
+
+    public void setEspecie(Especie especie) {   this.especie = especie; }
 }

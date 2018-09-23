@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 
 public class UbicacionDAOHibernateTest {
 
-    UbicacionDAOHibernate   ubicacionDAOSut;
+    private UbicacionDAOHibernate ubicacionDAOSut;
     private Bootstrap bootstraper;
 
     @Before
@@ -156,13 +156,15 @@ public class UbicacionDAOHibernateTest {
     public void siSeIntentaModificarElNombreDeUnaUbicacionGuardadaPorUnaQueNoEstaLaModifica()
     {
         //Setup(Given)
+        Ubicacion ubicacionModificada;
         //Exercise(When)
-        Runner.runInSession(()-> {
-            Ubicacion aModificar    = ubicacionDAOSut.recuperar("El Origen");
-            aModificar.setNombre("El Nuevo Origen");
-            ubicacionDAOSut.actualizar(aModificar);
-            return null;
-        });
+        ubicacionModificada = Runner.runInSession(()-> {
+                                    Ubicacion unaUbicacionRecuperada  = ubicacionDAOSut.recuperar("El Origen");
+                                    unaUbicacionRecuperada.setNombre("El Nuevo Origen");
+                                    ubicacionDAOSut.actualizar(unaUbicacionRecuperada);
+                                    return ubicacionDAOSut.recuperar("El Nuevo Origen");
+                                    });
         //Test(Then)
+        assertEquals("El Nuevo Origen", ubicacionModificada.getNombre());
     }
 }

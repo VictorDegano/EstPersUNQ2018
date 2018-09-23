@@ -45,6 +45,10 @@ public abstract class Ubicacion
     public int cantidadDeEntrenadores()
     {   return this.getEntrenadores().size(); }
 
+    /**
+     * Retorna el campeon actual del Dojo
+     * @return El {@link Bicho} campeon del dojo
+     */
     public Bicho campeonActual(){ return null;    }
 
 /*[--------]Constructors[--------]*/

@@ -1,6 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.service.mapa;
 
 import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
+import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
@@ -54,7 +55,7 @@ public class MapaServiceImplementacion implements MapaService
     @Override
     public int cantidadEntrenadores(String ubicacion)
     {
-        //TODO: ¿Hacer que devuelva 0 o una excepcion si no encuentra la Ubicacion?
+        //TODO: Tiene que usar UbicacionIncorrectaException
         return Runner.runInSession(() -> {
                     Ubicacion unaUbicacion = this.getUbicacionDAO().recuperar(ubicacion);
 
@@ -74,7 +75,15 @@ public class MapaServiceImplementacion implements MapaService
      */
     @Override
     public Bicho campeon(String dojo) {
-        return null;
+        return Runner.runInSession(() -> {
+                    Ubicacion unDojo = this.getUbicacionDAO().recuperar(dojo);
+
+                    if( unDojo != null)
+                    {   return unDojo.campeonActual();   }
+                    else
+                    {   throw new UbicacionIncorrectaException(dojo);  }
+                }
+        );
     }
 
     /**

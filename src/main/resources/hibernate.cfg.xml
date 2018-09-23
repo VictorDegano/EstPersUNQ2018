@@ -24,7 +24,9 @@
 
 <!--	Aca se le dice que clases vamos a querer persistir -->
 		<mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.Especie" />
-		<mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon" />
 		<mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion" />
 		<mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo" />
 		<mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo" />
