@@ -30,6 +30,7 @@
 		<mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion" />
 		<mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo" />
 		<mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo" />
+		<mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia" />
 		<mapping class="ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador" />
 	
 	</session-factory>

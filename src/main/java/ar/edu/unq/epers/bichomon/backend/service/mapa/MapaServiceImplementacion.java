@@ -55,14 +55,13 @@ public class MapaServiceImplementacion implements MapaService
     @Override
     public int cantidadEntrenadores(String ubicacion)
     {
-        //TODO: Tiene que usar UbicacionIncorrectaException
         return Runner.runInSession(() -> {
                     Ubicacion unaUbicacion = this.getUbicacionDAO().recuperar(ubicacion);
 
                     if( unaUbicacion != null)
                     {   return unaUbicacion.cantidadDeEntrenadores();   }
                     else
-                    {   throw new RuntimeException("Nombre de ubicacion: "+ ubicacion +" incorrecto");  }
+                    {   throw new UbicacionIncorrectaException(ubicacion);  }
                 }
         );
     }

@@ -1,5 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 
 import javax.persistence.*;
@@ -13,13 +14,16 @@ import javax.persistence.*;
 @Entity
 public class Bicho {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="BichoSequenceGenerator")
+    @SequenceGenerator(allocationSize = 1, name="BichoSequenceGenerator", sequenceName = "bicho_sequence")
     private int id;
     @Transient
-	private String nombre;
+	private String nombre; // TODO: 23/09/2018 en el tp 2 ya no se necesita que tengan nombre, hay que quitarselo
     @ManyToOne(cascade = CascadeType.ALL)
 	private Especie especie;
 	private int energia;
+	@ManyToOne(cascade = CascadeType.ALL)
+    private Entrenador duenio;
 
 	public Bicho() {}
 
@@ -61,4 +65,7 @@ public class Bicho {
     public void setNombre(String nombre) {  this.nombre = nombre;   }
 
     public void setEspecie(Especie especie) {   this.especie = especie; }
+
+    public Entrenador getDuenio() { return duenio;  }
+    public void setDuenio(Entrenador duenio) {  this.duenio = duenio;   }
 }

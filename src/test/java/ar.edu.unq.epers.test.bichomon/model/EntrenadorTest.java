@@ -1,7 +1,12 @@
 package ar.edu.unq.epers.test.bichomon.model;
 
+import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
+import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import org.junit.After;
@@ -15,6 +20,8 @@ public class EntrenadorTest {
     private Entrenador entrenadorSUT;
     private Ubicacion unaUbicacion;
     private Ubicacion unaUbicacion2;
+    private Guarderia unaGuarderia;
+    private Bicho nuevoBicho;
 
     @Before
     public void setUp() throws Exception
@@ -22,13 +29,26 @@ public class EntrenadorTest {
         entrenadorSUT   = new Entrenador();
         entrenadorSUT.setNombre("Sutter");
 
+        Especie rojomon = new Especie();
+        rojomon.setNombre("Rojomon");
+        rojomon.setTipo(TipoBicho.FUEGO);
+        rojomon.setAltura(180);
+        rojomon.setPeso(75);
+        rojomon.setEnergiaIncial(100);
+        rojomon.setUrlFoto("/image/rojomon.jpg");
+        nuevoBicho      = new Bicho(rojomon, "");
+
         unaUbicacion    = new Pueblo();
         unaUbicacion.setNombre("El Origen");
 
         unaUbicacion2   = new Dojo();
         unaUbicacion2.setNombre("Dojo el Origen");
 
+        unaGuarderia = new Guarderia();
+        unaGuarderia.setNombre("Guarderia el Origen");
+
         entrenadorSUT.setUbicacion(unaUbicacion);
+        entrenadorSUT.getBichosCapturados().add(nuevoBicho);
     }
 
     @After
@@ -45,5 +65,42 @@ public class EntrenadorTest {
         assertEquals(unaUbicacion2, entrenadorSUT.getUbicacion());
         assertTrue(unaUbicacion.getEntrenadores().isEmpty());
         assertFalse(unaUbicacion2.getEntrenadores().isEmpty());
+    }
+
+    @Test
+    public void siUnEntrenadorIntentaAbandonarUnBichomonEnUnPuebloODojoRecibeUnaExcepcion()
+    {
+        //Setup(Given)
+        String mensajePueblo= "";
+        String mensajeDojo  = "";
+
+        //Exercise(When)
+        try
+        {   entrenadorSUT.abandonarBicho(nuevoBicho);   }
+        catch (UbicacionIncorrectaException e)
+        {   mensajePueblo = e.getMessage(); }
+        entrenadorSUT.moverse(unaUbicacion2);
+        try
+        {   entrenadorSUT.abandonarBicho(nuevoBicho);   }
+        catch (UbicacionIncorrectaException e)
+        {   mensajeDojo = e.getMessage(); }
+        //Test(Then)
+        assertEquals("La Ubicacion: El Origen es incorrecta. No se puede abandonar un bichomon en esta Ubicacion", mensajePueblo);
+        assertEquals("La Ubicacion: Dojo el Origen es incorrecta. No se puede abandonar un bichomon en esta Ubicacion", mensajeDojo);
+        assertFalse(entrenadorSUT.getBichosCapturados().isEmpty());
+        assertTrue(entrenadorSUT.getBichosCapturados().contains(nuevoBicho));
+    }
+
+    @Test
+    public void siUnEntrenadorAbandonaAUnBichomonEnUnaGuarderiaYaNoLoPosee()
+    {
+        //Setup(Given)
+        entrenadorSUT.moverse(unaGuarderia);
+        //Exercise(When)
+        entrenadorSUT.abandonarBicho(nuevoBicho);
+        //Test(Then)
+        assertTrue(entrenadorSUT.getBichosCapturados().isEmpty());
+        assertFalse(unaGuarderia.getBichosAbandonados().isEmpty());
+        assertTrue(unaGuarderia.getBichosAbandonados().contains(nuevoBicho));
     }
 }

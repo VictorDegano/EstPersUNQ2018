@@ -1,5 +1,6 @@
 package ar.edu.unq.epers.test.bichomon.model;
 
+import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
@@ -8,12 +9,8 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 import static org.junit.Assert.*;
 
@@ -23,11 +20,12 @@ public class UbicacionTest {
     private Ubicacion ubicacionSUT2;
     private Ubicacion ubicacionSUT3;
     private Ubicacion ubicacionSUT4;
+    private Bicho nuevoBicho;
 
     @Before
     public void setUp() throws Exception
     {
-        Especie rojomon = new Especie();
+        Especie rojomon     = new Especie();
         rojomon.setNombre("Rojomon");
         rojomon.setTipo(TipoBicho.FUEGO);
         rojomon.setAltura(180);
@@ -35,21 +33,22 @@ public class UbicacionTest {
         rojomon.setEnergiaIncial(100);
         rojomon.setUrlFoto("/image/rojomon.jpg");
         Dojo dojoConCampeon = new Dojo();
-        Bicho nuevoBichoCampeon  = new Bicho(rojomon, "");
+        nuevoBicho          = new Bicho(rojomon, "");
         Campeon nuevoCampeon= new Campeon();
-        nuevoCampeon.setBichoCampeon(nuevoBichoCampeon);
+        nuevoCampeon.setBichoCampeon(nuevoBicho);
         dojoConCampeon.setCampeonActual(nuevoCampeon);
 
-        ubicacionSUT1   = new Pueblo();
+        ubicacionSUT1       = new Pueblo();
         ubicacionSUT1.setNombre("La Prueba");
 
-        ubicacionSUT2   = new Guarderia();
+        ubicacionSUT2       = new Guarderia();
         ubicacionSUT2.setNombre("La Guarderia de Prueba");
 
-        ubicacionSUT3   = new Dojo();
+        ubicacionSUT3       = new Dojo();
         ubicacionSUT3.setNombre("Dojo Prueba");
 
-        ubicacionSUT4   = dojoConCampeon;
+        ubicacionSUT4       = dojoConCampeon;
+        ubicacionSUT4.setNombre("Dojo Campeonus");
     }
 
     @Test
@@ -91,6 +90,28 @@ public class UbicacionTest {
 
         //Test(Then)
         assertNotNull(campeonDojo);
+    }
+
+    @Test(expected = UbicacionIncorrectaException.class)
+    public void SiSeAbandonaUnBichomonEnUnDojoSeDaUnaExcepcion()
+    {
+        //Setup(Given)
+        //Exercise(When)
+        ubicacionSUT4.abandonar(nuevoBicho);
+
+        //Test(Then)
+        fail("No hubo Excepcion");
+    }
+
+    @Test(expected = UbicacionIncorrectaException.class)
+    public void SiSeAbandonaUnBichomonEnUnPuebloSeDaUnaExcepcion()
+    {
+        //Setup(Given)
+        //Exercise(When)
+        ubicacionSUT1.abandonar(nuevoBicho);
+
+        //Test(Then)
+        fail("No hubo Excepcion");
     }
 
 }

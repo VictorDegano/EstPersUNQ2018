@@ -1,5 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
+import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 
@@ -49,7 +50,16 @@ public abstract class Ubicacion
      * Retorna el campeon actual del Dojo
      * @return El {@link Bicho} campeon del dojo
      */
-    public Bicho campeonActual(){ return null;    }
+    public Bicho campeonActual()
+    { return null;    }
+
+    /**
+     * Abandona el bicho especificado del entrenador en su ubicacion actual.
+     * @param bicho - el bicho a abandonar
+     * @throws UbicacionIncorrectaException si la ubicacion no es una guarderia.
+     */
+    public void abandonar(Bicho bicho)
+    { throw new UbicacionIncorrectaException(this.getNombre(), "No se puede abandonar un bichomon en esta Ubicacion");  }
 
 /*[--------]Constructors[--------]*/
     public Ubicacion() {    }
