@@ -1,6 +1,7 @@
 package ar.edu.unq.epers.test.bichomon.dao.hibernate;
 
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EspecieDAOHibernate;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 
@@ -77,6 +78,16 @@ public class EspecieDAOHibernateTest {
         assertEquals("arromon", especiesRecuperadas.get(1).getNombre());
         assertEquals("mugreomon", especiesRecuperadas.get(2).getNombre());
 
+    }
+
+
+    @Test
+    public void al_crearse_un_bicho_se_incrementa_en_uno_la_cantidade_de_bichos_en_la_tabla_especie(){
+        Especie especieRecuperada = this.testService.getEspecie("arromon");
+        assertEquals(0,especieRecuperada.getCantidadBichos());
+        Bicho bichoCreado = this.testService.crearBicho("arromon","arrozmon");
+        Especie especieRecuperadaDespuesDeCrearBicho = this.testService.getEspecie("arromon");
+        assertEquals(1,especieRecuperadaDespuesDeCrearBicho.getCantidadBichos());
     }
 
 
