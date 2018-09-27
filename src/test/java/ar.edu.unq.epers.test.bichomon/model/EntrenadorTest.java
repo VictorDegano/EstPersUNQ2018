@@ -3,6 +3,7 @@ package ar.edu.unq.epers.test.bichomon.model;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.Nivel;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
@@ -22,10 +23,20 @@ public class EntrenadorTest {
     private Ubicacion unaUbicacion2;
     private Guarderia unaGuarderia;
     private Bicho nuevoBicho;
+    private Bicho bichoDenadie;
+    private Nivel nivel1;
+    private Nivel nivel2;
+    private Nivel nivel3;
 
     @Before
     public void setUp() throws Exception
     {
+        nivel1  = new Nivel(1, 1, 99, 4);
+        nivel2  = new Nivel(2, 100, 399, 5);
+        nivel3  = new Nivel(3, 400, 999, 6);
+        nivel1.setNivelSiguiente(nivel2);
+        nivel2.setNivelSiguiente(nivel3);
+
         entrenadorSUT   = new Entrenador();
         entrenadorSUT.setNombre("Sutter");
 
@@ -37,6 +48,8 @@ public class EntrenadorTest {
         rojomon.setEnergiaIncial(100);
         rojomon.setUrlFoto("/image/rojomon.jpg");
         nuevoBicho      = new Bicho(rojomon, "");
+        bichoDenadie    = new Bicho(rojomon, "");
+        bichoDenadie.setEnergia(23456);
 
         unaUbicacion    = new Pueblo();
         unaUbicacion.setNombre("El Origen");
@@ -103,4 +116,65 @@ public class EntrenadorTest {
         assertFalse(unaGuarderia.getBichosAbandonados().isEmpty());
         assertTrue(unaGuarderia.getBichosAbandonados().contains(nuevoBicho));
     }
+
+    @Test
+    public void siUnEntrenadorIntentaAbandonarAUnBichomonQueNoPoseeNoPasaNada()
+    {
+        //Setup(Given)
+        entrenadorSUT.moverse(unaGuarderia);
+
+        //Exercise(When)
+        entrenadorSUT.abandonarBicho(bichoDenadie);
+
+        //Test(Then)
+        assertFalse(unaGuarderia.getBichosAbandonados().contains(nuevoBicho));
+        assertFalse(entrenadorSUT.getBichosCapturados().isEmpty());
+        assertTrue(unaGuarderia.getBichosAbandonados().isEmpty());
+    }
+
+    @Test
+    public void siUnEntrenadorDeNivelUnoSinXPGanaCuarentaPuntosDeXPQuedaEnNivelUno()
+    {
+        //Setup(given)
+        entrenadorSUT.setNivel(nivel1);
+        entrenadorSUT.setExperiencia(0);
+        //Exercise(When)
+        entrenadorSUT.subirExperiencia(40);
+
+        //Test(Then)
+        assertEquals(1, entrenadorSUT.getNivel().getNroDeNivel());
+        assertEquals(40, entrenadorSUT.getExperiencia());
+    }
+
+    @Test
+    public void siUnEntrenadorDeNivelUnoObtieneUnaExperienciaQueLeHaceSuperarLosNoventaYNuevePuntosSubeAlNivelDos()
+    {
+        //Setup(given)
+        entrenadorSUT.setNivel(nivel1);
+        entrenadorSUT.setExperiencia(40);
+
+        //Exercise(When)
+        entrenadorSUT.subirExperiencia(61);
+
+        //Test(Then)
+        assertEquals(2, entrenadorSUT.getNivel().getNroDeNivel());
+        assertEquals(101, entrenadorSUT.getExperiencia());
+    }
+
+    @Test
+    public void siUnEntrenadorDeNivelUnoSinXPGanaElEquivalenteACuatrocientosCincuentaPuntosDeXPTerminaEnElNivel3()
+    {
+        //Setup(given)
+        entrenadorSUT.setNivel(nivel1);
+        entrenadorSUT.setExperiencia(0);
+
+        //Exercise(When)
+        entrenadorSUT.subirExperiencia(100);
+        entrenadorSUT.subirExperiencia(350);
+
+        //Test(Then)
+        assertEquals(3, entrenadorSUT.getNivel().getNroDeNivel());
+        assertEquals(450, entrenadorSUT.getExperiencia());
+    }
+
 }

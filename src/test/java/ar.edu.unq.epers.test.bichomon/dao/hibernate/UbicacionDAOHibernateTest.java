@@ -93,7 +93,6 @@ public class UbicacionDAOHibernateTest {
         Ubicacion ubicacionAModificar;
         ubicacionAModificar = Runner.runInSession(()-> { return ubicacionDAOSut.recuperar("El Origen");});
         Entrenador unNuevoEntrenador    = new Entrenador();
-        unNuevoEntrenador.setNivel(2);
         unNuevoEntrenador.setExperiencia(15600);
         unNuevoEntrenador.setNombre("Rick");
 

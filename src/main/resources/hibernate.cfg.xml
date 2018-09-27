@@ -32,6 +32,7 @@
 		<mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo" />
 		<mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia" />
 		<mapping class="ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador" />
+		<mapping class="ar.edu.unq.epers.bichomon.backend.model.entrenador.Nivel" />
 	
 	</session-factory>
 </hibernate-configuration>

@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: 14/09/2018 Plantear si nivel, ubicacion y experiencia pueden ser null
 @Entity
 public class Entrenador
 {
@@ -16,11 +15,10 @@ public class Entrenador
     @Column(unique = true, nullable = false)
     private String nombre;
     private int experiencia;
-    private int nivel;
+    @ManyToOne
+    private Nivel nivel;
     @ManyToOne(cascade = CascadeType.ALL)
     private Ubicacion ubicacion = null;
-
-    //@Transient // TODO: 23/09/2018 Ignorado, cuando se vaya a trabajar sobre la lista de bichomones hay que definirle la relacion @OneToMany
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Bicho> bichosCapturados = new ArrayList<>();
 
@@ -36,21 +34,30 @@ public class Entrenador
     }
 
     /**
-     * Abandona el bicho con la id idBicho en la ubicacion actual. La ubicacion debe ser una
-     * guarderia, si el bicho no esta en posecion del entrenador sucede nada.
-     * @param idBichoAAbandonar - El id del bicho a abandonar.
+     * Abandona el bicho indicado en la ubicacion actual. La ubicacion debe ser una
+     * guarderia para poder abandonar y si el bicho no esta en posecion del entrenador sucede nada.
+     * @param bichoAAbandonar - El bicho a abandonar.
      */
     public void abandonarBicho(Bicho bichoAAbandonar)
     {
-//        Bicho bichoAAbandonar   = this.getBichosCapturados().stream().filter(a -> a.getId() == idBichoAAbandonar).findFirst().orElseGet(null);
-//        if (bichoAAbandonar != null)
-//        {
-//            this.getUbicacion().abandonar(bichoAAbandonar);
-//            this.getBichosCapturados().remove(bichoAAbandonar);
-//        }
-        this.getUbicacion().abandonar(bichoAAbandonar);
-        this.getBichosCapturados().remove(bichoAAbandonar);
+        if (this.getBichosCapturados().contains(bichoAAbandonar)) {
+            this.getUbicacion().abandonar(bichoAAbandonar);
+            this.getBichosCapturados().remove(bichoAAbandonar);
+        }
     }
+
+    /**
+     * El entrenador ganara experiencia y la acumulara a la cantidad de experiencia que tiene.
+     * En el caso que su experiencia supere la experiencia limite de su nivel actual, subira al nivel siguiente.
+     * @param experienciaGanada - La cantidad de experiencia que ganara.
+     */
+    public void subirExperiencia(int experienciaGanada)
+    {
+        int nuevaExperiencia    = this.getExperiencia() + experienciaGanada;
+        this.setExperiencia(nuevaExperiencia);
+        this.getNivel().ganoExperiencia(this);
+    }
+
 /*[--------]Constructors[--------]*/
     public Entrenador() {   }
 
@@ -61,8 +68,8 @@ public class Entrenador
     public int getExperiencia() {   return experiencia; }
     public void setExperiencia(int experiencia) {   this.experiencia = experiencia; }
 
-    public int getNivel() { return nivel;   }
-    public void setNivel(int nivel) {   this.nivel = nivel; }
+    public Nivel getNivel() { return nivel;   }
+    public void setNivel(Nivel nivel) {   this.nivel = nivel; }
 
     public Ubicacion getUbicacion() {   return ubicacion;   }
     public void setUbicacion(Ubicacion ubicacion) { this.ubicacion = ubicacion; }

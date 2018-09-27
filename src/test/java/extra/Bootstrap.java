@@ -2,6 +2,7 @@ package extra;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.Nivel;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
@@ -18,6 +19,28 @@ public class Bootstrap
 
     public void crearDatos()
     {
+/*----------[CREACION DE BICHOS]----------*/
+        Nivel nivel1  = new Nivel(1, 1, 99, 4);
+        Nivel nivel2  = new Nivel(2, 100, 399, 5);
+        Nivel nivel3  = new Nivel(3, 400, 999, 6);
+        Nivel nivel4  = new Nivel(4, 1000, 1999, 7);
+        Nivel nivel5  = new Nivel(5, 2000, 2999, 8);
+        Nivel nivel6  = new Nivel(6, 3000, 3999, 9);
+        Nivel nivel7  = new Nivel(7, 4000, 4999, 10);
+        Nivel nivel8  = new Nivel(8, 5000, 5999, 11);
+        Nivel nivel9  = new Nivel(9, 6000, 6999, 12);
+        Nivel nivel10 = new Nivel(10, 7000, 7999, 13);
+        nivel1.setNivelSiguiente(nivel2);
+        nivel2.setNivelSiguiente(nivel3);
+        nivel3.setNivelSiguiente(nivel4);
+        nivel4.setNivelSiguiente(nivel5);
+        nivel5.setNivelSiguiente(nivel6);
+        nivel6.setNivelSiguiente(nivel7);
+        nivel7.setNivelSiguiente(nivel8);
+        nivel8.setNivelSiguiente(nivel9);
+        nivel9.setNivelSiguiente(nivel10);
+        nivel10.setNivelSiguiente(nivel10);
+
 /*----------[CREACION DE UBICACION]----------*/
         Ubicacion puebloElOrigen= new Pueblo();
         puebloElOrigen.setNombre("El Origen");
@@ -35,12 +58,12 @@ public class Bootstrap
         Entrenador entrenador1  = new Entrenador();
         entrenador1.setNombre("Pepe Pepon");
         entrenador1.setExperiencia(0);
-        entrenador1.setNivel(1);
+        entrenador1.setNivel(nivel1);
 
         Entrenador entrenador2  = new Entrenador();
         entrenador2.setNombre("El Loquillo");
         entrenador2.setExperiencia(990);
-        entrenador2.setNivel(3);
+        entrenador2.setNivel(nivel3);
 
         entrenador1.setUbicacion(puebloElOrigen);
         puebloElOrigen.agregarEntrenador(entrenador1);
@@ -125,6 +148,16 @@ public class Bootstrap
         entrenador1.getBichosCapturados().add(fortinator);
 
         Session session = Runner.getCurrentSession();
+        session.save(nivel1);
+        session.save(nivel2);
+        session.save(nivel3);
+        session.save(nivel4);
+        session.save(nivel5);
+        session.save(nivel6);
+        session.save(nivel7);
+        session.save(nivel8);
+        session.save(nivel9);
+        session.save(nivel10);
         session.save(puebloElOrigen);
         session.save(puebloDesert);
         session.save(dojoDesert);
@@ -158,8 +191,9 @@ public class Bootstrap
             Query query9 = session.createNativeQuery("TRUNCATE TABLE bicho_sequence;");
             Query query10= session.createNativeQuery("TRUNCATE TABLE entrenador_bicho;");
             Query query11= session.createNativeQuery("TRUNCATE TABLE guarderia_bicho;");
-            Query query12= session.createNativeQuery("SET FOREIGN_KEY_CHECKS=1;");
-            Query query13= session.createNativeQuery("insert into bicho_sequence(next_val) values(0);");
+            Query query12= session.createNativeQuery("TRUNCATE TABLE nivel;");
+            Query query13= session.createNativeQuery("SET FOREIGN_KEY_CHECKS=1;");
+            Query query14= session.createNativeQuery("insert into bicho_sequence(next_val) values(0);");
             query1.executeUpdate();
             query2.executeUpdate();
             query3.executeUpdate();
@@ -173,6 +207,7 @@ public class Bootstrap
             query11.executeUpdate();
             query12.executeUpdate();
             query13.executeUpdate();
+            query14.executeUpdate();
 
             return null;
         });
