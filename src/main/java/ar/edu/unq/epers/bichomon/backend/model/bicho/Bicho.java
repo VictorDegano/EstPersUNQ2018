@@ -14,7 +14,8 @@ import javax.persistence.*;
 @Entity
 public class Bicho {
 
-    @Id @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="BichoSequenceGenerator")
+
+	@Id @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="BichoSequenceGenerator")
     @SequenceGenerator(allocationSize = 1, name="BichoSequenceGenerator", sequenceName = "bicho_sequence")
     private int id;
     @Transient
@@ -74,6 +75,12 @@ public class Bicho {
 	    int dañoAHacer = this.daño();
 		contrincante.setEnergia(contrincante.energia-dañoAHacer);
 		return dañoAHacer;
+    }
+
+    public Especie getEvolucionBase(){
+
+	    Especie base=this.especie.getBase();
+	    return base;
     }
 
     public int daño()
