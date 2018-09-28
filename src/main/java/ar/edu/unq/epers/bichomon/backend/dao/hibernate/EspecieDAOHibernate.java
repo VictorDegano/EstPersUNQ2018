@@ -1,5 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.dao.hibernate;
 
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 
 import org.hibernate.Session;
@@ -33,14 +34,25 @@ public class EspecieDAOHibernate implements ar.edu.unq.epers.bichomon.backend.da
 
     @Override
     public void actualizar(Especie especie) {
+        Session session = Runner.getCurrentSession();
+        session.update(especie);
 
     }
 
     @Override
     public List<Especie> recuperarTodos() {
-        Session session =Runner.getCurrentSession();
+        Session session = Runner.getCurrentSession();
         String hql = "FROM Especie e order by e.nombre asc";
         Query<Especie> query = session.createQuery(hql,  Especie.class);
         return query.getResultList();
     }
+
+    public Bicho crearBicho(String nombreEspecie, String nombreBicho) {
+        Especie especie = this.recuperar(nombreEspecie);
+        especie.setCantidadBichos(especie.getCantidadBichos() + 1);
+        this.actualizar(especie);
+        Bicho nuevoBicho = new Bicho(especie,nombreBicho);
+        return nuevoBicho;
+    }
+
 }

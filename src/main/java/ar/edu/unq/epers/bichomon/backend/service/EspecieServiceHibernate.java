@@ -42,6 +42,9 @@ public class EspecieServiceHibernate implements EspecieService {
 
     @Override
     public Bicho crearBicho(String nombreEspecie, String nombreBicho) {
-        return null;
+        return Runner.runInSession(()->{
+            return this.especieDAO.crearBicho(nombreEspecie,nombreBicho);
+        });
     }
+
 }
