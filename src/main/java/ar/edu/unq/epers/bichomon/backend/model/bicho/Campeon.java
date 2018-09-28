@@ -27,4 +27,7 @@ public class Campeon
 
     public int getId() {    return id;  }
     public void setId(int id) { this.id = id;   }
+
+    public Timestamp getFechaFinDeCampeon() {   return fechaFinDeCampeon;   }
+    public void setFechaFinDeCampeon(Timestamp fechaFinDeCampeon) { this.fechaFinDeCampeon = fechaFinDeCampeon; }
 }
