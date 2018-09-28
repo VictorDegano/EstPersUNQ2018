@@ -97,6 +97,15 @@ public class EspecieDAOHibernateTest {
         assertEquals(1,especieRecuperadaDespuesDeCrearBicho.getCantidadBichos());
     }
 
+    @Test
+    public void retornan_las_diez_especies_mas_populares(){
+
+        List<Especie> populares = this.testService.populares();
+        assertEquals(populares.size(),1);
+
+
+    }
+
 
 }
 
