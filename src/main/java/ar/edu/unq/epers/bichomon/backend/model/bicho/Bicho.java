@@ -1,6 +1,9 @@
 package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
+
+import javax.persistence.*;
 
 /**
  * Un {@link Bicho} existente en el sistema, el mismo tiene un nombre
@@ -8,12 +11,22 @@ import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
  * 
  * @author Charly Backend
  */
+@Entity
 public class Bicho {
 
-	private String nombre;
+    @Id @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="BichoSequenceGenerator")
+    @SequenceGenerator(allocationSize = 1, name="BichoSequenceGenerator", sequenceName = "bicho_sequence")
+    private int id;
+    @Transient
+	private String nombre; // TODO: 23/09/2018 en el tp 2 ya no se necesita que tengan nombre, hay que quitarselo
+    @ManyToOne(cascade = CascadeType.ALL)
 	private Especie especie;
 	private int energia;
-	
+	@ManyToOne(cascade = CascadeType.ALL)
+    private Entrenador duenio;
+
+	public Bicho() {}
+
 	public Bicho(Especie especie, String nombre) {
 		this.especie = especie;
 		this.nombre = nombre;
@@ -46,4 +59,13 @@ public class Bicho {
 		this.energia = energia;
 	}
 
+    public int getId() {    return id;  }
+    public void setId(int id) { this.id = id;   }
+
+    public void setNombre(String nombre) {  this.nombre = nombre;   }
+
+    public void setEspecie(Especie especie) {   this.especie = especie; }
+
+    public Entrenador getDuenio() { return duenio;  }
+    public void setDuenio(Entrenador duenio) {  this.duenio = duenio;   }
 }

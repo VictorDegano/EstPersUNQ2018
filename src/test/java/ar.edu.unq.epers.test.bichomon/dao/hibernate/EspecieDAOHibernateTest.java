@@ -5,6 +5,9 @@ import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 
 import ar.edu.unq.epers.bichomon.backend.service.EspecieServiceHibernate;
+import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
+import extra.Bootstrap;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -50,9 +53,13 @@ public class EspecieDAOHibernateTest {
 
     }
 
-    //@After
-    //public void tearDown() throws Exception {
-    //}
+    @After
+    public void tearDown() throws Exception
+    {
+        Bootstrap bootstrap = new Bootstrap();
+        Runner.runInSession(()-> {  bootstrap.limpiarTabla();
+                                    return null;});
+    }
 
     @Test
     public void cuando_se_guarda_una_especie_se_hace_de_forma_correcta() {

@@ -3,8 +3,12 @@ package ar.edu.unq.epers.test.bichomon.service;
 import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EntrenadorDAOHibernate;
+import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EspecieDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.UbicacionDAOHibernate;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
@@ -14,6 +18,8 @@ import extra.Bootstrap;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.sql.Timestamp;
 
 import static org.junit.Assert.*;
 
@@ -180,7 +186,38 @@ public class MapaServiceImplementacionTest
     }
 
     @Test
-    public void campeon() { }
+    public void SiPidoElCampeonActualAUnDojoSinCampeonMeDaNull()
+    {
+        //Setup(Given)
+        //Exercise(When)
+        Bicho campeon   = mapaServiceSUT.campeon("Dojo Deshabitado");
+        //Test(Then)
+        assertNull(campeon);
+    }
+
+    @Test
+    public void SiPidoElCampeonActualAUnDojoQueTieneCampeonMeLoDa()
+    {
+        //Setup(Given)
+        Bicho campeonActual;
+        Dojo dojoConCampeon     = new Dojo();
+        dojoConCampeon.setNombre("The Last Dojo");
+        Especie fortmon         = Runner.runInSession(() -> {   EspecieDAOHibernate especieDAOHibernate = new EspecieDAOHibernate();
+                                                            return especieDAOHibernate.recuperar("Fortmon");});
+        Bicho bichoCampeon      = new Bicho(fortmon, "");
+        Campeon fortimonCampeon = new Campeon();
+        fortimonCampeon.setBichoCampeon(bichoCampeon);
+        fortimonCampeon.setFechaInicioDeCampeon(Timestamp.valueOf("2018-09-16 15:00:00"));
+        dojoConCampeon.setCampeonActual(fortimonCampeon);
+
+        Runner.runInSession(() -> { ubicacionDAO.guardar(dojoConCampeon);
+                                    return null;});
+
+        //Exercise(When)
+        campeonActual   = mapaServiceSUT.campeon("The Last Dojo");
+        //Test(Then)
+        assertNotNull(campeonActual);
+    }
 
     @Test
     public void campeonHistorico() {    }

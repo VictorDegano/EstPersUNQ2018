@@ -52,7 +52,7 @@ public class EntrenadorDAOHibernateTest {
         assertNotNull(entrenadorRecuperado);
         assertEquals("Pepe Pepon", entrenadorRecuperado.getNombre());
         assertEquals(0, entrenadorRecuperado.getExperiencia());
-        assertEquals(1, entrenadorRecuperado.getNivel());
+        assertEquals(1, entrenadorRecuperado.getNivel().getNroDeNivel());
         assertEquals("El Origen", entrenadorRecuperado.getUbicacion().getNombre());
     }
 
@@ -62,7 +62,6 @@ public class EntrenadorDAOHibernateTest {
         Entrenador entrenadorAGuardar;
         entrenadorAGuardar = new Entrenador();
         entrenadorAGuardar.setExperiencia(0);
-        entrenadorAGuardar.setNivel(1);
 
         //Exercise(When)
         Runner.runInSession(() -> {
@@ -80,7 +79,6 @@ public class EntrenadorDAOHibernateTest {
         entrenadorAGuardar = new Entrenador();
         entrenadorAGuardar.setNombre("Juan Rebenque");
         entrenadorAGuardar.setExperiencia(10);
-        entrenadorAGuardar.setNivel(1);
 
         //Exercise(When)
         entrenadorRecuperado = Runner.runInSession(() -> {
@@ -90,7 +88,6 @@ public class EntrenadorDAOHibernateTest {
         //Test(Then)
         assertEquals("Juan Rebenque", entrenadorRecuperado.getNombre());
         assertEquals(10, entrenadorRecuperado.getExperiencia());
-        assertEquals(1, entrenadorRecuperado.getNivel());
     }
 
     @Test(expected = PersistenceException.class)
@@ -100,7 +97,6 @@ public class EntrenadorDAOHibernateTest {
         entrenadorAGuardar = new Entrenador();
         entrenadorAGuardar.setNombre("Pepe Pepon");
         entrenadorAGuardar.setExperiencia(0);
-        entrenadorAGuardar.setNivel(1);
 
         //Exercise(When)
         Runner.runInSession(() -> {
@@ -115,8 +111,7 @@ public class EntrenadorDAOHibernateTest {
         //Setup(Given)
         Entrenador entrenadorRecuperado;
         Entrenador entrenadorAModificar = Runner.runInSession(() -> { return entrenadorDAOSut.recuperar("Pepe Pepon"); });
-        entrenadorAModificar.setExperiencia(101);
-        entrenadorAModificar.setNivel(2);
+        entrenadorAModificar.setExperiencia(98);
 
         //Exercise(When)
         entrenadorRecuperado    = Runner.runInSession(() -> {entrenadorDAOSut.actualizar(entrenadorAModificar);
@@ -124,8 +119,8 @@ public class EntrenadorDAOHibernateTest {
 
         //Test(Then)
         assertEquals("Pepe Pepon", entrenadorRecuperado.getNombre());
-        assertEquals(101, entrenadorRecuperado.getExperiencia());
-        assertEquals(2, entrenadorRecuperado.getNivel());
+        assertEquals(98, entrenadorRecuperado.getExperiencia());
+        assertEquals(1, entrenadorRecuperado.getNivel().getNroDeNivel());
     }
 
     @Test(expected = PersistenceException.class)
@@ -134,11 +129,11 @@ public class EntrenadorDAOHibernateTest {
         Entrenador entrenadorAActualizar= new Entrenador();
         entrenadorAActualizar.setNombre("Pepe");
         entrenadorAActualizar.setExperiencia(12);
-        entrenadorAActualizar.setNivel(1);
 
         //Exercise(When)
         Runner.runInSession(() -> {entrenadorDAOSut.actualizar(entrenadorAActualizar);
                                    return entrenadorDAOSut.recuperar("Pepe"); });
         //Test(Then)
+        fail("No Hubo Excepcion");
     }
 }
