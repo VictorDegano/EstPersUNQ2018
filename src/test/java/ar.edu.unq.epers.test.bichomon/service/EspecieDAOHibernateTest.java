@@ -1,11 +1,11 @@
-package ar.edu.unq.epers.test.bichomon.dao.hibernate;
+package ar.edu.unq.epers.test.bichomon.service;
 
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EspecieDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 
-import ar.edu.unq.epers.bichomon.backend.service.EspecieServiceHibernate;
+import ar.edu.unq.epers.bichomon.backend.service.especie.EspecieServiceHibernate;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 import extra.Bootstrap;
 import org.junit.After;

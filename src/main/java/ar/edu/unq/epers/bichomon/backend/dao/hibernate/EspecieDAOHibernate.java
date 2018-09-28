@@ -55,4 +55,9 @@ public class EspecieDAOHibernate implements ar.edu.unq.epers.bichomon.backend.da
         return nuevoBicho;
     }
 
+    public List<Especie> populares(){
+        Session session = Runner.getCurrentSession();
+        String hql = ""
+    }
+
 }

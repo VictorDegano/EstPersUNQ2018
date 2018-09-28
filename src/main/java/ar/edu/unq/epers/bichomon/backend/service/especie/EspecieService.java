@@ -48,4 +48,21 @@ public interface EspecieService {
      * @return un objeto {@link Bicho} instanciado
      */
     Bicho crearBicho(String nombreEspecie, String nombreBicho);
+
+    /**
+     * retorna aquellos diez especies mas populares,
+     * o sea, aquellas que tengan mas bichos en manos de distintos entrenadores.
+     * No contaran los bichos en la Guardería.
+     */
+    List<Especie> populares();
+
+    /**
+     *
+     * retorna aquellos diez especies menos populares,
+     * o sea, aquellas que tengan actualmente mas bichos en la Guardería.
+     */
+    List<Especie> impopulares();
+
+
+
 }
