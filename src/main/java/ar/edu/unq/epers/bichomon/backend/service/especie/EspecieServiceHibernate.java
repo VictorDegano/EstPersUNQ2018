@@ -54,7 +54,8 @@ public class EspecieServiceHibernate implements EspecieService {
         });
     }
 
-    @Override List<Especie> impopulares(){
+    @Override
+    public List<Especie> impopulares(){
         return null;
     }
 
