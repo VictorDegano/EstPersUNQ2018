@@ -19,7 +19,7 @@ public class Bootstrap
 
     public void crearDatos()
     {
-/*----------[CREACION DE BICHOS]----------*/
+        /*----------[CREACION DE BICHOS]----------*/
         Nivel nivel1  = new Nivel(1, 1, 99, 4);
         Nivel nivel2  = new Nivel(2, 100, 399, 5);
         Nivel nivel3  = new Nivel(3, 400, 999, 6);
@@ -41,7 +41,7 @@ public class Bootstrap
         nivel9.setNivelSiguiente(nivel10);
         nivel10.setNivelSiguiente(nivel10);
 
-/*----------[CREACION DE UBICACION]----------*/
+        /*----------[CREACION DE UBICACION]----------*/
         Ubicacion puebloElOrigen= new Pueblo();
         puebloElOrigen.setNombre("El Origen");
 
@@ -54,7 +54,7 @@ public class Bootstrap
         Ubicacion laGuarderia   = new Guarderia();
         laGuarderia.setNombre("La Guarderia");
 
-/*----------[CREACION DE ENTRENADORES]----------*/
+        /*----------[CREACION DE ENTRENADORES]----------*/
         Entrenador entrenador1  = new Entrenador();
         entrenador1.setNombre("Pepe Pepon");
         entrenador1.setExperiencia(0);
@@ -82,10 +82,22 @@ public class Bootstrap
 
         entrenador1.setUbicacion(puebloElOrigen);
         puebloElOrigen.agregarEntrenador(entrenador1);
+
         entrenador2.setUbicacion(puebloDesert);
         puebloDesert.agregarEntrenador(entrenador2);
 
-/*----------[CREACION DE ESPECIES]----------*/
+        entrenador3.setUbicacion(puebloDesert);
+        puebloDesert.agregarEntrenador(entrenador3);
+
+        entrenador4.setUbicacion(puebloElOrigen);
+        puebloElOrigen.agregarEntrenador(entrenador4);
+
+        entrenador5.setUbicacion(puebloElOrigen);
+        entrenador5.setUbicacion(puebloElOrigen);
+
+
+
+        /*----------[CREACION DE ESPECIES]----------*/
         Especie red = new Especie();
         red.setNombre("Rojomon");
         red.setTipo(TipoBicho.FUEGO);
@@ -150,17 +162,88 @@ public class Bootstrap
         dientemon.setEnergiaIncial(5000);
         dientemon.setUrlFoto("/image/dientmon.jpg");
 
-/*----------[CREACION DE BICHOS]----------*/
+        // Creadas para Testear
+
+        Especie pikachu = new Especie();
+        pikachu.setNombre("Pikachu");
+        pikachu.setTipo(TipoBicho.ELECTRICIDAD);
+        pikachu.setAltura(394);
+        pikachu.setPeso(40);
+        pikachu.setEnergiaIncial(300);
+        pikachu.setUrlFoto("/image.pikachu.jpg");
+
+        Especie digimon = new Especie();
+        digimon.setNombre("Digimon");
+        digimon.setTipo(TipoBicho.FUEGO);
+        digimon.setAltura(123);
+        digimon.setPeso(40);
+        digimon.setEnergiaIncial(690);
+        digimon.setUrlFoto("/image.digimon.jpg");
+
+        Especie miguelmon = new Especie();
+        miguelmon.setNombre("Miguelmon");
+        miguelmon.setTipo(TipoBicho.CHOCOLATE);
+        miguelmon.setAltura(850);
+        miguelmon.setPeso(213);
+        miguelmon.setEnergiaIncial(6000);
+        miguelmon.setUrlFoto("/image.miguelmon.jpg");
+
+
+
+
+        /*----------[CREACION DE BICHOS]----------*/
+        Bicho rojo = new Bicho(red,"");
+        red.setCantidadBichos(1);
+        rojo.setEnergia(339);
+
         Bicho fortinator= new Bicho(fortmon, "");
-        fortmon.setCantidadBichos(1);
         fortinator.setEnergia(5555);
 
         Bicho dientudo  = new Bicho(dientemon, "");
-        dientemon.setCantidadBichos(1);
         dientudo.setEnergia(80);
+
+        Bicho amarillon = new Bicho(amarillo,"");
+        amarillon.setEnergia(343);
+
+        Bicho verde = new Bicho(green,"");
+        verde.setEnergia(435);
+
+        Bicho geomon = new Bicho(tierronmon,"");
+        geomon.setEnergia(304);
+
+        Bicho gasper = new Bicho(fantasmon,"");
+        gasper.setEnergia(900);
+
+
+
+        fortmon.setCantidadBichos(1);
+        dientemon.setCantidadBichos(1);
+        amarillo.setCantidadBichos(1);
+        green.setCantidadBichos(1);
+        tierronmon.setCantidadBichos(1);
+        fantasmon.setCantidadBichos(1);
+
 
         fortinator.setDuenio(entrenador1);
         entrenador1.getBichosCapturados().add(fortinator);
+
+        dientudo.setDuenio(entrenador2);
+        entrenador2.getBichosCapturados().add(dientudo);
+
+        rojo.setDuenio(entrenador3);
+        entrenador3.getBichosCapturados().add(rojo);
+
+        amarillon.setDuenio(entrenador4);
+        entrenador4.getBichosCapturados().add(amarillon);
+
+        verde.setDuenio(entrenador5);
+        entrenador5.getBichosCapturados().add(verde);
+
+        geomon.setDuenio(entrenador1);
+        entrenador1.getBichosCapturados().add(geomon);
+
+        gasper.setDuenio(entrenador2);
+        entrenador2.getBichosCapturados().add(gasper);
 
         Session session = Runner.getCurrentSession();
         session.save(nivel1);
@@ -173,12 +256,21 @@ public class Bootstrap
         session.save(nivel8);
         session.save(nivel9);
         session.save(nivel10);
+
         session.save(puebloElOrigen);
         session.save(puebloDesert);
         session.save(dojoDesert);
         session.save(laGuarderia);
+
         session.save(entrenador1);
         session.save(entrenador2);
+        session.save(entrenador3);
+        session.save(entrenador4);
+        session.save(entrenador5);
+
+        session.save(pikachu);
+        session.save(digimon);
+        session.save(miguelmon);
         session.save(red);
         session.save(amarillo);
         session.save(green);
@@ -187,8 +279,15 @@ public class Bootstrap
         session.save(vampiron);
         session.save(fortmon);
         session.save(dientemon);
+
         session.save(fortinator);
         session.save(dientudo);
+        session.save(rojo);
+        session.save(amarillon);
+        session.save(verde);
+        session.save(geomon);
+        session.save(gasper);
+
     }
 
     public void limpiarTabla()
