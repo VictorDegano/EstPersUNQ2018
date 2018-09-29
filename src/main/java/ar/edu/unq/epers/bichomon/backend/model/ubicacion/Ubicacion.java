@@ -2,6 +2,7 @@ package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 
 import javax.persistence.*;
@@ -65,6 +66,8 @@ public abstract class Ubicacion
     public Ubicacion() {    }
 
 /*[--------]Getters & Setters[--------]*/
+    public void setCampeonActual(Campeon campeonActual)
+    {   throw new UbicacionIncorrectaException(this.getNombre(), "No se puede coronar un bichomon en esta Ubicacion"); }
     public String getNombre() { return nombre;  }
     public void setNombre(String nombre) {  this.nombre = nombre;   }
 
@@ -73,4 +76,8 @@ public abstract class Ubicacion
 
     public int getId() {    return id;  }
     public void setId(int id) { this.id = id;   }
+/*------------------Duelos---------------*/
+    public void duelo(Bicho bichoDeCombate)
+    { throw new UbicacionIncorrectaException(this.getNombre(), "No se puede pelear en esta Ubicacion");  }
+
 }

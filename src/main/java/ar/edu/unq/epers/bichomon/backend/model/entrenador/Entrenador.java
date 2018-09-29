@@ -79,4 +79,44 @@ public class Entrenador
 
     public List<Bicho> getBichosCapturados() {  return bichosCapturados;    }
     public void setBichosCapturados(List<Bicho> bichosCapturados) { this.bichosCapturados = bichosCapturados;   }
+
+
+/*---------------Duelos-----------------*/
+
+    public void retar(Bicho bichoDeCombate) {this.ubicacion.duelo(bichoDeCombate); }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

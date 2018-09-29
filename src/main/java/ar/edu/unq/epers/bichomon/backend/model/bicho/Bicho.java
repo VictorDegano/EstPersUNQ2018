@@ -68,4 +68,17 @@ public class Bicho {
 
     public Entrenador getDuenio() { return duenio;  }
     public void setDuenio(Entrenador duenio) {  this.duenio = duenio;   }
+
+    public int atacar(Bicho contrincante)
+    {
+	    int dañoAHacer = this.daño();
+		contrincante.setEnergia(contrincante.energia-dañoAHacer);
+		return dañoAHacer;
+    }
+
+    public int daño()
+    {
+        Double dmg = this.energia * (Math.random() * 1);
+	    return dmg.intValue();
+    }
 }

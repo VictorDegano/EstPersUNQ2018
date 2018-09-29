@@ -64,8 +64,8 @@ public class EntrenadorTest {
         entrenadorSUT.getBichosCapturados().add(nuevoBicho);
     }
 
-    @After
-    public void tearDown() throws Exception {   }
+        @After
+        public void tearDown() throws Exception {   }
 
     @Test
     public void si_Un_Entrenador_Se_Mueve_De_Una_Ubicacion_A_Otra_Al_Preguntarle_En_Cual_Esta_Responde_La_Nueva_Ubicacion()
