@@ -7,6 +7,7 @@ import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class Dojo extends Ubicacion
 {
     @OneToOne(cascade = CascadeType.ALL)
     private Campeon campeonActual;
+    @Transient
     public List<Registro> historial= new ArrayList<>();
 
     public Bicho campeonActual()

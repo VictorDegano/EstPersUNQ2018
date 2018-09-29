@@ -24,6 +24,7 @@ public class EspecieDAOHibernateTest {
     Especie especie;
     Especie especie2;
     Especie especie3;
+    Bootstrap bootstrap;
 
     @Before
     public void setUp() throws Exception {
@@ -51,7 +52,9 @@ public class EspecieDAOHibernateTest {
         this.testService.crearEspecie(especie);
         this.testService.crearEspecie(especie2);
         this.testService.crearEspecie(especie3);
-
+        bootstrap = new Bootstrap();
+        Runner.runInSession(()-> {  bootstrap.crearDatos();
+            return null;});
     }
 
     @After
@@ -101,7 +104,7 @@ public class EspecieDAOHibernateTest {
     public void retornan_las_diez_especies_mas_populares(){
 
         List<Especie> populares = this.testService.populares();
-        assertEquals(populares.size(),1);
+        assertEquals(populares.size(),10);
 
 
     }
