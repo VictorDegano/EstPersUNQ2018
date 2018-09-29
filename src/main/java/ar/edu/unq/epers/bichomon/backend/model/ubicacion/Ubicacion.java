@@ -80,4 +80,5 @@ public abstract class Ubicacion
     public void duelo(Bicho bichoDeCombate)
     { throw new UbicacionIncorrectaException(this.getNombre(), "No se puede pelear en esta Ubicacion");  }
 
+    public Bicho buscar(){ return null;}
 }

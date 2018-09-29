@@ -2,6 +2,7 @@ package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon;
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -79,6 +80,15 @@ public class Dojo extends Ubicacion
             registroDeLucha.setGanador(bichoRetador);
         }
         historial.add(registroDeLucha);
+    }
+
+    public Bicho buscar(Entrenador entrenador){
+        Bicho premio = new Bicho();
+        if (entrenador.getNivel().getNroDeNivel()* (Math.random()*1) >0.5)
+        {
+            premio= new Bicho(campeonActual.getBichoCampeon().getEvolucionBase(),"");
+        }
+
     }
 
 }
