@@ -37,13 +37,23 @@ public class EspecieServiceImpl implements EspecieService {
 		return especieDAO.recuperarTodos();
 	}
 
-
 	@Override
 	public Bicho crearBicho(String nombreEspecie, String nombreBicho){
 		Especie especie = especieDAO.recuperar(nombreEspecie);
 		Bicho bicho = especie.crearBicho(nombreBicho);
 		especieDAO.actualizar(especie);
 		return bicho;
+    }
+
+	@Override
+	public List<Especie> populares() {
+			return null;
+		}
+
+	@Override
+	public List<Especie> impopulares() {
+		return null;
 	}
+
 
 }

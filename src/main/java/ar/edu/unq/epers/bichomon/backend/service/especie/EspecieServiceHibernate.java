@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.bichomon.backend.service;
+package ar.edu.unq.epers.bichomon.backend.service.especie;
 
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EspecieDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
@@ -45,6 +45,17 @@ public class EspecieServiceHibernate implements EspecieService {
         return Runner.runInSession(()->{
             return this.especieDAO.crearBicho(nombreEspecie,nombreBicho);
         });
+    }
+
+    @Override
+    public List<Especie> populares(){
+        return Runner.runInSession(()->{
+            return this.especieDAO.populares();
+        });
+    }
+
+    @Override List<Especie> impopulares(){
+        return null;
     }
 
 }

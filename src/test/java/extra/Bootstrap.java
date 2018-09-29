@@ -65,6 +65,21 @@ public class Bootstrap
         entrenador2.setExperiencia(990);
         entrenador2.setNivel(nivel3);
 
+        Entrenador entrenador3 = new Entrenador();
+        entrenador3.setNombre("Ricardo");
+        entrenador3.setExperiencia(7500);
+        entrenador3.setNivel(nivel1);
+
+        Entrenador entrenador4 = new Entrenador();
+        entrenador4.setNombre("Ortigoza");
+        entrenador4.setExperiencia(7500);
+        entrenador4.setNivel(nivel10);
+
+        Entrenador entrenador5 = new Entrenador();
+        entrenador5.setNombre("Tinelli");
+        entrenador5.setExperiencia(7500);
+        entrenador5.setNivel(nivel10);
+
         entrenador1.setUbicacion(puebloElOrigen);
         puebloElOrigen.agregarEntrenador(entrenador1);
         entrenador2.setUbicacion(puebloDesert);
