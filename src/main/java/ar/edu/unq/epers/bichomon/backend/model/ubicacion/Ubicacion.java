@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 public abstract class Ubicacion
 {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
     @Column(unique = true, nullable = false)
     private String nombre;

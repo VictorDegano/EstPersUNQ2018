@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 @Entity
 public class Campeon
 {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
 
     @OneToOne(cascade = CascadeType.ALL) // TODO: 16/09/2018 OneToOne? Un Campeon tiene Un solo Bicho.

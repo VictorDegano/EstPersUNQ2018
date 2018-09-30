@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Entity
 public class Especie {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Integer id;
 
     @Column(unique=true)

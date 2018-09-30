@@ -14,9 +14,7 @@ import javax.persistence.*;
 @Entity
 public class Bicho {
 
-
-	@Id @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="BichoSequenceGenerator")
-    @SequenceGenerator(allocationSize = 1, name="BichoSequenceGenerator", sequenceName = "bicho_sequence")
+	@Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
     @Transient
 	private String nombre; // TODO: 23/09/2018 en el tp 2 ya no se necesita que tengan nombre, hay que quitarselo
@@ -79,8 +77,9 @@ public class Bicho {
 
     public Especie getEvolucionBase(){
 
-	    Especie base=this.especie.getBase();
-	    return base;
+//	    Especie base=this.especie.getBase();
+//	    return base;
+        return null;
     }
 
     public int daño()

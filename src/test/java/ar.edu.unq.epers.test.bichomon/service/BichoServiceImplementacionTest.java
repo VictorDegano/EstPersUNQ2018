@@ -4,6 +4,7 @@ import ar.edu.unq.epers.bichomon.backend.dao.hibernate.BichoDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EntrenadorDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.UbicacionDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.BichoServiceImplementacion;
@@ -70,9 +71,11 @@ public class BichoServiceImplementacionTest {
         Entrenador pepePepon;
         //Exercise(When)
         bichoServiceSut.abandonar("Pepe Pepon",1);
-        pepePepon   = Runner.runInSession(()-> { return entrenadorDao.recuperar("Pepe Pepon");});
+        pepePepon               = Runner.runInSession(()-> { return entrenadorDao.recuperar("Pepe Pepon");});
+        Bicho bichoAbandonado   = Runner.runInSession(()-> { return bichoDao.recuperar(1);});
         //Test(Then)
-        assertTrue(pepePepon.getBichosCapturados().isEmpty());
+        assertFalse(pepePepon.getBichosCapturados().contains(bichoAbandonado));
+        assertEquals(1, pepePepon.getBichosCapturados().size());
     }
 
     @Test @Ignore
