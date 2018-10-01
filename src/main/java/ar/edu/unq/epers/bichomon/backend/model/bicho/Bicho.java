@@ -2,8 +2,8 @@ package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
-
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 /**
  * Un {@link Bicho} existente en el sistema, el mismo tiene un nombre
@@ -23,6 +23,28 @@ public class Bicho {
 	private int energia;
 	@ManyToOne(cascade = CascadeType.ALL)
     private Entrenador duenio;
+	private int victorias;
+    private Timestamp fechaDeCaptura;
+
+	public int atacar(Bicho contrincante)
+	{
+		int dañoAHacer = this.daño();
+		contrincante.setEnergia(contrincante.energia-dañoAHacer);
+		return dañoAHacer;
+	}
+
+	public Especie getEvolucionBase(){
+
+//	    Especie base=this.especie.getBase();
+//	    return base;
+		return null;
+	}
+
+	public int daño()
+	{
+		Double dmg = this.energia * (Math.random() * 1);
+		return dmg.intValue();
+	}
 
 	public Bicho() {}
 
@@ -68,23 +90,9 @@ public class Bicho {
     public Entrenador getDuenio() { return duenio;  }
     public void setDuenio(Entrenador duenio) {  this.duenio = duenio;   }
 
-    public int atacar(Bicho contrincante)
-    {
-	    int dañoAHacer = this.daño();
-		contrincante.setEnergia(contrincante.energia-dañoAHacer);
-		return dañoAHacer;
-    }
+	public int getVictorias() { return victorias;   }
+	public void setVictorias(int victorias) {   this.victorias = victorias; }
 
-    public Especie getEvolucionBase(){
-
-//	    Especie base=this.especie.getBase();
-//	    return base;
-        return null;
-    }
-
-    public int daño()
-    {
-        Double dmg = this.energia * (Math.random() * 1);
-	    return dmg.intValue();
-    }
+    public Timestamp getFechaDeCaptura() {  return fechaDeCaptura;  }
+    public void setFechaDeCaptura(Timestamp fechaDeCaptura) {   this.fechaDeCaptura = fechaDeCaptura;   }
 }
