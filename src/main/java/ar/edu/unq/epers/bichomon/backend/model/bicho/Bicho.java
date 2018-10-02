@@ -33,12 +33,8 @@ public class Bicho {
 		return dañoAHacer;
 	}
 
-	public Especie getEvolucionBase(){
-
-//	    Especie base=this.especie.getBase();
-//	    return base;
-		return null;
-	}
+	public Especie getEvolucionBase()
+    {   return this.especie.getEspecieBase();   }
 
 	public int daño()
 	{
@@ -46,7 +42,30 @@ public class Bicho {
 		return dmg.intValue();
 	}
 
-	public Bicho() {}
+	public boolean puedeEvolucionar()
+    {   return this.getEspecie().puedeEvolucionar(this);    }
+
+    public void evolucionar()
+    {
+        Especie especieVieja    = this.getEspecie();
+
+        if (especieVieja.puedeEvolucionar(this))
+        {
+            especieVieja.setCantidadBichos(especieVieja.getCantidadBichos()-1);
+            Especie especieNueva    = especieVieja.getEvolucion();
+            this.setEspecie(especieNueva);
+            especieNueva.setCantidadBichos(especieVieja.getCantidadBichos()+1);
+            this.aumentarEnergiaSiCorresponde();
+        }
+    }
+
+    private void aumentarEnergiaSiCorresponde()
+    {
+        if (this.getEnergia() < this.getEspecie().getEnergiaInicial())
+        {   this.setEnergia(this.getEspecie().getEnergiaInicial());  }
+    }
+
+    public Bicho() {}
 
 	public Bicho(Especie especie, String nombre) {
 		this.especie = especie;

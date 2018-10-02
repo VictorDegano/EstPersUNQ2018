@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.test.bichomon.service;
+package ar.edu.unq.epers.test.bichomon.dao.hibernate;
 
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EspecieDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
