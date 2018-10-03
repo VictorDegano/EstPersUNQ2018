@@ -1,9 +1,9 @@
-package ar.edu.unq.epers.bichomon.backend.model.bicho;
+package ar.edu.unq.epers.test.bichomon.model;
 
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEnergia;
-import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEvolucion;
 import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionVictoria;
 import org.junit.After;
 import org.junit.Before;

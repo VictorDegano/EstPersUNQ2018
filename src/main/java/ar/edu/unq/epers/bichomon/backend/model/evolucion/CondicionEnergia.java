@@ -1,10 +1,15 @@
 package ar.edu.unq.epers.bichomon.backend.model.evolucion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import javax.persistence.Entity;
 
-public class CondicionEnergia implements CondicionEvolucion
+@Entity
+public class CondicionEnergia extends CondicionEvolucion
 {
     private int energiaCondicion;
+
+    public CondicionEnergia(int energiaACumplir)
+    {   this.setEnergiaCondicion(energiaACumplir);  }
 
     @Override
     public boolean cumpleCondicion(Bicho unBicho)

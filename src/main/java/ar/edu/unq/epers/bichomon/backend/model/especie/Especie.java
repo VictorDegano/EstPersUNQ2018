@@ -27,15 +27,18 @@ public class Especie {
 	private int energiaInicial;
 	private String urlFoto;
 	private int cantidadBichos;
-    @Transient
+
     // TODO: 01/10/2018 Ignorado hasta el momento de implementar el metodo del service
-    private Especie especieBase;
-    @Transient
+	@ManyToOne // TODO: 02/10/2018 oneToOne o ManyToOne?
+	private Especie especieBase;
+
     // TODO: 01/10/2018 Ignorado hasta el momento de implementar el metodo del service
-    private Especie evolucion;
-	@Transient
+	@OneToOne
+	private Especie evolucion;
+
     // TODO: 01/10/2018 Ignorado hasta el momento de implementar el metodo del service
-    private List<CondicionEvolucion> condicionesDeEvolucion;
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<CondicionEvolucion> condicionesDeEvolucion;
 
 	public Especie(){   }
 	

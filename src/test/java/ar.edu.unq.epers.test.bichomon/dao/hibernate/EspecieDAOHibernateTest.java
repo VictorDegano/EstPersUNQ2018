@@ -83,7 +83,7 @@ public class EspecieDAOHibernateTest {
     public void es_service_recupera_todas_las_especies(){
         List<Especie> especiesRecuperadas = this.testService.getAllEspecies();
 
-        assertEquals(14,especiesRecuperadas.size());
+        assertEquals(15,especiesRecuperadas.size());
         assertEquals("ajimon", especiesRecuperadas.get(0).getNombre());
         assertEquals("Amarillomon", especiesRecuperadas.get(1).getNombre());
         assertEquals("arromon", especiesRecuperadas.get(2).getNombre());
@@ -94,10 +94,11 @@ public class EspecieDAOHibernateTest {
         assertEquals("Miguelmon", especiesRecuperadas.get(7).getNombre());
         assertEquals("mugreomon", especiesRecuperadas.get(8).getNombre());
         assertEquals("Pikachu", especiesRecuperadas.get(9).getNombre());
-        assertEquals("Rojomon", especiesRecuperadas.get(10).getNombre());
-        assertEquals("Tierramon", especiesRecuperadas.get(11).getNombre());
-        assertEquals("Vanpiron", especiesRecuperadas.get(12).getNombre());
-        assertEquals("Verdemon", especiesRecuperadas.get(13).getNombre());
+        assertEquals("Raichu", especiesRecuperadas.get(10).getNombre());
+        assertEquals("Rojomon", especiesRecuperadas.get(11).getNombre());
+        assertEquals("Tierramon", especiesRecuperadas.get(12).getNombre());
+        assertEquals("Vanpiron", especiesRecuperadas.get(13).getNombre());
+        assertEquals("Verdemon", especiesRecuperadas.get(14).getNombre());
     }
 
 

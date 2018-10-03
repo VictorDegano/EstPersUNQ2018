@@ -33,6 +33,11 @@
 		<mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia" />
 		<mapping class="ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador" />
 		<mapping class="ar.edu.unq.epers.bichomon.backend.model.entrenador.Nivel" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEvolucion" />
+		<mapping class="ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEdad" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEnergia" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionVictoria" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionNivel" />
 	
 	</session-factory>
 </hibernate-configuration>

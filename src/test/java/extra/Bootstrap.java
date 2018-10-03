@@ -5,6 +5,9 @@ import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Nivel;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
+import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEnergia;
+import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEvolucion;
+import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionVictoria;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo;
@@ -13,6 +16,7 @@ import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 import org.hibernate.Session;
 
 import javax.persistence.Query;
+import java.util.Arrays;
 import java.util.List;
 
 public class Bootstrap
@@ -189,8 +193,19 @@ public class Bootstrap
         miguelmon.setEnergiaIncial(6000);
         miguelmon.setUrlFoto("/image.miguelmon.jpg");
 
+        Especie raichu = new Especie();
+        raichu.setNombre("Raichu");
+        raichu.setTipo(TipoBicho.ELECTRICIDAD);
+        raichu.setAltura(402);
+        raichu.setPeso(60);
+        raichu.setEnergiaIncial(900);
+        raichu.setUrlFoto("/image/Raichu.jpg");
+        raichu.setEspecieBase(pikachu);
 
-
+        pikachu.setEvolucion(raichu);
+        CondicionEvolucion condicion1   = new CondicionEnergia(332);
+        CondicionEvolucion condicion2   = new CondicionVictoria(5);
+        pikachu.setCondicionesDeEvolucion(Arrays.asList(condicion1, condicion2));
 
         /*----------[CREACION DE BICHOS]----------*/
         Bicho rojo = new Bicho(red,"");
@@ -229,8 +244,8 @@ public class Bootstrap
         patamon.setEnergia(digimon.getEnergiaInicial());
         digimon.setCantidadBichos(1);
 
-        Bicho raichu = new Bicho(pikachu,"");
-        raichu.setEnergia(pikachu.getEnergiaInicial());
+        Bicho pikara = new Bicho(pikachu,"");
+        pikara.setEnergia(pikachu.getEnergiaInicial());
         pikachu.setCantidadBichos(1);
 
         Bicho elChupaCabras = new Bicho(vampiron,"");
@@ -266,13 +281,16 @@ public class Bootstrap
         patamon.setDuenio(entrenador3);
         entrenador3.getBichosCapturados().add(patamon);
 
-        raichu.setDuenio(entrenador4);
-        entrenador4.getBichosCapturados().add(raichu);
+        pikara.setDuenio(entrenador4);
+        entrenador4.getBichosCapturados().add(pikara);
 
         elChupaCabras.setDuenio(entrenador5);
         entrenador5.getBichosCapturados().add(elChupaCabras);
 
         Session session = Runner.getCurrentSession();
+        session.save(condicion1);
+        session.save(condicion2);
+
         session.save(nivel1);
         session.save(nivel2);
         session.save(nivel3);
@@ -306,6 +324,7 @@ public class Bootstrap
         session.save(pikachu);
         session.save(digimon);
         session.save(miguelmon);
+        session.save(raichu);
 
         session.save(fortinator);
         session.save(dientudo);
@@ -316,9 +335,8 @@ public class Bootstrap
         session.save(gasper);
         session.save(miguelito);
         session.save(patamon);
-        session.save(raichu);
+        session.save(pikara);
         session.save(elChupaCabras);
-
     }
 
     public void limpiarTabla()

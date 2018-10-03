@@ -1,10 +1,16 @@
 package ar.edu.unq.epers.bichomon.backend.model.evolucion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import javax.persistence.Entity;
 
-public class CondicionVictoria implements CondicionEvolucion
+
+@Entity
+public class CondicionVictoria extends CondicionEvolucion
 {
     private int victoriaCondicion;
+
+    public CondicionVictoria(int victoriasACumplir)
+    {   this.setVictoriaCondicion(victoriasACumplir);   }
 
     @Override
     public boolean cumpleCondicion(Bicho unBicho)

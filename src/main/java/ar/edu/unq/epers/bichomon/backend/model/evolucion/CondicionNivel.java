@@ -2,7 +2,10 @@ package ar.edu.unq.epers.bichomon.backend.model.evolucion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 
-public class CondicionNivel implements CondicionEvolucion
+import javax.persistence.Entity;
+
+@Entity
+public class CondicionNivel extends CondicionEvolucion
 {
     private int nivelCondicion;
 
