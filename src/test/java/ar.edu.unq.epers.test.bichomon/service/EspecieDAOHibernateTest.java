@@ -106,7 +106,12 @@ public class EspecieDAOHibernateTest {
         List<Especie> populares = this.testService.populares();
         assertEquals(populares.size(),10);
 
+    }
 
+    @Test
+    public void retornan_las_diez_especies_menos_populares(){
+        List<Especie> impopulares = this.testService.impopulares();
+        assertEquals(impopulares.size(),10);
     }
 
 

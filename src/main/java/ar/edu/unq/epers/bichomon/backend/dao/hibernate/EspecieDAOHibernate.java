@@ -63,4 +63,12 @@ public class EspecieDAOHibernate implements ar.edu.unq.epers.bichomon.backend.da
         return query.getResultList();
     }
 
+
+    public List<Especie> impopulares() {
+        Session session = Runner.getCurrentSession();
+        String hql = "select bicho.especie from Bicho bicho where bicho.duenio is null group by bicho.especie order by count(bicho.especie)";
+        Query<Especie> query = session.createQuery(hql,  Especie.class);
+        query.setMaxResults(10);
+        return query.getResultList();
+    }
 }

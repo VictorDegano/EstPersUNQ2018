@@ -56,7 +56,9 @@ public class EspecieServiceHibernate implements EspecieService {
 
     @Override
     public List<Especie> impopulares(){
-        return null;
+        return Runner.runInSession(()->{
+            return this.especieDAO.impopulares();
+        });
     }
 
 }
