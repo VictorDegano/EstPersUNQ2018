@@ -13,7 +13,7 @@ public class Registro {
         return detalles;
     }
 
-    public void setDetalles(List detalles) {
+    public void setDetalles(List<Turno> detalles) {
         this.detalles = detalles;
     }
 

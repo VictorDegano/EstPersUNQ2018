@@ -4,7 +4,6 @@ import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.BichoDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EspecieDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
-import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 import ar.edu.unq.epers.bichomon.backend.service.runner.SessionFactoryProvider;
@@ -12,7 +11,6 @@ import extra.Bootstrap;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 
 import static org.junit.Assert.*;
@@ -47,7 +45,7 @@ public class BichoDAOHibernateTest {
 
         //Test(Then)
         assertEquals(1, bichoRecupeardo.getId());
-        assertEquals(5555, bichoRecupeardo.getEnergia());
+        assertEquals(5000, bichoRecupeardo.getEnergia());
         assertEquals("Fortmon", bichoRecupeardo.getEspecie().getNombre());
         assertEquals("Pepe Pepon", bichoRecupeardo.getDuenio().getNombre());
     }
@@ -78,7 +76,7 @@ public class BichoDAOHibernateTest {
 
         //Exercise(When)
         bichoRecuperado = Runner.runInSession(()-> {bichoDAOSut.guardar(nuevoBicho);
-                                                    return bichoDAOSut.recuperar(3);});
+                                                    return bichoDAOSut.recuperar(12);});
 
         //Test(Then)
         assertEquals(90000, bichoRecuperado.getEnergia());

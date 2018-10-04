@@ -90,7 +90,7 @@ public class Dojo extends Ubicacion
         {
             premio= new Bicho(campeonActual.getBichoCampeon().getEvolucionBase(),"");
         }
-
+        return premio;
     }
 
 }

@@ -2,8 +2,8 @@ package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
-
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 /**
  * Un {@link Bicho} existente en el sistema, el mismo tiene un nombre
@@ -14,9 +14,7 @@ import javax.persistence.*;
 @Entity
 public class Bicho {
 
-
-	@Id @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="BichoSequenceGenerator")
-    @SequenceGenerator(allocationSize = 1, name="BichoSequenceGenerator", sequenceName = "bicho_sequence")
+	@Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
     @Transient
 	private String nombre; // TODO: 23/09/2018 en el tp 2 ya no se necesita que tengan nombre, hay que quitarselo
@@ -25,8 +23,49 @@ public class Bicho {
 	private int energia;
 	@ManyToOne(cascade = CascadeType.ALL)
     private Entrenador duenio;
+	private int victorias;
+    private Timestamp fechaDeCaptura;
 
-	public Bicho() {}
+	public int atacar(Bicho contrincante)
+	{
+		int dañoAHacer = this.daño();
+		contrincante.setEnergia(contrincante.energia-dañoAHacer);
+		return dañoAHacer;
+	}
+
+	public Especie getEvolucionBase()
+    {   return this.especie.getEspecieBase();   }
+
+	public int daño()
+	{
+		Double dmg = this.energia * (Math.random() * 1);
+		return dmg.intValue();
+	}
+
+	public boolean puedeEvolucionar()
+    {   return this.getEspecie().puedeEvolucionar(this);    }
+
+    public void evolucionar()
+    {
+        Especie especieVieja    = this.getEspecie();
+
+        if (especieVieja.puedeEvolucionar(this))
+        {
+            especieVieja.setCantidadBichos(especieVieja.getCantidadBichos()-1);
+            Especie especieNueva    = especieVieja.getEvolucion();
+            this.setEspecie(especieNueva);
+            especieNueva.setCantidadBichos(especieVieja.getCantidadBichos()+1);
+            this.aumentarEnergiaSiCorresponde();
+        }
+    }
+
+    private void aumentarEnergiaSiCorresponde()
+    {
+        if (this.getEnergia() < this.getEspecie().getEnergiaInicial())
+        {   this.setEnergia(this.getEspecie().getEnergiaInicial());  }
+    }
+
+    public Bicho() {}
 
 	public Bicho(Especie especie, String nombre) {
 		this.especie = especie;
@@ -70,22 +109,9 @@ public class Bicho {
     public Entrenador getDuenio() { return duenio;  }
     public void setDuenio(Entrenador duenio) {  this.duenio = duenio;   }
 
-    public int atacar(Bicho contrincante)
-    {
-	    int dañoAHacer = this.daño();
-		contrincante.setEnergia(contrincante.energia-dañoAHacer);
-		return dañoAHacer;
-    }
+	public int getVictorias() { return victorias;   }
+	public void setVictorias(int victorias) {   this.victorias = victorias; }
 
-    public Especie getEvolucionBase(){
-
-	    Especie base=this.especie.getBase();
-	    return base;
-    }
-
-    public int daño()
-    {
-        Double dmg = this.energia * (Math.random() * 1);
-	    return dmg.intValue();
-    }
+    public Timestamp getFechaDeCaptura() {  return fechaDeCaptura;  }
+    public void setFechaDeCaptura(Timestamp fechaDeCaptura) {   this.fechaDeCaptura = fechaDeCaptura;   }
 }
