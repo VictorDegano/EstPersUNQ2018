@@ -3,6 +3,7 @@ package ar.edu.unq.epers.bichomon.backend.service.bicho;
 import ar.edu.unq.epers.bichomon.backend.dao.BichoDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
+import ar.edu.unq.epers.bichomon.backend.excepcion.BichoRecuperarException;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
@@ -13,6 +14,8 @@ public class BichoServiceImplementacion implements BichoService
     private UbicacionDAO ubicacionDao;
     private EntrenadorDAO entrenadorDao;
     private BichoDAO bichoDao;
+
+    public BichoServiceImplementacion() {   }
 
     /**
      * Busca un bicho en la ubicacion actual del entrenador especificado.
@@ -34,8 +37,7 @@ public class BichoServiceImplementacion implements BichoService
     @Override
     public void abandonar(String entrenador, int bicho)
     {
-        Runner.runInSession(() -> {
-                                    Bicho unBicho           = this.getBichoDao().recuperar(bicho);
+        Runner.runInSession(() -> { Bicho unBicho           = this.getBichoDao().recuperar(bicho);
                                     Entrenador unEntrenador = this.getEntrenadorDao().recuperar(entrenador);
                                     unEntrenador.abandonarBicho(unBicho);
                                     this.getEntrenadorDao().actualizar(unEntrenador);
@@ -51,8 +53,13 @@ public class BichoServiceImplementacion implements BichoService
      * @return true si el bicho puede evolucionar o false en el caso contrario
      */
     @Override
-    public boolean puedeEvolucionar(String entrenador, int bicho) {
-        return false;
+    public boolean puedeEvolucionar(String entrenador, int bicho)
+    {
+        return Runner.runInSession(() -> {  Bicho unBicho           = this.getBichoDao().recuperar(bicho);
+//                                            Entrenador unEntrenador = this.getEntrenadorDao().recuperar(entrenador);
+                                            if(unBicho == null)
+                                            {   throw new BichoRecuperarException(bicho);   }
+                                            return unBicho.puedeEvolucionar();});
     }
 
     /**
@@ -63,7 +70,9 @@ public class BichoServiceImplementacion implements BichoService
      * @return Un nuevo {@link Bicho} que es el resultante de la evolucion del bicho anterior.
      */
     @Override
-    public Bicho evolucionar(String entrenador, int Bicho) {
+    public Bicho evolucionar(String entrenador, int Bicho) 
+    {
+        // TODO: 02/10/2018 hay que agregar que tras la evolucion exitosa el en trenador gane experiencia     
         return null;
     }
 

@@ -1,8 +1,11 @@
 package ar.edu.unq.epers.bichomon.backend.model.especie;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEvolucion;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Representa una {@link Especie} de bicho.
@@ -13,27 +16,31 @@ import javax.persistence.*;
 @Entity
 public class Especie {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Integer id;
-
     @Column(unique=true)
 	private String nombre;
-
 	private int altura;
-
 	private int peso;
-
     @Enumerated(EnumType.STRING)
 	private TipoBicho tipo;
-
 	private int energiaInicial;
-	
 	private String urlFoto;
-	
 	private int cantidadBichos;
-	
-	public Especie(){
-	}
+
+    // TODO: 01/10/2018 Ignorado hasta el momento de implementar el metodo del service
+	@ManyToOne // TODO: 02/10/2018 oneToOne o ManyToOne?
+	private Especie especieBase;
+
+    // TODO: 01/10/2018 Ignorado hasta el momento de implementar el metodo del service
+	@OneToOne
+	private Especie evolucion;
+
+    // TODO: 01/10/2018 Ignorado hasta el momento de implementar el metodo del service
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<CondicionEvolucion> condicionesDeEvolucion;
+
+	public Especie(){   }
 	
 	public Especie(int id, String nombre, TipoBicho tipo) {
 	    this.id = id;
@@ -114,6 +121,9 @@ public class Especie {
 		this.cantidadBichos = i;
 	}
 
+    public List<CondicionEvolucion> getCondicionesDeEvolucion() {   return condicionesDeEvolucion;  }
+    public void setCondicionesDeEvolucion(List<CondicionEvolucion> condicionesDeEvolucion) {    this.condicionesDeEvolucion = condicionesDeEvolucion;   }
+
 	public Integer getId() {
 		return id;
 	}
@@ -121,9 +131,32 @@ public class Especie {
 		this.id = id;
 	}
 
+    public Especie getEspecieBase() {   return especieBase; }
+    public void setEspecieBase(Especie especieBase) {   this.especieBase = especieBase; }
+
+    public Especie getEvolucion() { return evolucion;   }
+    public void setEvolucion(Especie evolucion) {   this.evolucion = evolucion; }
+
 	public Bicho crearBicho(String nombreBicho){
 		this.cantidadBichos++;
 		return new Bicho(this, nombreBicho);
 	}
-	
+
+    public Bicho crearBicho(){
+        Bicho nuevoBicho    = new Bicho(this, "");
+        nuevoBicho.setVictorias(0);
+        nuevoBicho.setEnergia(this.getEnergiaInicial());
+	    this.cantidadBichos++;
+        return nuevoBicho;
+    }
+
+    public boolean puedeEvolucionar(Bicho bicho) {
+        if (this.getEvolucion() != null)
+        {
+            return this .getCondicionesDeEvolucion()
+                        .stream()
+                        .allMatch((condicion) -> {return condicion.cumpleCondicion(bicho);});
+        }
+        return false;
+    }
 }

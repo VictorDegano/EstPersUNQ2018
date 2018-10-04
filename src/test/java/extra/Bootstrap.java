@@ -5,6 +5,9 @@ import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Nivel;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
+import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEnergia;
+import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEvolucion;
+import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionVictoria;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo;
@@ -13,13 +16,15 @@ import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 import org.hibernate.Session;
 
 import javax.persistence.Query;
+import java.util.Arrays;
+import java.util.List;
 
 public class Bootstrap
 {
 
     public void crearDatos()
     {
-        /*----------[CREACION DE BICHOS]----------*/
+        /*----------[CREACION DE NIVELES]----------*/
         Nivel nivel1  = new Nivel(1, 1, 99, 4);
         Nivel nivel2  = new Nivel(2, 100, 399, 5);
         Nivel nivel3  = new Nivel(3, 400, 999, 6);
@@ -188,40 +193,65 @@ public class Bootstrap
         miguelmon.setEnergiaIncial(6000);
         miguelmon.setUrlFoto("/image.miguelmon.jpg");
 
+        Especie raichu = new Especie();
+        raichu.setNombre("Raichu");
+        raichu.setTipo(TipoBicho.ELECTRICIDAD);
+        raichu.setAltura(402);
+        raichu.setPeso(60);
+        raichu.setEnergiaIncial(900);
+        raichu.setUrlFoto("/image/Raichu.jpg");
+        raichu.setEspecieBase(pikachu);
 
-
+        pikachu.setEvolucion(raichu);
+        CondicionEvolucion condicion1   = new CondicionEnergia(332);
+        CondicionEvolucion condicion2   = new CondicionVictoria(5);
+        pikachu.setCondicionesDeEvolucion(Arrays.asList(condicion1, condicion2));
 
         /*----------[CREACION DE BICHOS]----------*/
         Bicho rojo = new Bicho(red,"");
+        rojo.setEnergia(red.getEnergiaInicial());
         red.setCantidadBichos(1);
-        rojo.setEnergia(339);
 
         Bicho fortinator= new Bicho(fortmon, "");
-        fortinator.setEnergia(5555);
+        fortinator.setEnergia(fortmon.getEnergiaInicial());
+        fortmon.setCantidadBichos(1);
 
         Bicho dientudo  = new Bicho(dientemon, "");
-        dientudo.setEnergia(80);
+        dientudo.setEnergia(dientemon.getEnergiaInicial());
+        dientemon.setCantidadBichos(1);
 
         Bicho amarillon = new Bicho(amarillo,"");
-        amarillon.setEnergia(343);
+        amarillon.setEnergia(amarillo.getEnergiaInicial());
+        amarillo.setCantidadBichos(1);
 
         Bicho verde = new Bicho(green,"");
-        verde.setEnergia(435);
+        verde.setEnergia(green.getEnergiaInicial());
+        green.setCantidadBichos(1);
 
         Bicho geomon = new Bicho(tierronmon,"");
-        geomon.setEnergia(304);
+        geomon.setEnergia(tierronmon.getEnergiaInicial());
+        tierronmon.setCantidadBichos(1);
 
         Bicho gasper = new Bicho(fantasmon,"");
-        gasper.setEnergia(900);
-
-
-
-        fortmon.setCantidadBichos(1);
-        dientemon.setCantidadBichos(1);
-        amarillo.setCantidadBichos(1);
-        green.setCantidadBichos(1);
-        tierronmon.setCantidadBichos(1);
+        gasper.setEnergia(fantasmon.getEnergiaInicial());
         fantasmon.setCantidadBichos(1);
+
+        Bicho miguelito = new Bicho(miguelmon,"");
+        miguelito.setEnergia(miguelmon.getEnergiaInicial());
+        miguelmon.setCantidadBichos(1);
+
+        Bicho patamon = new Bicho(digimon,"");
+        patamon.setEnergia(digimon.getEnergiaInicial());
+        digimon.setCantidadBichos(1);
+
+        Bicho pikara = new Bicho(pikachu,"");
+        pikara.setEnergia(pikachu.getEnergiaInicial());
+        pikachu.setCantidadBichos(1);
+
+        Bicho elChupaCabras = new Bicho(vampiron,"");
+        elChupaCabras.setEnergia(vampiron.getEnergiaInicial());
+        vampiron.setCantidadBichos(1);
+
 
 
         fortinator.setDuenio(entrenador1);
@@ -245,7 +275,22 @@ public class Bootstrap
         gasper.setDuenio(entrenador2);
         entrenador2.getBichosCapturados().add(gasper);
 
+        miguelito.setDuenio(entrenador2);
+        entrenador2.getBichosCapturados().add(miguelito);
+
+        patamon.setDuenio(entrenador3);
+        entrenador3.getBichosCapturados().add(patamon);
+
+        pikara.setDuenio(entrenador4);
+        entrenador4.getBichosCapturados().add(pikara);
+
+        elChupaCabras.setDuenio(entrenador5);
+        entrenador5.getBichosCapturados().add(elChupaCabras);
+
         Session session = Runner.getCurrentSession();
+        session.save(condicion1);
+        session.save(condicion2);
+
         session.save(nivel1);
         session.save(nivel2);
         session.save(nivel3);
@@ -268,9 +313,6 @@ public class Bootstrap
         session.save(entrenador4);
         session.save(entrenador5);
 
-        session.save(pikachu);
-        session.save(digimon);
-        session.save(miguelmon);
         session.save(red);
         session.save(amarillo);
         session.save(green);
@@ -279,6 +321,10 @@ public class Bootstrap
         session.save(vampiron);
         session.save(fortmon);
         session.save(dientemon);
+        session.save(pikachu);
+        session.save(digimon);
+        session.save(miguelmon);
+        session.save(raichu);
 
         session.save(fortinator);
         session.save(dientudo);
@@ -287,42 +333,21 @@ public class Bootstrap
         session.save(verde);
         session.save(geomon);
         session.save(gasper);
-
+        session.save(miguelito);
+        session.save(patamon);
+        session.save(pikara);
+        session.save(elChupaCabras);
     }
 
     public void limpiarTabla()
     {
         Runner.runInSession(()-> {
             Session session = Runner.getCurrentSession();
-            Query query1 = session.createNativeQuery("SET FOREIGN_KEY_CHECKS=0;");
-            Query query2 = session.createNativeQuery("TRUNCATE TABLE ubicacion;");
-            Query query3 = session.createNativeQuery("TRUNCATE TABLE dojo;");
-            Query query4 = session.createNativeQuery("TRUNCATE TABLE pueblo;");
-            Query query5 = session.createNativeQuery("TRUNCATE TABLE guarderia;");
-            Query query6 = session.createNativeQuery("TRUNCATE TABLE especie;");
-            Query query7 = session.createNativeQuery("TRUNCATE TABLE entrenador;");
-            Query query8 = session.createNativeQuery("TRUNCATE TABLE bicho;");
-            Query query9 = session.createNativeQuery("TRUNCATE TABLE bicho_sequence;");
-            Query query10= session.createNativeQuery("TRUNCATE TABLE entrenador_bicho;");
-            Query query11= session.createNativeQuery("TRUNCATE TABLE guarderia_bicho;");
-            Query query12= session.createNativeQuery("TRUNCATE TABLE nivel;");
-            Query query13= session.createNativeQuery("SET FOREIGN_KEY_CHECKS=1;");
-            Query query14= session.createNativeQuery("insert into bicho_sequence(next_val) values(0);");
-            query1.executeUpdate();
-            query2.executeUpdate();
-            query3.executeUpdate();
-            query4.executeUpdate();
-            query5.executeUpdate();
-            query6.executeUpdate();
-            query7.executeUpdate();
-            query8.executeUpdate();
-            query9.executeUpdate();
-            query10.executeUpdate();
-            query11.executeUpdate();
-            query12.executeUpdate();
-            query13.executeUpdate();
-            query14.executeUpdate();
-
+            List nombreDeTablas = session.createNativeQuery("SHOW TABLES;").getResultList();
+            session.createNativeQuery("SET FOREIGN_KEY_CHECKS=0;").executeUpdate();
+            for (Object tabla : nombreDeTablas)
+            {   session.createNativeQuery("TRUNCATE TABLE "+tabla).executeUpdate(); }
+            session.createNativeQuery("SET FOREIGN_KEY_CHECKS=1;").executeUpdate();
             return null;
         });
     }

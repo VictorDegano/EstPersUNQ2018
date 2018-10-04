@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-// TODO: 27/09/2018 Plantear si hay que contemplar el caso en que se actualice los valores de experiencia (Para actualizar a los personajes al traerlos), para modelar las modificaciones en el nivel 
 @Entity
 public class Nivel
 {

@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 public class Entrenador
 {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
     @Column(unique = true, nullable = false)
     private String nombre;

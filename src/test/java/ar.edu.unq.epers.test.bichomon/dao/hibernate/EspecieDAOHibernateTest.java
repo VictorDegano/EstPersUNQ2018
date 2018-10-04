@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.test.bichomon.service;
+package ar.edu.unq.epers.test.bichomon.dao.hibernate;
 
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EspecieDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
@@ -30,6 +30,7 @@ public class EspecieDAOHibernateTest {
     public void setUp() throws Exception {
         especieDAO = new EspecieDAOHibernate();
         this.testService = new EspecieServiceHibernate(especieDAO);
+        bootstrap = new Bootstrap();
 
         especie = new Especie(1, "arromon", TipoBicho.AGUA);
         especie.setAltura(12);
@@ -49,12 +50,11 @@ public class EspecieDAOHibernateTest {
         especie3.setEnergiaIncial(97);
         especie3.setUrlFoto("/image/mugreomon.jpg");
 
+        Runner.runInSession(()-> {  bootstrap.crearDatos();
+                                    return null;});
         this.testService.crearEspecie(especie);
         this.testService.crearEspecie(especie2);
         this.testService.crearEspecie(especie3);
-        bootstrap = new Bootstrap();
-        Runner.runInSession(()-> {  bootstrap.crearDatos();
-            return null;});
     }
 
     @After
@@ -83,11 +83,22 @@ public class EspecieDAOHibernateTest {
     public void es_service_recupera_todas_las_especies(){
         List<Especie> especiesRecuperadas = this.testService.getAllEspecies();
 
-        assertEquals(3,especiesRecuperadas.size());
+        assertEquals(15,especiesRecuperadas.size());
         assertEquals("ajimon", especiesRecuperadas.get(0).getNombre());
-        assertEquals("arromon", especiesRecuperadas.get(1).getNombre());
-        assertEquals("mugreomon", especiesRecuperadas.get(2).getNombre());
-
+        assertEquals("Amarillomon", especiesRecuperadas.get(1).getNombre());
+        assertEquals("arromon", especiesRecuperadas.get(2).getNombre());
+        assertEquals("Dientemon", especiesRecuperadas.get(3).getNombre());
+        assertEquals("Digimon", especiesRecuperadas.get(4).getNombre());
+        assertEquals("Fantasmon", especiesRecuperadas.get(5).getNombre());
+        assertEquals("Fortmon", especiesRecuperadas.get(6).getNombre());
+        assertEquals("Miguelmon", especiesRecuperadas.get(7).getNombre());
+        assertEquals("mugreomon", especiesRecuperadas.get(8).getNombre());
+        assertEquals("Pikachu", especiesRecuperadas.get(9).getNombre());
+        assertEquals("Raichu", especiesRecuperadas.get(10).getNombre());
+        assertEquals("Rojomon", especiesRecuperadas.get(11).getNombre());
+        assertEquals("Tierramon", especiesRecuperadas.get(12).getNombre());
+        assertEquals("Vanpiron", especiesRecuperadas.get(13).getNombre());
+        assertEquals("Verdemon", especiesRecuperadas.get(14).getNombre());
     }
 
 
@@ -104,7 +115,7 @@ public class EspecieDAOHibernateTest {
     public void retornan_las_diez_especies_mas_populares(){
 
         List<Especie> populares = this.testService.populares();
-        assertEquals(populares.size(),10);
+        assertEquals(10,populares.size());
 
 
     }
