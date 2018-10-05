@@ -40,6 +40,7 @@ public class BichoServiceImplementacionTest {
     private BichoDAOHibernate bichoDao;
     private EspecieDAOHibernate especieDao;
     private CondicionDeEvolucionDAOHibernate condicionDao;
+    private ExperienciaDAOHibernate experienciaDao;
     private Especie lagartomon;
     private Especie reptilmon;
     private Bicho lagortito;
@@ -54,9 +55,9 @@ public class BichoServiceImplementacionTest {
         ubicacionDao    = new UbicacionDAOHibernate();
         bichoDao        = new BichoDAOHibernate();
         especieDao      = new EspecieDAOHibernate();
-        bichoServiceSut = new BichoServiceImplementacion(entrenadorDao, ubicacionDao, bichoDao, especieDao);
+        experienciaDao  = new ExperienciaDAOHibernate();
+        bichoServiceSut = new BichoServiceImplementacion(entrenadorDao, ubicacionDao, bichoDao, especieDao, experienciaDao);
         condicionDao    = new CondicionDeEvolucionDAOHibernate();
-        especieDao      = new EspecieDAOHibernate();
     }
 
     @After

@@ -1,7 +1,8 @@
 package ar.edu.unq.epers.test.bichomon.dao;
 
-import ar.edu.unq.epers.bichomon.backend.dao.ExperienciaDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.ExperienciaDAOHibernate;
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.Experiencia;
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.TipoExperiencia;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 import org.hibernate.Session;
 import org.junit.After;
@@ -17,13 +18,15 @@ public class ExperienciaDAOHibernateTest {
     @Before
     public void setUp() throws Exception
     {
-        experienciaDAOSUT   = new ExperienciaDAOHibernate();
+        Experiencia combatir    = new Experiencia(TipoExperiencia.COMBATE, 10);
+        Experiencia capturar    = new Experiencia(TipoExperiencia.CAPTURA, 10);
+        Experiencia evolucion   = new Experiencia(TipoExperiencia.EVOLUCION, 5);
+        experienciaDAOSUT       = new ExperienciaDAOHibernate();
         Runner.runInSession(()-> {
                                     Session session = Runner.getCurrentSession();
-                                    session.createNativeQuery("CREATE TABLE IF NOT EXISTS Experiencia (nombre VARCHAR(255) NOT NULL UNIQUE, experiencia INTEGER, PRIMARY KEY(nombre));").executeUpdate();
-                                    session.createNativeQuery("INSERT INTO Experiencia (nombre, experiencia) VALUES ('COMBATIR', 10),\n" +
-                                                                                                                            "('CAPTURAR', 10),\n" +
-                                                                                                                            "('EVOLUCION', 5);").executeUpdate();
+                                    session.save(capturar);
+                                    session.save(combatir);
+                                    session.save(evolucion);
                                     return null;
                                 });
     }
@@ -41,16 +44,16 @@ public class ExperienciaDAOHibernateTest {
     public void DadaUnaTablaDeExperienciaSiRecuperoLosValoresDeExperienciaDeCombateEvolucionYCapturarLosObtengoCorrectamente()
     {
         //Setup(Given)
-        int capturar;
-        int combate;
-        int evolucion;
+        Experiencia capturar;
+        Experiencia combate;
+        Experiencia evolucion;
         //Exercise(When)
-        capturar    = Runner.runInSession(()-> { return experienciaDAOSUT.recuperar("CAPTURAR");});
-        combate     = Runner.runInSession(()-> { return experienciaDAOSUT.recuperar("COMBATIR");});
-        evolucion   = Runner.runInSession(()-> { return experienciaDAOSUT.recuperar("EVOLUCUION");});
+        capturar    = Runner.runInSession(()-> { return experienciaDAOSUT.recuperar(TipoExperiencia.COMBATE);});
+        combate     = Runner.runInSession(()-> { return experienciaDAOSUT.recuperar(TipoExperiencia.CAPTURA);});
+        evolucion   = Runner.runInSession(()-> { return experienciaDAOSUT.recuperar(TipoExperiencia.EVOLUCION);});
         //Test(Then)
-        assertEquals(10, combate);
-        assertEquals(10, capturar);
-        assertEquals(5, evolucion);
+        assertEquals(10, combate.getExperiencia());
+        assertEquals(10, capturar.getExperiencia());
+        assertEquals(5, evolucion.getExperiencia());
     }
 }

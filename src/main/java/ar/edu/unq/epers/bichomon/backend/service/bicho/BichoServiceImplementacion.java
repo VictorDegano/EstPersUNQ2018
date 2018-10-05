@@ -1,13 +1,12 @@
 package ar.edu.unq.epers.bichomon.backend.service.bicho;
 
-import ar.edu.unq.epers.bichomon.backend.dao.BichoDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.*;
+import ar.edu.unq.epers.bichomon.backend.dao.hibernate.*;
 import ar.edu.unq.epers.bichomon.backend.excepcion.BichoRecuperarException;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.TipoExperiencia;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 
@@ -19,6 +18,7 @@ public class BichoServiceImplementacion implements BichoService
     private EntrenadorDAO entrenadorDao;
     private BichoDAO bichoDao;
     private EspecieDAO especieDao;
+    private ExperienciaDAO experienciaDao;
 
     /**
      * Busca un bicho en la ubicacion actual del entrenador especificado.
@@ -60,7 +60,7 @@ public class BichoServiceImplementacion implements BichoService
     public boolean puedeEvolucionar(String entrenador, int bicho)
     {
         return Runner.runInSession(() -> {  Bicho unBicho           = this.getBichoDao().recuperar(bicho);
-//                                            Entrenador unEntrenador = this.getEntrenadorDao().recuperar(entrenador);
+
                                             if(unBicho == null)
                                             {   throw new BichoRecuperarException(bicho);   }
                                             return unBicho.puedeEvolucionar();});
@@ -78,8 +78,6 @@ public class BichoServiceImplementacion implements BichoService
     @Override
     public Bicho evolucionar(String entrenador, int bicho)
     {
-        // TODO: 02/10/2018 hay que agregar que tras la evolucion exitosa el en trenador gane experiencia
-
         return Runner.runInSession(() -> {
                                     Especie especieAntesDeEvolucion;
                                     Bicho unBicho                   = this.getBichoDao().recuperar(bicho);
@@ -93,14 +91,12 @@ public class BichoServiceImplementacion implements BichoService
                                     unBicho.evolucionar();
                                     if (especieAntesDeEvolucion != unBicho.getEspecie())
                                     {
-                                        unEntrenador.subirExperiencia(5);
+                                        unEntrenador.subirExperiencia(this.experienciaDao.recuperar(TipoExperiencia.EVOLUCION).getExperiencia());
                                         this.getEntrenadorDao().actualizar(unEntrenador);
                                         this.getBichoDao().actualizar(unBicho);
                                         this.getEspecieDao().actualizar(especieAntesDeEvolucion);
                                         this.getEspecieDao().actualizar(unBicho.getEspecie());
                                     }
-
-
 
                                     return unBicho;});
     }
@@ -108,12 +104,13 @@ public class BichoServiceImplementacion implements BichoService
 /*[--------]Constructors[--------]*/
     public BichoServiceImplementacion() {   }
 
-    public BichoServiceImplementacion(EntrenadorDAO entrenadorDao, UbicacionDAO ubicacionDao, BichoDAO bichoDao, EspecieDAO especieDao)
+    public BichoServiceImplementacion(EntrenadorDAOHibernate entrenadorDao, UbicacionDAOHibernate ubicacionDao, BichoDAOHibernate bichoDao, EspecieDAOHibernate especieDao, ExperienciaDAOHibernate experienciaDao)
     {
         this.entrenadorDao  = entrenadorDao;
         this.ubicacionDao   = ubicacionDao;
         this.bichoDao       = bichoDao;
         this.especieDao     = especieDao;
+        this.experienciaDao = experienciaDao;
     }
 
 /*[--------]Getters & Setters[--------]*/
