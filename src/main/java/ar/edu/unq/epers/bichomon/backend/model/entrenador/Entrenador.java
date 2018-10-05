@@ -53,8 +53,7 @@ public class Entrenador
      */
     public void subirExperiencia(int experienciaGanada)
     {
-        int nuevaExperiencia    = this.getExperiencia() + experienciaGanada;
-        this.setExperiencia(nuevaExperiencia);
+        this.setExperiencia(this.getExperiencia() + experienciaGanada);
         this.getNivel().ganoExperiencia(this);
     }
 
@@ -84,8 +83,6 @@ public class Entrenador
 /*---------------Duelos-----------------*/
 
     public void retar(Bicho bichoDeCombate) {this.ubicacion.duelo(bichoDeCombate); }
-
-
 }
 
 

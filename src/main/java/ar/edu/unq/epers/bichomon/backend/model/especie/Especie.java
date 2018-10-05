@@ -27,16 +27,10 @@ public class Especie {
 	private int energiaInicial;
 	private String urlFoto;
 	private int cantidadBichos;
-
-    // TODO: 01/10/2018 Ignorado hasta el momento de implementar el metodo del service
-	@ManyToOne // TODO: 02/10/2018 oneToOne o ManyToOne?
+	@ManyToOne
 	private Especie especieBase;
-
-    // TODO: 01/10/2018 Ignorado hasta el momento de implementar el metodo del service
 	@OneToOne
 	private Especie evolucion;
-
-    // TODO: 01/10/2018 Ignorado hasta el momento de implementar el metodo del service
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<CondicionEvolucion> condicionesDeEvolucion;
 

@@ -288,6 +288,13 @@ public class Bootstrap
         entrenador5.getBichosCapturados().add(elChupaCabras);
 
         Session session = Runner.getCurrentSession();
+
+        /*----------[CREACION DE TABLA DE EXPERIENCIA]----------*/
+        session.createNativeQuery("CREATE TABLE IF NOT EXISTS Experiencia (nombre VARCHAR(255) NOT NULL UNIQUE, experiencia INTEGER, PRIMARY KEY(nombre));").executeUpdate();
+        session.createNativeQuery("INSERT INTO Experiencia (nombre, experiencia) VALUES ('COMBATIR', 10),\n" +
+                                                                                                "('CAPTURAR', 10),\n" +
+                                                                                                "('EVOLUCION', 5);").executeUpdate();
+        /*----------[CARGA DE DATOS EN LA BASE]----------*/
         session.save(condicion1);
         session.save(condicion2);
 
