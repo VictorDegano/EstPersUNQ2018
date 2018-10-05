@@ -35,7 +35,7 @@ public class GuarderiaTest {
     {
         //Setup(Given)
         //Exercise(When)
-        guarderiaSut.abandonar(nuevoBicho);
+        guarderiaSut.refugiar(nuevoBicho);
         //Test(Then)
         assertFalse(guarderiaSut.getBichosAbandonados().isEmpty());
         assertTrue(guarderiaSut.getBichosAbandonados().contains(nuevoBicho));

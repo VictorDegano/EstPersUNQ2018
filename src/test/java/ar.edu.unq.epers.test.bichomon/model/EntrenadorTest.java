@@ -98,8 +98,8 @@ public class EntrenadorTest {
         catch (UbicacionIncorrectaException e)
         {   mensajeDojo = e.getMessage(); }
         //Test(Then)
-        assertEquals("La Ubicacion: El Origen es incorrecta. No se puede abandonar un bichomon en esta Ubicacion", mensajePueblo);
-        assertEquals("La Ubicacion: Dojo el Origen es incorrecta. No se puede abandonar un bichomon en esta Ubicacion", mensajeDojo);
+        assertEquals("La Ubicacion: El Origen es incorrecta. No se puede refugiar un bichomon en esta Ubicacion", mensajePueblo);
+        assertEquals("La Ubicacion: Dojo el Origen es incorrecta. No se puede refugiar un bichomon en esta Ubicacion", mensajeDojo);
         assertFalse(entrenadorSUT.getBichosCapturados().isEmpty());
         assertTrue(entrenadorSUT.getBichosCapturados().contains(nuevoBicho));
     }

@@ -13,12 +13,20 @@ public class Guarderia extends Ubicacion
     @OneToMany
     private List<Bicho> bichosAbandonados   = new ArrayList<>();
 
+    @OneToMany
+    private List<RegistroDeAbandono> registroDeBichosAbandonados = new  ArrayList<>();
+
     @Override
-    public void abandonar(Bicho bichoAbandonado)
-    {   this.getBichosAbandonados().add(bichoAbandonado);   }
+    public void refugiar(Bicho bichoAbandonado){
+
+        RegistroDeAbandono registro = new RegistroDeAbandono(bichoAbandonado.getDuenio(),bichoAbandonado);
+        this.getBichosAbandonados().add(bichoAbandonado);
+        bichoAbandonado.getDuenio().getBichosCapturados().remove(bichoAbandonado);
+        bichoAbandonado.setDuenio(null);
+    }
 
 /*[--------]Constructors[--------]*/
-    public Guarderia() {    }
+    public Guarderia() {   }
 
 /*[--------]Getters & Setters[--------]*/
     public List<Bicho> getBichosAbandonados() { return bichosAbandonados;   }
