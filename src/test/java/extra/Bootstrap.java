@@ -252,8 +252,7 @@ public class Bootstrap
         elChupaCabras.setEnergia(vampiron.getEnergiaInicial());
         vampiron.setCantidadBichos(1);
 
-
-
+                        /* Setear  Bichos a Entrenadores */
         fortinator.setDuenio(entrenador1);
         entrenador1.getBichosCapturados().add(fortinator);
 
@@ -286,6 +285,59 @@ public class Bootstrap
 
         elChupaCabras.setDuenio(entrenador5);
         entrenador5.getBichosCapturados().add(elChupaCabras);
+
+                  /* Bichos sin entrenadores (solo para test (deberian estar en una guarderia)*/
+        Bicho mousemon = new Bicho(digimon,"");
+        mousemon.setEnergia(digimon.getEnergiaInicial());
+        digimon.setCantidadBichos(2);
+
+        Bicho spiderman = new Bicho(digimon,"");
+        spiderman.setEnergia(pikachu.getEnergiaInicial());
+        pikachu.setCantidadBichos(3);
+
+        Bicho gatomon = new Bicho (pikachu,"");
+        gatomon.setEnergia(digimon.getEnergiaInicial());
+        digimon.setCantidadBichos(2);
+
+        Bicho perromon = new Bicho (fantasmon,"");
+        perromon.setEnergia(fantasmon.getEnergiaInicial());
+        fantasmon.setCantidadBichos(2);
+
+        Bicho ricardo = new Bicho(fortmon,"");
+        ricardo.setEnergia(fortmon.getEnergiaInicial());
+        fortmon.setCantidadBichos(2);
+
+        Bicho firulais = new Bicho(dientemon,"");
+        firulais.setEnergia(dientemon.getEnergiaInicial());
+        dientemon.setCantidadBichos(2);
+
+        Bicho tortumon = new Bicho(vampiron,"");
+        tortumon.setEnergia(vampiron.getEnergiaInicial());
+        vampiron.setCantidadBichos(2);
+
+        Bicho pekachu = new Bicho (pikachu,"");
+        pekachu.setEnergia(pikachu.getEnergiaInicial());
+        pikachu.setCantidadBichos(2);
+
+        Bicho verdolaga = new Bicho (green,"");
+        verdolaga.setEnergia(green.getEnergiaInicial());
+        green.setCantidadBichos(2);
+
+        Bicho rogelio = new Bicho (red,"");
+        rogelio.setEnergia(red.getEnergiaInicial());
+        red.setCantidadBichos(2);
+
+        Bicho amarelo = new Bicho(amarillo,"");
+        amarelo.setEnergia(amarillo.getEnergiaInicial());
+        amarillo.setCantidadBichos(2);
+
+        Bicho tierra = new Bicho(tierronmon,"");
+        tierra.setEnergia(tierronmon.getEnergiaInicial());
+        tierronmon.setCantidadBichos(2);
+
+        Bicho migue = new Bicho (miguelmon,"");
+        migue.setEnergia(miguelmon.getEnergiaInicial());
+        miguelmon.setCantidadBichos(2);
 
         Session session = Runner.getCurrentSession();
         session.save(condicion1);
@@ -337,6 +389,21 @@ public class Bootstrap
         session.save(patamon);
         session.save(pikara);
         session.save(elChupaCabras);
+
+
+        session.save(mousemon);
+        session.save(spiderman);
+        session.save(gatomon);
+        session.save(perromon);
+        session.save(ricardo);
+        session.save(firulais);
+        session.save(tortumon);
+        session.save(pekachu);
+        session.save(verdolaga);
+        session.save(rogelio);
+        session.save(amarelo);
+        session.save(tierronmon);
+        session.save(migue);
     }
 
     public void limpiarTabla()
