@@ -20,6 +20,7 @@ public class Guarderia extends Ubicacion
     public void refugiar(Bicho bichoAbandonado){
 
         RegistroDeAbandono registro = new RegistroDeAbandono(bichoAbandonado.getDuenio(),bichoAbandonado);
+        this.registroDeBichosAbandonados.add(registro);
         this.getBichosAbandonados().add(bichoAbandonado);
         bichoAbandonado.getDuenio().getBichosCapturados().remove(bichoAbandonado);
         bichoAbandonado.setDuenio(null);
