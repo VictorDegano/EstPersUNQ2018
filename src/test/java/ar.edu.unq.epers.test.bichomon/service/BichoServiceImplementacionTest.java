@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import javax.persistence.NoResultException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -39,6 +40,10 @@ public class BichoServiceImplementacionTest {
     private BichoDAOHibernate bichoDao;
     private EspecieDAOHibernate especieDao;
     private CondicionDeEvolucionDAOHibernate condicionDao;
+    private ExperienciaDAOHibernate experienciaDao;
+    private Especie lagartomon;
+    private Especie reptilmon;
+    private Bicho lagortito;
 
     @Before
     public void setUp() throws Exception
@@ -49,9 +54,10 @@ public class BichoServiceImplementacionTest {
         entrenadorDao   = new EntrenadorDAOHibernate();
         ubicacionDao    = new UbicacionDAOHibernate();
         bichoDao        = new BichoDAOHibernate();
-        bichoServiceSut = new BichoServiceImplementacion(entrenadorDao, ubicacionDao, bichoDao);
-        condicionDao    = new CondicionDeEvolucionDAOHibernate();
         especieDao      = new EspecieDAOHibernate();
+        experienciaDao  = new ExperienciaDAOHibernate();
+        bichoServiceSut = new BichoServiceImplementacion(entrenadorDao, ubicacionDao, bichoDao, especieDao, experienciaDao);
+        condicionDao    = new CondicionDeEvolucionDAOHibernate();
     }
 
     @After
@@ -133,15 +139,100 @@ public class BichoServiceImplementacionTest {
         assertTrue(bichoServiceSut.puedeEvolucionar("Pepe Enpepado", 24));
     }
 
+    @Test(expected = BichoRecuperarException.class)
+    public void SiSeIntentaEvolucionarUnBichoInexistenteNosDaUnaExcepcion()
+    {
+        //Setup(Given)
+        setUpBichoCumpleCondicion();
+        Bicho bichoEvolucionado;
+        //Exercise(When)
+        bichoEvolucionado   = bichoServiceSut.evolucionar("Pepe Enpepado", 19092);
+        //Test(Then)
+        fail("No Hubo Excepcion");
+    }
+
+    @Test(expected = NoResultException.class)
+    public void SiSeIntentaEvolucionarAUnBichoDeUnEntrenadorInexistenteNosDaUnaExcepcion()
+    {
+        //Setup(Given)
+        setUpBichoCumpleCondicion();
+        Bicho bichoEvolucionado;
+        //Exercise(When)
+        bichoEvolucionado   = bichoServiceSut.evolucionar("Pepe Enpepado Super Fiesta", 12);
+        //Test(Then)
+        fail("No Hubo Excepcion");
+    }
+
+    @Test
+    public void SiUnBichoCumpleConLasCondicionesParaEvolucionarEvoluciona()
+    {
+        //Setup(Given)
+        Bicho bichoEvolucionado;
+        Bicho bichoRecuperado;
+        Entrenador entrenadorRecuperado;
+        Especie especieVieja;
+        Especie especieNueva;
+        setUpBichoCumpleCondicion();
+        //Exercise(When)
+        bichoEvolucionado   = bichoServiceSut.evolucionar("Pepe Enpepado", 24);
+        bichoRecuperado     = Runner.runInSession(()-> { return bichoDao.recuperar(24);});
+        entrenadorRecuperado= Runner.runInSession(()-> { return entrenadorDao.recuperar("Pepe Enpepado");});
+        especieVieja        = Runner.runInSession(()-> { return especieDao.recuperar("Lagartomon");});
+        especieNueva        = Runner.runInSession(()-> { return especieDao.recuperar("Reptilmon");});
+        //Test(Then)
+        assertNotEquals(lagortito.getEspecie(), bichoEvolucionado.getEspecie());
+        assertEquals(bichoEvolucionado.getEspecie().getId(), bichoRecuperado.getEspecie().getId());
+        assertEquals(bichoEvolucionado.getEspecie().getNombre(), bichoRecuperado.getEspecie().getNombre());
+        assertTrue(entrenadorRecuperado .getBichosCapturados()
+                                        .stream()
+                                        .anyMatch(bichos-> (bichos.getId() == bichoRecuperado.getId()) && (bichos.getEspecie().getId() == bichoRecuperado.getEspecie().getId())));
+        assertTrue(entrenadorRecuperado .getBichosCapturados()
+                                        .stream()
+                                        .noneMatch(bichos-> (bichos.getId() == lagortito.getId()) && (bichos.getEspecie().getId() == lagortito.getEspecie().getId())));
+        assertEquals(30, entrenadorRecuperado.getExperiencia());
+        assertEquals(0, especieVieja.getCantidadBichos());
+        assertEquals(1, especieNueva.getCantidadBichos());
+    }
+
+    @Test
+    public void SiUnBichoNoCumpleConLasCondicionesParaEvolucionarNoEvoluciona()
+    {
+        //Setup(Given)
+        Bicho bichoEvolucionado;
+        Bicho bichoRecuperado;
+        Entrenador entrenadorRecuperado;
+        Especie especieVieja;
+        Especie especieNueva;
+        setUpBichoSinCumplirCondicion();
+        //Exercise(When)
+        bichoEvolucionado   = bichoServiceSut.evolucionar("Pepe Enpepado", 24);
+        bichoRecuperado     = Runner.runInSession(()-> { return bichoDao.recuperar(24);});
+        entrenadorRecuperado= Runner.runInSession(()-> { return entrenadorDao.recuperar("Pepe Enpepado");});
+        especieVieja        = Runner.runInSession(()-> { return especieDao.recuperar("Lagartomon");});
+        especieNueva        = Runner.runInSession(()-> { return especieDao.recuperar("Reptilmon");});
+        //Test(Then)
+        assertNotEquals(lagortito.getEspecie(), bichoEvolucionado.getEspecie());
+        assertEquals(bichoEvolucionado.getEspecie().getId(), bichoRecuperado.getEspecie().getId());
+        assertEquals(bichoEvolucionado.getEspecie().getNombre(), bichoRecuperado.getEspecie().getNombre());
+        assertTrue(entrenadorRecuperado .getBichosCapturados()
+                                        .stream()
+                                        .anyMatch(bichos->  (bichos.getId() == bichoRecuperado.getId())
+                                                            && (bichos.getEspecie().getId() == especieVieja.getId())));
+        assertTrue(entrenadorRecuperado .getBichosCapturados()
+                                        .stream()
+                                        .noneMatch(bichos-> (bichos.getId() == lagortito.getId())
+                                                            && (bichos.getEspecie().getId() == especieVieja.getEvolucion().getId())));
+        assertEquals(25, entrenadorRecuperado.getExperiencia());
+        assertEquals(1, especieVieja.getCantidadBichos());
+        assertEquals(0, especieNueva.getCantidadBichos());
+    }
+
+
+
     @Test @Ignore
     public void buscar() {
     }
 
-
-
-    @Test @Ignore
-    public void evolucionar() {
-    }
 
     private void setUpBichoSinCondicion()
     {   setUpBichoPuedeEvolucionar(Collections.emptyList());    }
@@ -168,7 +259,7 @@ public class BichoServiceImplementacionTest {
 
     private void setUpBichoPuedeEvolucionar(List<CondicionEvolucion> listaDeCondiciones)
     {
-        Especie lagartomon  = new Especie();
+        lagartomon  = new Especie();
         lagartomon.setNombre("Lagartomon");
         lagartomon.setTipo(TipoBicho.TIERRA);
         lagartomon.setAltura(20);
@@ -179,7 +270,7 @@ public class BichoServiceImplementacionTest {
         lagartomon.setEspecieBase(lagartomon);
         lagartomon.setCondicionesDeEvolucion(listaDeCondiciones);
 
-        Especie reptilmon   = new Especie();
+        reptilmon   = new Especie();
         reptilmon.setNombre("Reptilmon");
         reptilmon.setTipo(TipoBicho.TIERRA);
         reptilmon.setAltura(50);
@@ -190,7 +281,7 @@ public class BichoServiceImplementacionTest {
         reptilmon.setEspecieBase(lagartomon);
         lagartomon.setEvolucion(reptilmon);
 
-        Bicho lagortito = new Bicho();
+        lagortito = new Bicho();
         lagortito.setEspecie(lagartomon);
         lagortito.setEnergia(lagartomon.getEnergiaInicial());
         lagortito.setFechaDeCaptura(Timestamp.valueOf(LocalDateTime.now().minusDays(30)));

@@ -2,7 +2,9 @@ package extra;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.Experiencia;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Nivel;
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.TipoExperiencia;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEnergia;
@@ -340,6 +342,17 @@ public class Bootstrap
         miguelmon.setCantidadBichos(2);
 
         Session session = Runner.getCurrentSession();
+
+        /*----------[CREACION DE TABLA DE EXPERIENCIA]----------*/
+        Experiencia combatir    = new Experiencia(TipoExperiencia.COMBATE, 10);
+        Experiencia capturar    = new Experiencia(TipoExperiencia.CAPTURA, 10);
+        Experiencia evolucion   = new Experiencia(TipoExperiencia.EVOLUCION, 5);
+
+        /*----------[CARGA DE DATOS EN LA BASE]----------*/
+        session.save(combatir);
+        session.save(capturar);
+        session.save(evolucion);
+
         session.save(condicion1);
         session.save(condicion2);
 

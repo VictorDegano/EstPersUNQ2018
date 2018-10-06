@@ -38,7 +38,7 @@
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEnergia" />
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionVictoria" />
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionNivel" />
+		<mapping class="ar.edu.unq.epers.bichomon.backend.model.entrenador.Experiencia"/>
 		<mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.RegistroDeAbandono" />
-	
 	</session-factory>
 </hibernate-configuration>
