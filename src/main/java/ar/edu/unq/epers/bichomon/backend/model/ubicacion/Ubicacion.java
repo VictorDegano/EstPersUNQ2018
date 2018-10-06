@@ -56,11 +56,11 @@ public abstract class Ubicacion
 
     /**
      * Abandona el bicho especificado del entrenador en su ubicacion actual.
-     * @param bicho - el bicho a abandonar
+     * @param bicho - el bicho a refugiar
      * @throws UbicacionIncorrectaException si la ubicacion no es una guarderia.
      */
-    public void abandonar(Bicho bicho)
-    { throw new UbicacionIncorrectaException(this.getNombre(), "No se puede abandonar un bichomon en esta Ubicacion");  }
+    public void refugiar(Bicho bicho)
+    { throw new UbicacionIncorrectaException(this.getNombre(), "No se puede refugiar un bichomon en esta Ubicacion");  }
 
 /*[--------]Constructors[--------]*/
     public Ubicacion() {    }

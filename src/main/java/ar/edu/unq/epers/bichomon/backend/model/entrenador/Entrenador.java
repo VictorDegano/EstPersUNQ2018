@@ -35,14 +35,13 @@ public class Entrenador
 
     /**
      * Abandona el bicho indicado en la ubicacion actual. La ubicacion debe ser una
-     * guarderia para poder abandonar y si el bicho no esta en posecion del entrenador sucede nada.
-     * @param bichoAAbandonar - El bicho a abandonar.
+     * guarderia para poder refugiar y si el bicho no esta en posecion del entrenador sucede nada.
+     * @param bichoAAbandonar - El bicho a refugiar.
      */
     public void abandonarBicho(Bicho bichoAAbandonar)
     {
-        if (this.getBichosCapturados().contains(bichoAAbandonar)) {
-            this.getUbicacion().abandonar(bichoAAbandonar);
-            this.getBichosCapturados().remove(bichoAAbandonar);
+        if(this.bichosCapturados.contains(bichoAAbandonar)){
+            this.getUbicacion().refugiar(bichoAAbandonar);
         }
     }
 

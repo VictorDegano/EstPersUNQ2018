@@ -48,6 +48,7 @@ public class EntrenadorTest {
         rojomon.setEnergiaIncial(100);
         rojomon.setUrlFoto("/image/rojomon.jpg");
         nuevoBicho      = new Bicho(rojomon, "");
+        nuevoBicho.setDuenio(entrenadorSUT);
         bichoDenadie    = new Bicho(rojomon, "");
         bichoDenadie.setEnergia(23456);
 
@@ -98,8 +99,8 @@ public class EntrenadorTest {
         catch (UbicacionIncorrectaException e)
         {   mensajeDojo = e.getMessage(); }
         //Test(Then)
-        assertEquals("La Ubicacion: El Origen es incorrecta. No se puede abandonar un bichomon en esta Ubicacion", mensajePueblo);
-        assertEquals("La Ubicacion: Dojo el Origen es incorrecta. No se puede abandonar un bichomon en esta Ubicacion", mensajeDojo);
+        assertEquals("La Ubicacion: El Origen es incorrecta. No se puede refugiar un bichomon en esta Ubicacion", mensajePueblo);
+        assertEquals("La Ubicacion: Dojo el Origen es incorrecta. No se puede refugiar un bichomon en esta Ubicacion", mensajeDojo);
         assertFalse(entrenadorSUT.getBichosCapturados().isEmpty());
         assertTrue(entrenadorSUT.getBichosCapturados().contains(nuevoBicho));
     }
@@ -115,6 +116,7 @@ public class EntrenadorTest {
         assertTrue(entrenadorSUT.getBichosCapturados().isEmpty());
         assertFalse(unaGuarderia.getBichosAbandonados().isEmpty());
         assertTrue(unaGuarderia.getBichosAbandonados().contains(nuevoBicho));
+        assertEquals(1,unaGuarderia.getRegistroDeBichosAbandonados().size());
     }
 
     @Test

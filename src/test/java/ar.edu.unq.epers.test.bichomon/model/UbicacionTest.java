@@ -97,7 +97,7 @@ public class UbicacionTest {
     {
         //Setup(Given)
         //Exercise(When)
-        ubicacionSUT4.abandonar(nuevoBicho);
+        ubicacionSUT4.refugiar(nuevoBicho);
 
         //Test(Then)
         fail("No hubo Excepcion");
@@ -108,7 +108,7 @@ public class UbicacionTest {
     {
         //Setup(Given)
         //Exercise(When)
-        ubicacionSUT1.abandonar(nuevoBicho);
+        ubicacionSUT1.refugiar(nuevoBicho);
 
         //Test(Then)
         fail("No hubo Excepcion");

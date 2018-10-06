@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.test.bichomon.dao.hibernate;
+package ar.edu.unq.epers.test.bichomon.service;
 
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EspecieDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
@@ -17,7 +17,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class EspecieDAOHibernateTest {
+public class EspecieServiceHibernateTest {
 
     private EspecieServiceHibernate testService;
     EspecieDAOHibernate especieDAO;

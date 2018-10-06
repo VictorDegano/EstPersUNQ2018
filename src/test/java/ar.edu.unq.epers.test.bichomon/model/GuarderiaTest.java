@@ -1,6 +1,7 @@
 package ar.edu.unq.epers.test.bichomon.model;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
@@ -14,6 +15,7 @@ public class GuarderiaTest {
 
     private Bicho nuevoBicho;
     private Guarderia guarderiaSut;
+    private Entrenador entrenador;
     @Before
     public void setUp() throws Exception
     {
@@ -27,7 +29,12 @@ public class GuarderiaTest {
         Dojo dojoConCampeon = new Dojo();
         nuevoBicho          = new Bicho(rojomon, "");
         guarderiaSut   = new Guarderia();
+        entrenador = new Entrenador();
+        entrenador.getBichosCapturados().add(nuevoBicho);
+        nuevoBicho.setDuenio(entrenador);
         guarderiaSut.setNombre("Guarderia NoTeQuiereNadie");
+
+
     }
 
     @Test
@@ -35,7 +42,7 @@ public class GuarderiaTest {
     {
         //Setup(Given)
         //Exercise(When)
-        guarderiaSut.abandonar(nuevoBicho);
+        guarderiaSut.refugiar(nuevoBicho);
         //Test(Then)
         assertFalse(guarderiaSut.getBichosAbandonados().isEmpty());
         assertTrue(guarderiaSut.getBichosAbandonados().contains(nuevoBicho));
