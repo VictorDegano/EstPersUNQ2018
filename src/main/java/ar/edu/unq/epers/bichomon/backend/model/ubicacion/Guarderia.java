@@ -2,6 +2,7 @@ package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class Guarderia extends Ubicacion
     @OneToMany
     private List<Bicho> bichosAbandonados   = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<RegistroDeAbandono> registroDeBichosAbandonados = new  ArrayList<>();
 
     @Override

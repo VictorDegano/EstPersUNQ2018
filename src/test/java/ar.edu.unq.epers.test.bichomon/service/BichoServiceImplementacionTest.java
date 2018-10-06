@@ -110,7 +110,7 @@ public class BichoServiceImplementacionTest {
         setUpBichoCumpleCondicion();
         //Exercise(When)
         //Test(Then)
-        assertTrue(bichoServiceSut.puedeEvolucionar("Pepe Enpepado", 12));
+        assertTrue(bichoServiceSut.puedeEvolucionar("Pepe Enpepado", 24));
     }
 
     @Test(expected = BichoRecuperarException.class)
@@ -130,7 +130,7 @@ public class BichoServiceImplementacionTest {
         setUpBichoSinCondicion();
         //Exercise(When)
         //Test(Then)
-        assertTrue(bichoServiceSut.puedeEvolucionar("Pepe Enpepado", 12));
+        assertTrue(bichoServiceSut.puedeEvolucionar("Pepe Enpepado", 24));
     }
 
     @Test @Ignore

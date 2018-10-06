@@ -76,7 +76,7 @@ public class BichoDAOHibernateTest {
 
         //Exercise(When)
         bichoRecuperado = Runner.runInSession(()-> {bichoDAOSut.guardar(nuevoBicho);
-                                                    return bichoDAOSut.recuperar(12);});
+                                                    return bichoDAOSut.recuperar(24);});
 
         //Test(Then)
         assertEquals(90000, bichoRecuperado.getEnergia());
