@@ -25,5 +25,27 @@ public class RegistroDeAbandono {
     }
 
 
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Entrenador getEntrenador() {
+        return entrenador;
+    }
+
+    public void setEntrenador(Entrenador entrenador) {
+        this.entrenador = entrenador;
+    }
+
+    public Bicho getBichomon() {
+        return bichomon;
+    }
+
+    public void setBichomon(Bicho bichomon) {
+        this.bichomon = bichomon;
+    }
 }

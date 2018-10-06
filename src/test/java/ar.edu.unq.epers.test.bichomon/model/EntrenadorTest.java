@@ -48,6 +48,7 @@ public class EntrenadorTest {
         rojomon.setEnergiaIncial(100);
         rojomon.setUrlFoto("/image/rojomon.jpg");
         nuevoBicho      = new Bicho(rojomon, "");
+        nuevoBicho.setDuenio(entrenadorSUT);
         bichoDenadie    = new Bicho(rojomon, "");
         bichoDenadie.setEnergia(23456);
 
@@ -115,6 +116,7 @@ public class EntrenadorTest {
         assertTrue(entrenadorSUT.getBichosCapturados().isEmpty());
         assertFalse(unaGuarderia.getBichosAbandonados().isEmpty());
         assertTrue(unaGuarderia.getBichosAbandonados().contains(nuevoBicho));
+        assertEquals(1,unaGuarderia.getRegistroDeBichosAbandonados().size());
     }
 
     @Test

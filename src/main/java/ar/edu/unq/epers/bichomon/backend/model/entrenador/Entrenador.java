@@ -40,9 +40,9 @@ public class Entrenador
      */
     public void abandonarBicho(Bicho bichoAAbandonar)
     {
-
-        this.getUbicacion().refugiar(bichoAAbandonar);
-
+        if(this.bichosCapturados.contains(bichoAAbandonar)){
+            this.getUbicacion().refugiar(bichoAAbandonar);
+        }
     }
 
     /**

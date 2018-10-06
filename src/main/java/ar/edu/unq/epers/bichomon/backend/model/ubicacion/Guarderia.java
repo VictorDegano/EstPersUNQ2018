@@ -21,7 +21,7 @@ public class Guarderia extends Ubicacion
 
         RegistroDeAbandono registro = new RegistroDeAbandono(bichoAbandonado.getDuenio(),bichoAbandonado);
         this.registroDeBichosAbandonados.add(registro);
-        this.getBichosAbandonados().add(bichoAbandonado);
+        this.bichosAbandonados.add(bichoAbandonado);
         bichoAbandonado.getDuenio().getBichosCapturados().remove(bichoAbandonado);
         bichoAbandonado.setDuenio(null);
     }
@@ -29,7 +29,15 @@ public class Guarderia extends Ubicacion
 /*[--------]Constructors[--------]*/
     public Guarderia() {   }
 
-/*[--------]Getters & Setters[--------]*/
+    /*[--------]Getters & Setters[--------]*/
     public List<Bicho> getBichosAbandonados() { return bichosAbandonados;   }
     public void setBichosAbandonados(List<Bicho> bichosAbandonados) {   this.bichosAbandonados = bichosAbandonados; }
+
+    public List<RegistroDeAbandono> getRegistroDeBichosAbandonados() {
+        return registroDeBichosAbandonados;
+    }
+
+    public void setRegistroDeBichosAbandonados(List<RegistroDeAbandono> registroDeBichosAbandonados) {
+        this.registroDeBichosAbandonados = registroDeBichosAbandonados;
+    }
 }
