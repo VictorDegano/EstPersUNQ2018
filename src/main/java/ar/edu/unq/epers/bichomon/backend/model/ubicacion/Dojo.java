@@ -3,11 +3,12 @@ package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,8 +19,12 @@ public class Dojo extends Ubicacion
 {
     @OneToOne(cascade = CascadeType.ALL)
     private Campeon campeonActual;
-    @Transient
-    public List<Registro> historial= new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL) @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Registro> historial= new ArrayList<>();
+
+    @OneToMany @Transient
+    private List<Campeon> HistorialDeCampeones = new ArrayList<>();
 
     public Bicho campeonActual()
     {
@@ -38,18 +43,28 @@ public class Dojo extends Ubicacion
     public List<Registro> getHistorial() {
        return this.historial;
     }
-    /*------------Duelos--------------*/
+
+    private void agregarAHistorialDeCampeones(Campeon campeon) {    this.HistorialDeCampeones.add(campeon); }
+    public void setHistorial(List<Registro> historial) {    this.historial = historial; }
+
+    public List<Campeon> getHistorialDeCampeones() {    return HistorialDeCampeones;    }
+    public void setHistorialDeCampeones(List<Campeon> historialDeCampeones) {   HistorialDeCampeones = historialDeCampeones;    }
+
+/*------------Duelos--------------*/
 
     private void coronar(Bicho ganador) {
         Campeon nuevoCampeon=new Campeon();
         if ( this.campeonActual != null)
-        {   this.campeonActual.setFechaFinDeCampeon(Timestamp.valueOf(LocalDateTime.now()));    }
+        {
+            this.campeonActual.setFechaFinDeCampeon(Timestamp.valueOf(LocalDateTime.now()));
+            this.agregarAHistorialDeCampeones(this.campeonActual);
+        }
         nuevoCampeon.setBichoCampeon(ganador);
         nuevoCampeon.setFechaInicioDeCampeon(Timestamp.valueOf(LocalDateTime.now()));
         this.campeonActual=nuevoCampeon;
     }
 
-    public void duelo(Bicho bichoRetador) {
+    public Registro duelo(Bicho bichoRetador) {
         Registro registroDeLucha = new Registro();
         if(campeonActual != null) {
             Double randVal= Math.random() * 5;
@@ -67,21 +82,19 @@ public class Dojo extends Ubicacion
 
             if (campeon.getEnergia() <= 0) {
                 registroDeLucha.setGanador(bichoRetador);
-                this.coronar(registroDeLucha.ganador);
-
+                this.coronar(registroDeLucha.getGanador());
             }else{
                 registroDeLucha.setGanador(campeon);}
 
             campeon.setEnergia(energiaC + randVal.intValue());
             bichoRetador.setEnergia(energiaR + randVal.intValue());
-
-
         }
         else{
             coronar(bichoRetador);
             registroDeLucha.setGanador(bichoRetador);
         }
         historial.add(registroDeLucha);
+        return registroDeLucha;
     }
 
     public Bicho buscar(Entrenador entrenador){

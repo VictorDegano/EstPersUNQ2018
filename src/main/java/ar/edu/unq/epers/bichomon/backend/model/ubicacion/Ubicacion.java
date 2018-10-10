@@ -77,7 +77,7 @@ public abstract class Ubicacion
     public int getId() {    return id;  }
     public void setId(int id) { this.id = id;   }
 /*------------------Duelos---------------*/
-    public void duelo(Bicho bichoDeCombate)
+    public Registro duelo(Bicho bichoDeCombate)
     { throw new UbicacionIncorrectaException(this.getNombre(), "No se puede pelear en esta Ubicacion");  }
 
     public Bicho buscar(){ return null;}
