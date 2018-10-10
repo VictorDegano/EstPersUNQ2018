@@ -81,4 +81,5 @@ public abstract class Ubicacion
     { throw new UbicacionIncorrectaException(this.getNombre(), "No se puede pelear en esta Ubicacion");  }
 
     public Bicho buscar(){ return null;}
+
 }

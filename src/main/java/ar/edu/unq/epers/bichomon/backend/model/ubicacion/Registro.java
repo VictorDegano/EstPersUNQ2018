@@ -6,24 +6,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Registro {
+
     public Bicho ganador;
-    public List<Turno> detalles = new ArrayList<>();
+    public List<Turno> detalles;
 
-    public List<Turno> getDetalles() {
-        return detalles;
+
+    public Registro(){
+        List<Turno> detalles = new ArrayList<>();
     }
 
-    public void setDetalles(List<Turno> detalles) {
-        this.detalles = detalles;
-    }
 
-    public void setGanador(Bicho ganador) {
-        this.ganador = ganador;
-    }
+    public List<Turno> getDetalles(){return detalles;}
 
-    public void agregarComentario(Turno turno) {
-        this.detalles.add(turno);
-    }
+    public void setDetalles(List<Turno> detalles){this.detalles = detalles;}
+
+    public void setGanador(Bicho ganador){this.ganador = ganador;}
+
+    public void agregarComentario(Turno turno){this.detalles.add(turno);}
 
 
 }

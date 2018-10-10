@@ -220,5 +220,7 @@ public class MapaServiceImplementacionTest
     }
 
     @Test
-    public void campeonHistorico() {    }
+    public void campeonHistorico() {
+
+    }
 }
