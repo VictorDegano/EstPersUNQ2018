@@ -40,6 +40,8 @@
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionNivel" />
 		<mapping class="ar.edu.unq.epers.bichomon.backend.model.entrenador.Experiencia"/>
 		<mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.RegistroDeAbandono" />
+		<mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Registro" />
+		<mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Turno" />
 		<mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.ProbabilidadDeEspecie"/>
 	</session-factory>
 </hibernate-configuration>

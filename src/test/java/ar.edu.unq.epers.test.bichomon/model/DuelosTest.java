@@ -108,7 +108,7 @@ public class DuelosTest {
         entrenadorSUT.retar(nuevoBicho);
         Registro ganador=unaUbicacion2.getHistorial().get(0);
 
-        assertEquals(nuevoBicho , ganador.ganador);
+        assertEquals(nuevoBicho , ganador.getGanador());
 
 
     }
@@ -124,7 +124,7 @@ public class DuelosTest {
         entrenadorSUT.retar(nuevoBicho);
         Registro ganador=unaUbicacion2.getHistorial().get(0);
 
-        assertEquals(bichoDenadie , ganador.ganador);
+        assertEquals(bichoDenadie , ganador.getGanador());
 
 
     }
@@ -138,7 +138,7 @@ public class DuelosTest {
         entrenadorSUT.retar(nuevoBicho);
         Registro ganador=unaUbicacion2.getHistorial().get(0);
 
-        assertEquals(nuevoBicho , ganador.ganador);
+        assertEquals(nuevoBicho , ganador.getGanador());
 
 
     }
