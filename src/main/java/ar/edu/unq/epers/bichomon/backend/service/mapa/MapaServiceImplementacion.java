@@ -85,6 +85,8 @@ public class MapaServiceImplementacion implements MapaService
         );
     }
 
+
+
     /**
      * Retorna al bicho que ha sido campeon por mas tiempo en el dojo.
      *
