@@ -1,7 +1,10 @@
 package ar.edu.unq.epers.bichomon.backend.model.entrenador;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Registro;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -81,7 +84,7 @@ public class Entrenador
 
 /*---------------Duelos-----------------*/
 
-    public void retar(Bicho bichoDeCombate) {this.ubicacion.duelo(bichoDeCombate); }
+    public Registro retar(Bicho bichoDeCombate) {   return  this.ubicacion.duelo(bichoDeCombate); }
 }
 
 

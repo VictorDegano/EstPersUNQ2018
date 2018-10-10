@@ -8,6 +8,7 @@ import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.TipoExperiencia;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Registro;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 
 import javax.persistence.NoResultException;
@@ -83,7 +84,6 @@ public class BichoServiceImplementacion implements BichoService
                                     Bicho unBicho                   = this.getBichoDao().recuperar(bicho);
                                     Entrenador unEntrenador         = this.getEntrenadorDao().recuperar(entrenador);
 
-
                                     if(unBicho == null)
                                     {   throw new BichoRecuperarException(bicho);   }
 
@@ -101,7 +101,38 @@ public class BichoServiceImplementacion implements BichoService
                                     return unBicho;});
     }
 
-/*[--------]Constructors[--------]*/
+    /**
+     * El entrenador desafia al campeon del dojo.
+     *
+     * @param entrenador
+     * @param bicho
+     * @return ResultadoCombate un log donde se muestra lo sucedido en el combate
+     * @throws UbicacionIncorrectaException si la ubicacion no es un dojo.
+     */
+    @Override
+    public Registro duelo(String entrenador, int bicho)
+    {
+        return Runner.runInSession(() -> {
+                        Bicho unBicho                   = this.getBichoDao().recuperar(bicho);
+                        Entrenador unEntrenador         = this.getEntrenadorDao().recuperar(entrenador);
+                        Registro registroDeBatalla;
+
+                        if(unBicho == null)
+                        {   throw new BichoRecuperarException(bicho);   }
+
+                        registroDeBatalla   = unEntrenador.retar(unBicho);
+
+                        if (registroDeBatalla.getGanador().getId() == unBicho.getId())
+                        {
+                            unEntrenador.subirExperiencia(this.experienciaDao.recuperar(TipoExperiencia.COMBATE).getExperiencia());
+                            this.getEntrenadorDao().actualizar(unEntrenador);
+                        }
+                        this.getUbicacionDao().actualizar(unEntrenador.getUbicacion());
+
+                        return registroDeBatalla;});
+    }
+
+    /*[--------]Constructors[--------]*/
     public BichoServiceImplementacion() {   }
 
     public BichoServiceImplementacion(EntrenadorDAOHibernate entrenadorDao, UbicacionDAOHibernate ubicacionDao, BichoDAOHibernate bichoDao, EspecieDAOHibernate especieDao, ExperienciaDAOHibernate experienciaDao)
