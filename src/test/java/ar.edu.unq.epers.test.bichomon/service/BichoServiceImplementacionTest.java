@@ -12,6 +12,9 @@ import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEnergia;
 import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEvolucion;
 import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionNivel;
 import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionVictoria;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Registro;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.BichoServiceImplementacion;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.MapaService;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.MapaServiceImplementacion;
@@ -28,12 +31,14 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.Assert.*;
 
 public class BichoServiceImplementacionTest {
 
     private Bootstrap bootstraper;
+    private MapaService mapaService;
     private BichoServiceImplementacion bichoServiceSut;
     private EntrenadorDAOHibernate entrenadorDao;
     private UbicacionDAOHibernate ubicacionDao;
@@ -58,6 +63,7 @@ public class BichoServiceImplementacionTest {
         experienciaDao  = new ExperienciaDAOHibernate();
         bichoServiceSut = new BichoServiceImplementacion(entrenadorDao, ubicacionDao, bichoDao, especieDao, experienciaDao);
         condicionDao    = new CondicionDeEvolucionDAOHibernate();
+        mapaService     = new MapaServiceImplementacion(entrenadorDao, ubicacionDao);
     }
 
     @After
@@ -227,7 +233,46 @@ public class BichoServiceImplementacionTest {
         assertEquals(0, especieNueva.getCantidadBichos());
     }
 
+    @Test(expected = UbicacionIncorrectaException.class)
+    public void SiUnRetadorIntentaHacerUnDueloEnUnPuebloDaError()
+    {
+        //Setup(Given)
+        //Exercise(When)
+        bichoServiceSut.duelo("Pepe Pepon", 2);
+        //Test(Then)
+        fail("No hubo Excepcion");
+    }
 
+    @Test(expected = UbicacionIncorrectaException.class)
+    public void SiUnRetadorIntentaHacerUnDueloEnUnaGuarderiaDaError()
+    {
+        //Setup(Given)
+        mapaService.mover("Pepe Pepon","La Guarderia");
+        //Exercise(When)
+        bichoServiceSut.duelo("Pepe Pepon", 2);
+        //Test(Then)
+        fail("No hubo Excepcion");
+    }
+
+    @Test
+    public void SiUnRetadorRetaAUnDojoSinCampeonElBichoQueUsaSeConvierteEnCampeon()
+    {
+        //Setup(Given)
+        Entrenador entrenadorRecuperado;
+        Registro registro;
+        Dojo ubicacionRecuperada;
+        //Exercise(When)
+        mapaService.mover("Pepe Pepon", "Dojo Desert");
+        registro            = bichoServiceSut.duelo("Pepe Pepon", 2);
+        entrenadorRecuperado= Runner.runInSession(()-> { return entrenadorDao.recuperar("Pepe Pepon");});
+        ubicacionRecuperada = (Dojo) Runner.runInSession(()-> { return ubicacionDao.recuperar("Dojo Desert");});
+
+        //Test(Then)
+        assertEquals(10, entrenadorRecuperado.getExperiencia());
+        assertEquals(2, ubicacionRecuperada.campeonActual().getId());
+        assertEquals(1, ubicacionRecuperada.getHistorial().size());
+        assertEquals(2, ubicacionRecuperada.getHistorial().get(0).getGanador().getId());
+    }
 
     @Test @Ignore
     public void buscar() {

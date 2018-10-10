@@ -3,6 +3,8 @@ package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -15,7 +17,7 @@ public class Dojo extends Ubicacion
 {
     @OneToOne(cascade = CascadeType.ALL)
     private Campeon campeonActual;
-    @Transient
+    @OneToMany(cascade = CascadeType.ALL) @LazyCollection(LazyCollectionOption.FALSE)
     public List<Registro> historial = new ArrayList<>();
     @OneToMany
     public List<Campeon> campeonesHistoricos = new ArrayList<>();
@@ -37,20 +39,28 @@ public class Dojo extends Ubicacion
     public List<Registro> getHistorial() {
        return this.historial;
     }
-    /*------------Duelos--------------*/
+
+    private void agregarAHistorialDeCampeones(Campeon campeon) {    this.getHistorialDeCampeones().add(campeon); }
+    public void setHistorial(List<Registro> historial) {    this.historial = historial; }
+
+    public List<Campeon> getHistorialDeCampeones() {    return this.campeonesHistoricos;    }
+    public void setHistorialDeCampeones(List<Campeon> historialDeCampeones) {   this.campeonesHistoricos = historialDeCampeones;    }
+
+/*------------Duelos--------------*/
 
     private void coronarANuevoCampeon(Bicho ganador) {
         Campeon nuevoCampeon = new Campeon();
         if ( this.campeonActual != null){
             this.campeonActual.setFechaFinDeCampeon(Timestamp.valueOf(LocalDateTime.now()));
             this.campeonesHistoricos.add(this.campeonActual);
+            this.agregarAHistorialDeCampeones(this.campeonActual);
         }
         nuevoCampeon.setBichoCampeon(ganador);
         nuevoCampeon.setFechaInicioDeCampeon(Timestamp.valueOf(LocalDateTime.now()));
         this.campeonActual=nuevoCampeon;
     }
 
-    public void duelo(Bicho bichoRetador) {
+    public Registro duelo(Bicho bichoRetador) {
         Registro registroDeLucha = new Registro();
 
         // si hay un campeon comienza un duelo
@@ -62,7 +72,7 @@ public class Dojo extends Ubicacion
             Bicho campeon = this.campeonActual.getBichoCampeon();
 
             //inicia el duelo
-            while ((campeon.getEnergia() <= 0 || bichoRetador.getEnergia() <= 0) && contadorDeTurno <= 10) {
+            while ((campeon.getEnergia() > 0 || bichoRetador.getEnergia() > 0) && contadorDeTurno != 10) {
 
                 registroDeLucha.agregarComentario(new Turno((bichoRetador.getNombre() + "Ataca"), bichoRetador.atacar(campeon)));
                 registroDeLucha.agregarComentario(new Turno((campeon.getNombre() + "Ataca"), campeon.atacar(bichoRetador)));
@@ -72,7 +82,7 @@ public class Dojo extends Ubicacion
             // se corona al nuevo campeon
             if (campeon.getEnergia() <= 0) {
                 registroDeLucha.setGanador(bichoRetador);
-                this.coronarANuevoCampeon(registroDeLucha.ganador);
+                this.coronarANuevoCampeon(registroDeLucha.getGanador());
             }
             else{
                 registroDeLucha.setGanador(campeon);}
@@ -92,6 +102,7 @@ public class Dojo extends Ubicacion
 
         // se agrega el combate al historial de combates
         historial.add(registroDeLucha);
+        return registroDeLucha;
     }
 
     public Bicho buscar(Entrenador entrenador){

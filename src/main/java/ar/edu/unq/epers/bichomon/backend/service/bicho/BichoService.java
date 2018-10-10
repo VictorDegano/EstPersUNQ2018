@@ -2,6 +2,7 @@ package ar.edu.unq.epers.bichomon.backend.service.bicho;
 
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Registro;
 
 /**Clase que implementa los servicios necesarios para la utilizacion de los bichos.*/
 public interface BichoService
@@ -38,11 +39,11 @@ public interface BichoService
     Bicho evolucionar(String entrenador, int Bicho);
 
     /**
-     *  El entrenador desafia al campeon del dojo.
+     * El entrenador desafia al campeon del dojo.
      * @param entrenador
      * @param bicho
      * @return ResultadoCombate un log donde se muestra lo sucedido en el combate
      * @throws UbicacionIncorrectaException si la ubicacion no es un dojo.
      */
-    //ResultadoCombate duelo(String entrenador, int bicho)
+    Registro duelo(String entrenador, int bicho);
 }
