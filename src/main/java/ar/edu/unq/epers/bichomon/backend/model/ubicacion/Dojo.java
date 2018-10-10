@@ -17,7 +17,7 @@ public class Dojo extends Ubicacion
     private Campeon campeonActual;
     @Transient
     public List<Registro> historial = new ArrayList<>();
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     public List<Campeon> campeonesHistoricos = new ArrayList<>();
 
     public Bicho campeonActual()

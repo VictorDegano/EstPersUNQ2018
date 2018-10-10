@@ -19,7 +19,7 @@ public class Entrenador
     private Nivel nivel;
     @ManyToOne(cascade = CascadeType.ALL)
     private Ubicacion ubicacion = null;
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade=CascadeType.ALL)
     private List<Bicho> bichosCapturados = new ArrayList<>();
 
     /**

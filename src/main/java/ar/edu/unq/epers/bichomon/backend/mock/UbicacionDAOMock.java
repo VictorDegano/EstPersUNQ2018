@@ -1,6 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.mock;
 
 import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
@@ -42,4 +43,9 @@ public class UbicacionDAOMock implements UbicacionDAO
 
     @Override
     public void actualizar(Ubicacion ubicacion)  { DATA.put(ubicacion.getNombre(), ubicacion);}
+
+    @Override
+    public Bicho recuperarCampeonHistoricoDe(String dojo) {
+        return null;
+    }
 }

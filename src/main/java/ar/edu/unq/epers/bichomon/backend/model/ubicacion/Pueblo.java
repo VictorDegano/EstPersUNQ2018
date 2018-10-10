@@ -14,7 +14,7 @@ import java.util.Random;
 public class Pueblo extends Ubicacion
 {
     // la sumatoria de las posibilidades de las especie tiene que ser 100
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade=CascadeType.ALL)
     public List<ProbabilidadDeEspecie> probabilidadDeEspeciesDelPueblo ;
 
     public List<ProbabilidadDeEspecie> getProbabilidadDeEspeciesDelPueblo() {

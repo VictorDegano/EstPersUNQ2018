@@ -96,14 +96,8 @@ public class MapaServiceImplementacion implements MapaService
     @Override
     public Bicho campeonHistorico(String dojo) {
         return Runner.runInSession(() -> {
-                    Ubicacion unDojo = this.getUbicacionDAO().recuperar(dojo);
-
-                    if( unDojo != null)
-                    {   return unDojo.campeonActual();   }
-                    else
-                    {   throw new UbicacionIncorrectaException(dojo);  }
-                }
-        );
+            return  this.getUbicacionDAO().recuperarCampeonHistoricoDe(dojo);
+        });
     }
 
 /*[--------]Constructors[--------]*/

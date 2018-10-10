@@ -1,6 +1,8 @@
 package ar.edu.unq.epers.bichomon.backend.dao.hibernate;
 
 import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 import org.hibernate.Session;
@@ -49,6 +51,20 @@ public class UbicacionDAOHibernate implements UbicacionDAO
     {
         Session session = Runner.getCurrentSession();
         session.update(ubicacion);
+    }
+
+    public Bicho recuperarCampeonHistoricoDe(String dojo){
+
+        Session session = Runner.getCurrentSession();
+        String hql = "SELECT c.bichoCampeon "
+                    +"FROM Dojo as d inner join d.campeonesHistoricos as c "
+                    +"WHERE d.nombre = :unNombre "
+                    +"order by DATEDIFF(c.fechaInicioDeCampeon, c.fechaFinDeCampeon) asc";
+        Query<Bicho> query = session.createQuery(hql, Bicho.class);
+        query.setParameter("unNombre", dojo);
+        return query.getResultList().get(0);
+
+
     }
 
 }
