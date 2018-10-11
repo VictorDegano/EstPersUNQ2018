@@ -136,4 +136,7 @@ public class EntrenadorDAOHibernateTest {
         //Test(Then)
         fail("No Hubo Excepcion");
     }
+
+//    @Test
+//    public void siSePideLaListaDeLoCampeonesY
 }

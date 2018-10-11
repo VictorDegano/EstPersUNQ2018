@@ -37,7 +37,7 @@ public class EntrenadorDAOHibernate implements EntrenadorDAO {
     public List<Entrenador> campeones() {
         Session session = Runner.getCurrentSession();
 //        String hql = "select bicho.especie from Bicho bicho where bicho.duenio is null group by bicho.especie order by count(bicho.especie)";
-        String hql = "Select dojo.campeon.bichoCampeon.duenio from Dojo dojo where dojo.campeon is not null group by dojo.campeon.fechaInicioDeCampeon order by count(dojo.campeon.bichoCampeon.duenio)";
+        String hql = "Select dojo.campeon.bichoCampeon.duenio from Dojo dojo where dojo.campeon is not null group by dojo.campeon.bichoCampeon.duenio, max(dojo.campeon.fechaInicioDeCampeon) order by dojo.campeon.fechaInicioDeCampeon desc";
         Query<Entrenador> query = session.createQuery(hql,  Entrenador.class);
         query.setMaxResults(10);
         return query.getResultList();
