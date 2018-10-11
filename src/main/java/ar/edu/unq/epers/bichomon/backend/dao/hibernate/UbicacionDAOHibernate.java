@@ -2,13 +2,16 @@ package ar.edu.unq.epers.bichomon.backend.dao.hibernate;
 
 import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-
+import java.util.Date;
 import javax.persistence.PersistenceException;
+
+import java.time.LocalDateTime;
 
 public class UbicacionDAOHibernate implements UbicacionDAO
 {
@@ -56,14 +59,34 @@ public class UbicacionDAOHibernate implements UbicacionDAO
     public Bicho recuperarCampeonHistoricoDe(String dojo){
 
         Session session = Runner.getCurrentSession();
-        String hql = "SELECT c.bichoCampeon "
+        String hql = "SELECT c "
                     +"FROM Dojo as d inner join d.campeonesHistoricos as c "
                     +"WHERE d.nombre = :unNombre "
                     +"order by DATEDIFF(c.fechaInicioDeCampeon, c.fechaFinDeCampeon) asc";
-        Query<Bicho> query = session.createQuery(hql, Bicho.class);
+        Query<Campeon> query = session.createQuery(hql, Campeon.class);
         query.setParameter("unNombre", dojo);
-        return query.getResultList().get(0);
 
+        String hql2 = "SELECT d.campeonActual "
+                     +"FROM Dojo as d "
+                     +"WHERE d.nombre = :unNombre ";
+        Query<Campeon> query2 = session.createQuery(hql2, Campeon.class);
+        query2.setParameter("unNombre", dojo);
+
+        Campeon mejorCampeonEnElHistorial = query.getResultList().get(0);
+        Campeon campeonActual = query2.getSingleResult();
+
+
+        Date date = new Date();
+        int diasCampeonActual = (int) ((date.getTime()- campeonActual.getFechaInicioDeCampeon().getTime() )/86400000);
+
+        int diasCampeonDelHistorial = (int) ((mejorCampeonEnElHistorial.getFechaFinDeCampeon().getTime()- mejorCampeonEnElHistorial.getFechaInicioDeCampeon().getTime())/86400000);
+
+        if (diasCampeonActual > diasCampeonDelHistorial){
+            return(campeonActual.getBichoCampeon());
+        }
+        else{
+            return(mejorCampeonEnElHistorial.getBichoCampeon());
+        }
 
     }
 
