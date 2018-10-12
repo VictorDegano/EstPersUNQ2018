@@ -275,8 +275,8 @@ public class BichoServiceImplementacionTest {
     public void buscar() {
         Entrenador entrenadorRecuperado;
         Bicho bichoEncontrado;
-        bichoEncontrado = Runner.runInSession(()-> {return bichoServiceSut.buscar("Tinelli");});
-        entrenadorRecuperado = Runner.runInSession(()-> {return entrenadorDao.recuperar("Tinelli"); });
+        bichoEncontrado = Runner.runInSession(()-> {return bichoServiceSut.buscar("Marcelo");});
+        entrenadorRecuperado = Runner.runInSession(()-> {return entrenadorDao.recuperar("Marcelo"); });
         assertEquals(bichoEncontrado.getEnergia(),5000);
         assertEquals(bichoEncontrado.getDuenio().getNombre(),entrenadorRecuperado.getNombre());
 

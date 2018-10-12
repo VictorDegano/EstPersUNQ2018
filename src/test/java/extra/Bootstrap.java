@@ -61,6 +61,9 @@ public class Bootstrap
         Ubicacion dojoDesert    = new Dojo();
         dojoDesert.setNombre("Dojo Desert");
 
+        Ubicacion dojo   = new Dojo();
+        dojo.setNombre("Dojo");
+
         Ubicacion laGuarderia   = new Guarderia();
         laGuarderia.setNombre("La Guarderia");
 
@@ -91,6 +94,11 @@ public class Bootstrap
         entrenador5.setExperiencia(7500);
         entrenador5.setNivel(nivel10);
 
+        Entrenador entrenador6 = new Entrenador();
+        entrenador6.setNombre("Marcelo");
+        entrenador6.setExperiencia(7500);
+        entrenador6.setNivel(nivel10);
+
         entrenador1.setUbicacion(puebloElOrigen);
         puebloElOrigen.agregarEntrenador(entrenador1);
 
@@ -106,6 +114,8 @@ public class Bootstrap
         entrenador5.setUbicacion(dojoDesert);
         dojoDesert.agregarEntrenador(entrenador5);
 
+        entrenador6.setUbicacion(dojo);
+        dojo.agregarEntrenador(entrenador6);
 
 
         /*----------[CREACION DE ESPECIES]----------*/
@@ -263,7 +273,7 @@ public class Bootstrap
         Campeon campeon = new Campeon();
         campeon.setBichoCampeon(elChupaCabras);
 
-        dojoDesert.setCampeonActual(campeon);
+         dojo.setCampeonActual(campeon);
 
         fortinator.setDuenio(entrenador1);
         entrenador1.getBichosCapturados().add(fortinator);
@@ -427,8 +437,9 @@ public class Bootstrap
         session.save(amarelo);
         session.save(tierronmon);
         session.save(migue);
-
         session.save(campeon);
+        session.save(dojo);
+        session.save (entrenador6);
     }
 
     public void limpiarTabla()

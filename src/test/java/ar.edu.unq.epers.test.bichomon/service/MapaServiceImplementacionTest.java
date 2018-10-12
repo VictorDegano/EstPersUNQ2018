@@ -101,7 +101,7 @@ public class MapaServiceImplementacionTest
 
         //Test(Then)
         assertFalse(dojoBD.getEntrenadores().isEmpty());
-        assertEquals(1, dojoBD.getEntrenadores().size());
+        assertEquals(2, dojoBD.getEntrenadores().size());
         assertTrue(ubicacionViejaBD.getEntrenadores().isEmpty());
         assertEquals("Dojo Desert", entrenador.getUbicacion().getNombre() );
     }

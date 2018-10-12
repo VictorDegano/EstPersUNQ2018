@@ -3,6 +3,7 @@ package ar.edu.unq.epers.bichomon.backend.service.bicho;
 import ar.edu.unq.epers.bichomon.backend.dao.*;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.*;
 import ar.edu.unq.epers.bichomon.backend.excepcion.BichoRecuperarException;
+import ar.edu.unq.epers.bichomon.backend.excepcion.BusquedaFallida;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
@@ -33,7 +34,9 @@ public class BichoServiceImplementacion implements BichoService
        return Runner.runInSession(() -> {Entrenador unEntrenador = this.getEntrenadorDao().recuperar(entrenador);
                                    Bicho bicho = unEntrenador.buscarBicho();
                                    if (bicho != null ){
+
                                        if (!unEntrenador.getUbicacion().soyGuarderia()) {
+
                                            this.getEntrenadorDao().actualizar(unEntrenador);
                                            this.getBichoDao().guardar(bicho);
                                        }
@@ -41,8 +44,11 @@ public class BichoServiceImplementacion implements BichoService
                                            this.getEntrenadorDao().actualizar(unEntrenador);
                                            this.getBichoDao().actualizar(bicho);
                                        }
+                                       unEntrenador.subirExperiencia(this.experienciaDao.recuperar(TipoExperiencia.CAPTURA).getExperiencia());
                                    }
-
+                                   else{
+                                       throw new BusquedaFallida();
+                                   }
                                   return bicho; });
 
     }
