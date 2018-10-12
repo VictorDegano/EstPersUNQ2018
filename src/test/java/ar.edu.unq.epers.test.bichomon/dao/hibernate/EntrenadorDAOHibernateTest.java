@@ -289,5 +289,20 @@ public class EntrenadorDAOHibernateTest {
         assertEquals("El Loquillo", listaDeCampeones.get(1).getNombre());
     }
 
+    @Test
+    public void siSePideLaListaDeLosLideresDevuelveUnaListaDeEntrenadoresOrdenadosDeMayorAMenorPorLaSumaDePoderDeSusBichos()
+    {
+        //Setup(given)
+        List<Entrenador> listaDeLideres;
+        //Exercise(when)
+        listaDeLideres    = Runner.runInSession(() -> {   return entrenadorDAOSut.lideres();});
+        //Test(Then)
+        assertFalse(listaDeLideres.isEmpty());
+        assertEquals("Pepe Pepon", listaDeLideres.get(0).getNombre());
+        assertEquals("El Loquillo", listaDeLideres.get(1).getNombre());
+        assertEquals("Ortigoza", listaDeLideres.get(2).getNombre());
+        assertEquals("Ricardo", listaDeLideres.get(3).getNombre());
+        assertEquals("Tinelli", listaDeLideres.get(4).getNombre());
+    }
 
 }

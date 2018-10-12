@@ -7,6 +7,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
+import java.lang.reflect.Array;
 import java.util.List;
 
 import static org.hibernate.jpa.QueryHints.HINT_PASS_DISTINCT_THROUGH;
@@ -38,33 +39,29 @@ public class EntrenadorDAOHibernate implements EntrenadorDAO {
     }
 
     public List<Entrenador> campeones() {
-        // TODO: 12/10/2018 falta test para que filtre hasta 10 entrenadores
         Session session = Runner.getCurrentSession();
-//        String hql3 = "Select dojo.campeonActual.bichoCampeon.duenio from Dojo dojo where dojo.campeonActual is not null group by dojo.campeonActual.bichoCampeon.duenio order by dojo.campeonActual.fechaInicioDeCampeon";
-
-//        String hql = "SELECT dojo.campeonActual.bichoCampeon.duenio AS entrenador " +
-//                     "FROM (" +
-//                            "SELECT entrenador, MIN(dojo.campeonActual.fechaInicioDeCampeon) AS fechaInicioDeCampeon " +
-//                            "FROM Dojo dojo WHERE dojo.campeonActual IS NOT NULL " +
-//                            "GROUP BY entrenador )" +
-//                     "ORDER BY fechaInicioDeCampeon DESC";
-
-//        String hql = "SELECT dojo.campeonActual.bichoCampeon.duenio " +
-//                     "FROM Dojo dojo WHERE dojo.campeonActual IS NOT NULL " +
-//                     "GROUP BY dojo.campeonActual.bichoCampeon.duenio " +
-//                     "ORDER BY dojo.campeonActual.fechaInicioDeCampeon";
-
-//        String hql = "SELECT dojo.campeonActual.bichoCampeon.duenio " +
-//                     "FROM Dojo dojo WHERE dojo.campeonActual IS NOT NULL " +
-//                     "ORDER BY dojo.campeonActual.fechaInicioDeCampeon ASC";
-
         String hql = "SELECT dojo.campeonActual.bichoCampeon.duenio " +
                      "FROM Dojo dojo " +
                      "WHERE dojo.campeonActual IS NOT NULL " +
+                     "GROUP BY dojo.campeonActual.bichoCampeon.duenio " +
                      "ORDER BY dojo.campeonActual.fechaInicioDeCampeon ASC";
 
         Query<Entrenador> query = session.createQuery(hql,  Entrenador.class);
-        query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        query.setMaxResults(10);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Entrenador> lideres() {
+        Session session = Runner.getCurrentSession();
+
+        String hql ="SELECT entrenador " +
+                    "FROM Entrenador entrenador " +
+                    "JOIN entrenador.bichosCapturados bicho " +
+                    "GROUP BY entrenador " +
+                    "ORDER BY SUM(bicho.poder) DESC";
+
+        Query<Entrenador> query = session.createQuery(hql, Entrenador.class);
         query.setMaxResults(10);
         return query.getResultList();
     }

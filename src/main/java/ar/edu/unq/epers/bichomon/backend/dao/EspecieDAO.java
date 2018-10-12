@@ -14,4 +14,5 @@ public interface EspecieDAO {
 
 	List<Especie> recuperarTodos();
 
+    Especie especieLider();
 }
