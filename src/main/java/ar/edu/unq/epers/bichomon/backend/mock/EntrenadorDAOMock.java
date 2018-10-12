@@ -6,6 +6,7 @@ import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,4 +42,10 @@ public class EntrenadorDAOMock implements EntrenadorDAO
 
     @Override
     public void actualizar(Entrenador entrenador) { DATA.put(entrenador.getNombre(), entrenador);   }
+
+    @Override
+    public List<Entrenador> campeones() {   return null;    }
+
+    @Override
+    public List<Entrenador> lideres() { return null;    }
 }

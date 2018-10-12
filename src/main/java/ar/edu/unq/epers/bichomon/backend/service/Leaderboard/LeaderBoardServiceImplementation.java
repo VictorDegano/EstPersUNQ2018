@@ -26,7 +26,6 @@ public class LeaderBoardServiceImplementation implements LeaderBoardService
     }
 
     @Override
-    public List<Entrenador> lideres() {
-        return null;
-    }
+    public List<Entrenador> lideres()
+    {   return Runner.runInSession(() -> { return entrenadorDAO.lideres();}); }
 }

@@ -13,4 +13,6 @@ public interface EntrenadorDAO
     void actualizar(Entrenador entrenador);
 
     List<Entrenador> campeones();
+
+    List<Entrenador> lideres();
 }
