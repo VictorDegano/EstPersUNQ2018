@@ -261,6 +261,9 @@ public class MapaServiceImplementacionTest
 
         Dojo dojo = new Dojo();
         dojo.setNombre("The Last Dojo");
+        campeon1.setDojo(dojo);
+        campeon2.setDojo(dojo);
+        campeon3.setDojo(dojo);
         dojo.setCampeonActual(campeon1);
         dojo.campeonesHistoricos.add(campeon3);
         dojo.campeonesHistoricos.add(campeon2);
