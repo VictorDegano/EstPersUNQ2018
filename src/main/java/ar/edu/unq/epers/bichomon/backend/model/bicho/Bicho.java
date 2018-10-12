@@ -25,6 +25,7 @@ public class Bicho {
     private Entrenador duenio;
 	private int victorias;
     private Timestamp fechaDeCaptura;
+    private int poder;
 
 	public int atacar(Bicho contrincante)
 	{
@@ -114,4 +115,7 @@ public class Bicho {
 
     public Timestamp getFechaDeCaptura() {  return fechaDeCaptura;  }
     public void setFechaDeCaptura(Timestamp fechaDeCaptura) {   this.fechaDeCaptura = fechaDeCaptura;   }
+
+    public int getPoder() { return poder;   }
+    public void setPoder(int poder) {   this.poder = poder; }
 }

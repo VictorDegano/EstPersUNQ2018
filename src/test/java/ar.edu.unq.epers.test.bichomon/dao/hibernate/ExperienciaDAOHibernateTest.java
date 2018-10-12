@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.test.bichomon.dao;
+package ar.edu.unq.epers.test.bichomon.dao.hibernate;
 
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.ExperienciaDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Experiencia;

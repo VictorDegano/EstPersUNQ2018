@@ -5,6 +5,8 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Registro;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ public class Entrenador
     private Nivel nivel;
     @ManyToOne(cascade = CascadeType.ALL)
     private Ubicacion ubicacion = null;
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(cascade=CascadeType.ALL) @LazyCollection(LazyCollectionOption.FALSE)
     private List<Bicho> bichosCapturados = new ArrayList<>();
 
     /**
