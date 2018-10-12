@@ -107,8 +107,9 @@ public class Dojo extends Ubicacion
 
     @Override
     public Bicho buscarBicho(Entrenador entrenador) {
+
         Bicho premio= new Bicho(campeonActual.getBichoCampeon().getEvolucionBase(),"");
-        premio.setEnergia(premio.getEspecie().getEnergiaInicial());
+        premio.setEnergia(campeonActual.getBichoCampeon().getEspecie().getEnergiaInicial());
         return premio;
     }
 

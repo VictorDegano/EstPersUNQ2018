@@ -29,7 +29,22 @@ public class BichoServiceImplementacion implements BichoService
      */
     @Override
     public Bicho buscar(String entrenador) {
-        return null;
+
+       return Runner.runInSession(() -> {Entrenador unEntrenador = this.getEntrenadorDao().recuperar(entrenador);
+                                   Bicho bicho = unEntrenador.buscarBicho();
+                                   if (bicho != null ){
+                                       if (!unEntrenador.getUbicacion().soyGuarderia()) {
+                                           this.getEntrenadorDao().actualizar(unEntrenador);
+                                           this.getBichoDao().guardar(bicho);
+                                       }
+                                       else {
+                                           this.getEntrenadorDao().actualizar(unEntrenador);
+                                           this.getBichoDao().actualizar(bicho);
+                                       }
+                                   }
+
+                                  return bicho; });
+
     }
 
     /**

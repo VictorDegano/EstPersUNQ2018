@@ -10,11 +10,9 @@ import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEnergia;
 import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEvolucion;
-import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionNivel;
 import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionVictoria;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Registro;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.BichoServiceImplementacion;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.MapaService;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.MapaServiceImplementacion;
@@ -31,7 +29,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import static org.junit.Assert.*;
 
@@ -274,8 +271,15 @@ public class BichoServiceImplementacionTest {
         assertEquals(2, ubicacionRecuperada.getHistorial().get(0).getGanador().getId());
     }
 
-    @Test @Ignore
+    @Test
     public void buscar() {
+        Entrenador entrenadorRecuperado;
+        Bicho bichoEncontrado;
+        bichoEncontrado = Runner.runInSession(()-> {return bichoServiceSut.buscar("Tinelli");});
+        entrenadorRecuperado = Runner.runInSession(()-> {return entrenadorDao.recuperar("Tinelli"); });
+        assertEquals(bichoEncontrado.getEnergia(),5000);
+        assertEquals(bichoEncontrado.getDuenio().getNombre(),entrenadorRecuperado.getNombre());
+
     }
 
 

@@ -80,6 +80,9 @@ public abstract class Ubicacion
     public Registro duelo(Bicho bichoDeCombate)
     { throw new UbicacionIncorrectaException(this.getNombre(), "No se puede pelear en esta Ubicacion");  }
 
+    public Boolean soyGuarderia(){
+        return false;
+    }
     public Bicho buscar(Entrenador entrenador){
         Bicho premio = null;
         if (entrenador.getNivel().getNroDeNivel()* (Math.random()*1) >0.5)

@@ -72,5 +72,9 @@ public class Guarderia extends Ubicacion
         return registroDeBichos;
     }
 
+    @Override
+    public Boolean soyGuarderia(){
+        return true;
+    }
 
 }

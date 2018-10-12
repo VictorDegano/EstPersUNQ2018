@@ -1,6 +1,7 @@
 package extra;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Experiencia;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Nivel;
@@ -10,16 +11,15 @@ import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEnergia;
 import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEvolucion;
 import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionVictoria;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.*;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 import org.hibernate.Session;
 
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 
 public class Bootstrap
 {
@@ -49,6 +49,9 @@ public class Bootstrap
         nivel10.setNivelSiguiente(nivel10);
 
         /*----------[CREACION DE UBICACION]----------*/
+
+
+
         Ubicacion puebloElOrigen= new Pueblo();
         puebloElOrigen.setNombre("El Origen");
 
@@ -60,6 +63,7 @@ public class Bootstrap
 
         Ubicacion laGuarderia   = new Guarderia();
         laGuarderia.setNombre("La Guarderia");
+
 
         /*----------[CREACION DE ENTRENADORES]----------*/
         Entrenador entrenador1  = new Entrenador();
@@ -99,8 +103,8 @@ public class Bootstrap
         entrenador4.setUbicacion(puebloElOrigen);
         puebloElOrigen.agregarEntrenador(entrenador4);
 
-        entrenador5.setUbicacion(puebloElOrigen);
-        entrenador5.setUbicacion(puebloElOrigen);
+        entrenador5.setUbicacion(dojoDesert);
+        dojoDesert.agregarEntrenador(entrenador5);
 
 
 
@@ -255,6 +259,12 @@ public class Bootstrap
         vampiron.setCantidadBichos(1);
 
                         /* Setear  Bichos a Entrenadores */
+
+        Campeon campeon = new Campeon();
+        campeon.setBichoCampeon(elChupaCabras);
+
+        dojoDesert.setCampeonActual(campeon);
+
         fortinator.setDuenio(entrenador1);
         entrenador1.getBichosCapturados().add(fortinator);
 
@@ -417,6 +427,8 @@ public class Bootstrap
         session.save(amarelo);
         session.save(tierronmon);
         session.save(migue);
+
+        session.save(campeon);
     }
 
     public void limpiarTabla()
