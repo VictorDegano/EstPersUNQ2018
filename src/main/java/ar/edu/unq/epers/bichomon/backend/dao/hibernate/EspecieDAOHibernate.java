@@ -51,12 +51,6 @@ public class EspecieDAOHibernate implements ar.edu.unq.epers.bichomon.backend.da
     public Especie especieLider()
     {
         Session session = Runner.getCurrentSession();
-//        String hql = "SELECT especie " +
-//                     "FROM Especie especie " +
-//                     "JOIN Campeon campeon " +
-//                     "WHERE campeon.bichoCampeon.especie = especie " +
-//                     "GROUP BY especie " +
-//                     "ORDER BY COUNT(campeon.bichoCampeon.especie) DESC";
 
         String hql = "SELECT campeon.bichoCampeon.especie " +
                      "FROM Campeon campeon " +

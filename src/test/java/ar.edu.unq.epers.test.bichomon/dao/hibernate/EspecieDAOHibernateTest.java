@@ -1,6 +1,7 @@
-package ar.edu.unq.epers.bichomon.backend.dao.hibernate;
+package ar.edu.unq.epers.test.bichomon.dao.hibernate;
 
 import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EspecieDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;

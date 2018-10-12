@@ -19,7 +19,7 @@
 		<!-- Echo all executed SQL to stdout -->
 		<property name="show_sql">true</property>
 		
-		<property name="hibernate.hbm2ddl.auto">create-drop</property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
 
 <!--	Aca se le dice que clases vamos a querer persistir -->
 		<mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.Especie" />

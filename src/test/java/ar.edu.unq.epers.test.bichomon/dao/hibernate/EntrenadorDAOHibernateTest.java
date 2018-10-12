@@ -151,14 +151,14 @@ public class EntrenadorDAOHibernateTest {
     }
 
     @Test
-    public void siSePideLaListaDeLosCampeonesYSoloHayUnDojoConCampeonDevuelveUnaListaConUnEntrenador()
+    public void siSePideLaListaDeLosCampeonesYHayDosUnDojoConCampeonDevuelveUnaListaConDosEntrenador()
     {
         //Setup(given)
         List<Entrenador> listaDeCampeones;
         Campeon unNuevoCampeon  = new Campeon();
         Dojo unDojoConCampeon   = new Dojo();
         Entrenador pepePepon    = Runner.runInSession(() -> {   return entrenadorDAOSut.recuperar("Pepe Pepon"); });
-        unNuevoCampeon.setFechaInicioDeCampeon(Timestamp.valueOf(LocalDateTime.now()));
+        unNuevoCampeon.setFechaInicioDeCampeon(Timestamp.valueOf(LocalDateTime.of(2018,4,20,12,50)));
         unNuevoCampeon.setBichoCampeon(pepePepon.getBichosCapturados().get(0));
         unDojoConCampeon.setNombre("Dojo Champion");
         unDojoConCampeon.setCampeonActual(unNuevoCampeon);
@@ -168,23 +168,13 @@ public class EntrenadorDAOHibernateTest {
         //Exercise(when)
         listaDeCampeones    = Runner.runInSession(() -> {   return entrenadorDAOSut.campeones();});
         //Test(Then)
-        assertEquals(1, listaDeCampeones.size());
+        assertEquals(2, listaDeCampeones.size());
         assertEquals("Pepe Pepon", listaDeCampeones.get(0).getNombre());
+        assertEquals("Tinelli", listaDeCampeones.get(1).getNombre());
     }
 
     @Test
-    public void siSePideLaListaDeLosCampeonesYNoHayDojoConCampeonDevuelveUnaListaVacia()
-    {
-        //Setup(given)
-        List<Entrenador> listaDeCampeones;
-        //Exercise(when)
-        listaDeCampeones    = Runner.runInSession(() -> {   return entrenadorDAOSut.campeones();});
-        //Test(Then)
-        assertTrue(listaDeCampeones.isEmpty());
-    }
-
-    @Test
-    public void siSePideLaListaDeLosCampeonesYSoloHayDosDojosConCampeonDelMismoEntrenadorDevuelveUnaListaConUnEntrenador()
+    public void siSePideLaListaDeLosCampeonesYSoloHayTresDojosConCampeonDeDosEntrenadoresDevuelveUnaListaConDosEntrenadores()
     {
         //Setup(given)
         List<Entrenador> listaDeCampeones;
@@ -193,11 +183,11 @@ public class EntrenadorDAOHibernateTest {
         Dojo unDojoConCampeon   = new Dojo();
         Dojo unDojoConCampeon1  = new Dojo();
         Entrenador pepePepon    = Runner.runInSession(() -> {   return entrenadorDAOSut.recuperar("Pepe Pepon"); });
-        unNuevoCampeon.setFechaInicioDeCampeon(Timestamp.valueOf(LocalDateTime.now()));
+        unNuevoCampeon.setFechaInicioDeCampeon(Timestamp.valueOf(LocalDateTime.of(2018,4,20,12,50)));
         unNuevoCampeon.setBichoCampeon(pepePepon.getBichosCapturados().get(0));
         unDojoConCampeon.setNombre("Dojo Champion");
         unDojoConCampeon.setCampeonActual(unNuevoCampeon);
-        unNuevoCampeon1.setFechaInicioDeCampeon(Timestamp.valueOf(LocalDateTime.now().minusDays(20)));
+        unNuevoCampeon1.setFechaInicioDeCampeon(Timestamp.valueOf(LocalDateTime.of(2018,1,20,12,50)));
         unNuevoCampeon1.setBichoCampeon(pepePepon.getBichosCapturados().get(1));
         unDojoConCampeon1.setNombre("Dojo Champion Fiesta");
         unDojoConCampeon1.setCampeonActual(unNuevoCampeon1);
@@ -209,12 +199,12 @@ public class EntrenadorDAOHibernateTest {
         //Exercise(when)
         listaDeCampeones    = Runner.runInSession(() -> {   return entrenadorDAOSut.campeones();});
         //Test(Then)
-        assertEquals(1, listaDeCampeones.size());
+        assertEquals(2, listaDeCampeones.size());
         assertEquals("Pepe Pepon", listaDeCampeones.get(0).getNombre());
     }
 
     @Test
-    public void siSePideLaListaDeLosCampeonesYSoloHayDosDojosConCampeonDevuelveUnaListaConDosEntrenadoresOrdenadosDesdeElCampeonMasAntiguoAlMasNuevo()
+    public void siSePideLaListaDeLosCampeonesYSoloHayTresDojosConCampeonDevuelveUnaListaConTresEntrenadoresOrdenadosDesdeElCampeonMasAntiguoAlMasNuevo()
     {
         //Setup(given)
         List<Entrenador> listaDeCampeones;
@@ -240,9 +230,11 @@ public class EntrenadorDAOHibernateTest {
         //Exercise(when)
         listaDeCampeones    = Runner.runInSession(() -> {   return entrenadorDAOSut.campeones();});
         //Test(Then)
-        assertEquals(2, listaDeCampeones.size());
+        assertEquals(3, listaDeCampeones.size());
         assertEquals("El Loquillo", listaDeCampeones.get(0).getNombre());
         assertEquals("Pepe Pepon", listaDeCampeones.get(1).getNombre());
+        assertEquals("Tinelli", listaDeCampeones.get(2).getNombre());
+
     }
 
     @Test
@@ -284,9 +276,10 @@ public class EntrenadorDAOHibernateTest {
         //Exercise(when)
         listaDeCampeones    = Runner.runInSession(() -> {   return entrenadorDAOSut.campeones();});
         //Test(Then)
-        assertEquals(2, listaDeCampeones.size());
+        assertEquals(3, listaDeCampeones.size());
         assertEquals("Pepe Pepon", listaDeCampeones.get(0).getNombre());
         assertEquals("El Loquillo", listaDeCampeones.get(1).getNombre());
+        assertEquals("Tinelli", listaDeCampeones.get(2).getNombre());
     }
 
     @Test

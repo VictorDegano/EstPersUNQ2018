@@ -16,6 +16,8 @@ import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 import org.hibernate.Session;
 
 import javax.persistence.Query;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -96,7 +98,7 @@ public class Bootstrap
 
         Entrenador entrenador6 = new Entrenador();
         entrenador6.setNombre("Marcelo");
-        entrenador6.setExperiencia(7500);
+        entrenador6.setExperiencia(15000);
         entrenador6.setNivel(nivel10);
 
         entrenador1.setUbicacion(puebloElOrigen);
@@ -283,6 +285,7 @@ public class Bootstrap
 
         Campeon campeon = new Campeon();
         campeon.setBichoCampeon(elChupaCabras);
+        campeon.setFechaInicioDeCampeon(Timestamp.valueOf(LocalDateTime.of(2018,10,12,12,50)));
 
          dojo.setCampeonActual(campeon);
 
