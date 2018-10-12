@@ -72,7 +72,7 @@ public class Dojo extends Ubicacion
             Bicho campeon = this.campeonActual.getBichoCampeon();
 
             //inicia el duelo
-            while ((campeon.getEnergia() > 0 || bichoRetador.getEnergia() > 0) && contadorDeTurno != 10) {
+            while (campeon.getEnergia() > 0 && bichoRetador.getEnergia() > 0 && contadorDeTurno != 10) {
 
                 registroDeLucha.agregarComentario(new Turno((bichoRetador.getNombre() + "Ataca"), bichoRetador.atacar(campeon)));
                 registroDeLucha.agregarComentario(new Turno((campeon.getNombre() + "Ataca"), campeon.atacar(bichoRetador)));
