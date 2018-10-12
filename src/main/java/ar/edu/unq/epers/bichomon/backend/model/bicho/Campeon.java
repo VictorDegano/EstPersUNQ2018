@@ -1,5 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -14,6 +16,10 @@ public class Campeon
 
     private Timestamp fechaInicioDeCampeon;
     private Timestamp fechaFinDeCampeon;
+
+    @ManyToOne
+    private Dojo dojo;
+
 
 /*[--------]Constructor[--------]*/
     public Campeon() {  }
@@ -30,4 +36,13 @@ public class Campeon
 
     public Timestamp getFechaFinDeCampeon() {   return fechaFinDeCampeon;   }
     public void setFechaFinDeCampeon(Timestamp fechaFinDeCampeon) { this.fechaFinDeCampeon = fechaFinDeCampeon; }
+
+
+    public Dojo getDojo() {
+        return dojo;
+    }
+
+    public void setDojo(Dojo dojo) {
+        this.dojo = dojo;
+    }
 }

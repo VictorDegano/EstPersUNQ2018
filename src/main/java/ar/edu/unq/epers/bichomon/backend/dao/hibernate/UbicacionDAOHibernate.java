@@ -58,35 +58,16 @@ public class UbicacionDAOHibernate implements UbicacionDAO
 
     public Bicho recuperarCampeonHistoricoDe(String dojo){
 
+
         Session session = Runner.getCurrentSession();
-        String hql = "SELECT c "
-                    +"FROM Dojo as d inner join d.campeonesHistoricos as c "
-                    +"WHERE d.nombre = :unNombre "
-                    +"order by DATEDIFF(c.fechaInicioDeCampeon, c.fechaFinDeCampeon) asc";
-        Query<Campeon> query = session.createQuery(hql, Campeon.class);
+        String hql = "SELECT c.bichoCampeon "+
+                     "FROM Campeon as c " +
+                     "WHERE c.dojo.nombre = :unNombre " +
+                     "order by DATEDIFF(c.fechaInicioDeCampeon, ifnull(c.fechaFinDeCampeon, now()))";
+        Query<Bicho> query = session.createQuery(hql, Bicho.class);
         query.setParameter("unNombre", dojo);
-
-        String hql2 = "SELECT d.campeonActual "
-                     +"FROM Dojo as d "
-                     +"WHERE d.nombre = :unNombre ";
-        Query<Campeon> query2 = session.createQuery(hql2, Campeon.class);
-        query2.setParameter("unNombre", dojo);
-
-        Campeon mejorCampeonEnElHistorial = query.getResultList().get(0);
-        Campeon campeonActual = query2.getSingleResult();
-
-
-        Date date = new Date();
-        int diasCampeonActual = (int) ((date.getTime()- campeonActual.getFechaInicioDeCampeon().getTime() )/86400000);
-
-        int diasCampeonDelHistorial = (int) ((mejorCampeonEnElHistorial.getFechaFinDeCampeon().getTime()- mejorCampeonEnElHistorial.getFechaInicioDeCampeon().getTime())/86400000);
-
-        if (diasCampeonActual > diasCampeonDelHistorial){
-            return(campeonActual.getBichoCampeon());
-        }
-        else{
-            return(mejorCampeonEnElHistorial.getBichoCampeon());
-        }
+        query.setMaxResults(1);
+        return query.getSingleResult();
 
     }
 
