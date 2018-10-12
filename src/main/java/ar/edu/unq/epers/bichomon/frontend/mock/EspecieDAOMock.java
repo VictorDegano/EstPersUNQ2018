@@ -93,6 +93,9 @@ public class EspecieDAOMock implements EspecieDAO {
 	}
 
 	@Override
+	public Especie especieLider() {	return null;	}
+
+	@Override
 	public void actualizar(Especie especie) {
 	}
 

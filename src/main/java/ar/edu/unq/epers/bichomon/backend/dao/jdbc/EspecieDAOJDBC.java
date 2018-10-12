@@ -126,6 +126,8 @@ public class EspecieDAOJDBC implements ar.edu.unq.epers.bichomon.backend.dao.Esp
         );
     }
 
+    @Override
+    public Especie especieLider() { return null;    }
 
 
     public void borrarEspecie(String especieABorrar)

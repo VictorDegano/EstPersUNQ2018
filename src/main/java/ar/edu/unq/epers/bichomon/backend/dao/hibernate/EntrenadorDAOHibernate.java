@@ -40,29 +40,13 @@ public class EntrenadorDAOHibernate implements EntrenadorDAO {
 
     public List<Entrenador> campeones() {
         Session session = Runner.getCurrentSession();
-//        String hql = "SELECT dojo.campeonActual.bichoCampeon.duenio AS entrenador " +
-//                     "FROM (" +
-//                            "SELECT entrenador, MIN(dojo.campeonActual.fechaInicioDeCampeon) AS fechaInicioDeCampeon " +
-//                            "FROM Dojo dojo WHERE dojo.campeonActual IS NOT NULL " +
-//                            "GROUP BY entrenador )" +
-//                     "ORDER BY fechaInicioDeCampeon DESC";
-
-//        String hql = "SELECT dojo.campeonActual.bichoCampeon.duenio " +
-//                     "FROM Dojo dojo WHERE dojo.campeonActual IS NOT NULL " +
-//                     "GROUP BY dojo.campeonActual.bichoCampeon.duenio " +
-//                     "ORDER BY dojo.campeonActual.fechaInicioDeCampeon";
-
-//        String hql = "SELECT dojo.campeonActual.bichoCampeon.duenio " +
-//                     "FROM Dojo dojo WHERE dojo.campeonActual IS NOT NULL " +
-//                     "ORDER BY dojo.campeonActual.fechaInicioDeCampeon ASC";
-
         String hql = "SELECT dojo.campeonActual.bichoCampeon.duenio " +
                      "FROM Dojo dojo " +
                      "WHERE dojo.campeonActual IS NOT NULL " +
+                     "GROUP BY dojo.campeonActual.bichoCampeon.duenio " +
                      "ORDER BY dojo.campeonActual.fechaInicioDeCampeon ASC";
 
         Query<Entrenador> query = session.createQuery(hql,  Entrenador.class);
-        query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         query.setMaxResults(10);
         return query.getResultList();
     }
@@ -71,15 +55,11 @@ public class EntrenadorDAOHibernate implements EntrenadorDAO {
     public List<Entrenador> lideres() {
         Session session = Runner.getCurrentSession();
 
-        // query in sql: Select Entrenador.id FROM Entrenador entrenador ORDER BY (SELECT SUM(bicho.poder) FROM Bicho bicho WHERE bicho.duenio_id= entrenador.id) DESC
-
-        String hql ="SELECT entrenador AS e " +
+        String hql ="SELECT entrenador " +
                     "FROM Entrenador entrenador " +
-                    "WHERE entrenador.bichosCapturados IS NOT EMPTY " +
-                    "ORDER BY (SELECT SUM(bicho.poder) " +
-                               "FROM Bicho bicho " +
-                               "WHERE bicho.duenio= e) DESC";
-
+                    "JOIN entrenador.bichosCapturados bicho " +
+                    "GROUP BY entrenador " +
+                    "ORDER BY SUM(bicho.poder) DESC";
 
         Query<Entrenador> query = session.createQuery(hql, Entrenador.class);
         query.setMaxResults(10);
