@@ -47,6 +47,26 @@ public class EspecieDAOHibernate implements ar.edu.unq.epers.bichomon.backend.da
         return query.getResultList();
     }
 
+    @Override
+    public Especie especieLider()
+    {
+        Session session = Runner.getCurrentSession();
+//        String hql = "SELECT especie " +
+//                     "FROM Especie especie " +
+//                     "JOIN Campeon campeon " +
+//                     "WHERE campeon.bichoCampeon.especie = especie " +
+//                     "GROUP BY especie " +
+//                     "ORDER BY COUNT(campeon.bichoCampeon.especie) DESC";
+
+        String hql = "SELECT campeon.bichoCampeon.especie " +
+                     "FROM Campeon campeon " +
+                     "GROUP BY campeon.bichoCampeon.especie " +
+                     "ORDER BY COUNT(campeon.bichoCampeon.especie) DESC";
+        Query<Especie> query = session.createQuery(hql, Especie.class);
+        query.setMaxResults(1);
+        return query.getSingleResult();
+    }
+
     public Bicho crearBicho(String nombreEspecie, String nombreBicho) {
         Especie especie = this.recuperar(nombreEspecie);
         especie.setCantidadBichos(especie.getCantidadBichos() + 1);

@@ -226,46 +226,57 @@ public class Bootstrap
         /*----------[CREACION DE BICHOS]----------*/
         Bicho rojo = new Bicho(red,"");
         rojo.setEnergia(red.getEnergiaInicial());
+        rojo.setPoder(20);
         red.setCantidadBichos(1);
 
         Bicho fortinator= new Bicho(fortmon, "");
         fortinator.setEnergia(fortmon.getEnergiaInicial());
+        fortinator.setPoder(150);
         fortmon.setCantidadBichos(1);
 
         Bicho dientudo  = new Bicho(dientemon, "");
         dientudo.setEnergia(dientemon.getEnergiaInicial());
+        dientudo.setPoder(30);
         dientemon.setCantidadBichos(1);
 
         Bicho amarillon = new Bicho(amarillo,"");
         amarillon.setEnergia(amarillo.getEnergiaInicial());
+        amarillon.setPoder(25);
         amarillo.setCantidadBichos(1);
 
         Bicho verde = new Bicho(green,"");
         verde.setEnergia(green.getEnergiaInicial());
+        verde.setPoder(23);
         green.setCantidadBichos(1);
 
         Bicho geomon = new Bicho(tierronmon,"");
         geomon.setEnergia(tierronmon.getEnergiaInicial());
+        geomon.setPoder(45);
         tierronmon.setCantidadBichos(1);
 
         Bicho gasper = new Bicho(fantasmon,"");
         gasper.setEnergia(fantasmon.getEnergiaInicial());
+        gasper.setPoder(15);
         fantasmon.setCantidadBichos(1);
 
         Bicho miguelito = new Bicho(miguelmon,"");
         miguelito.setEnergia(miguelmon.getEnergiaInicial());
+        miguelito.setPoder(55);
         miguelmon.setCantidadBichos(1);
 
         Bicho patamon = new Bicho(digimon,"");
         patamon.setEnergia(digimon.getEnergiaInicial());
+        patamon.setPoder(51);
         digimon.setCantidadBichos(1);
 
         Bicho pikara = new Bicho(pikachu,"");
         pikara.setEnergia(pikachu.getEnergiaInicial());
+        pikara.setPoder(66);
         pikachu.setCantidadBichos(1);
 
         Bicho elChupaCabras = new Bicho(vampiron,"");
         elChupaCabras.setEnergia(vampiron.getEnergiaInicial());
+        elChupaCabras.setPoder(40);
         vampiron.setCantidadBichos(1);
 
                         /* Setear  Bichos a Entrenadores */
