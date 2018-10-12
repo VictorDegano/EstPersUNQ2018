@@ -1,9 +1,13 @@
 package ar.edu.unq.epers.test.bichomon.model;
 
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.Nivel;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.ProbabilidadDeEspecie;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,10 +32,15 @@ public class PuebloTest {
     private ProbabilidadDeEspecie probAmar;
     private ProbabilidadDeEspecie probGreen;
     private List<ProbabilidadDeEspecie> probabilidadDeEspecies;
-
+    private Entrenador entrenador1;
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        Nivel nivel1  = new Nivel(1, 1, 99, 4);
+        Entrenador entrenador1  = new Entrenador();
+        entrenador1.setNombre("Pepe Pepon");
+        entrenador1.setExperiencia(0);
+        entrenador1.setNivel(nivel1);
         red = new Especie();
         red.setNombre("Rojomon");
         red.setTipo(TipoBicho.FUEGO);
@@ -89,7 +98,7 @@ public class PuebloTest {
     public void buscarEspecie() {
         // Obligo a que salga el primero
         when(pueblo.probabilidad()).thenReturn(0);
-        Especie especie = pueblo.BuscarEspecie();
-        assertEquals(especie.getNombre(),"Rojomon");
+        Bicho bicho = pueblo.buscarBicho(entrenador1);
+        assertEquals(bicho.getEspecie().getNombre(),"Rojomon");
     }
 }

@@ -16,6 +16,8 @@ public class GuarderiaTest {
     private Bicho nuevoBicho;
     private Guarderia guarderiaSut;
     private Entrenador entrenador;
+    private Bicho bicho2;
+    private Entrenador entrenador2;
     @Before
     public void setUp() throws Exception
     {
@@ -26,12 +28,27 @@ public class GuarderiaTest {
         rojomon.setPeso(75);
         rojomon.setEnergiaIncial(100);
         rojomon.setUrlFoto("/image/rojomon.jpg");
+
+        Especie amarillo = new Especie();
+        amarillo.setNombre("Amarillomon");
+        amarillo.setTipo(TipoBicho.ELECTRICIDAD);
+        amarillo.setAltura(170);
+        amarillo.setPeso(69);
+        amarillo.setEnergiaIncial(300);
+        amarillo.setUrlFoto("/image/amarillomon.png");
+
         Dojo dojoConCampeon = new Dojo();
         nuevoBicho          = new Bicho(rojomon, "");
+        bicho2 = new Bicho(amarillo,"");
         guarderiaSut   = new Guarderia();
         entrenador = new Entrenador();
         entrenador.getBichosCapturados().add(nuevoBicho);
+        entrenador.setNombre("Carlos");
+        entrenador2 = new Entrenador();
+        entrenador2.getBichosCapturados().add(bicho2);
+        entrenador2.setNombre("Pepe");
         nuevoBicho.setDuenio(entrenador);
+        bicho2.setDuenio(entrenador2);
         guarderiaSut.setNombre("Guarderia NoTeQuiereNadie");
 
 
@@ -46,5 +63,14 @@ public class GuarderiaTest {
         //Test(Then)
         assertFalse(guarderiaSut.getBichosAbandonados().isEmpty());
         assertTrue(guarderiaSut.getBichosAbandonados().contains(nuevoBicho));
+    }
+
+    @Test
+    public void seRealizaUnaBusquedaEnLaGuarderia(){
+        guarderiaSut.refugiar(nuevoBicho);
+        guarderiaSut.refugiar(bicho2);
+        Bicho bicho = guarderiaSut.buscarBicho(entrenador2);
+        assertEquals(bicho.getEspecie().getNombre(),"Rojomon");
+        assertEquals(guarderiaSut.getBichosAbandonados().size(),1);
     }
 }

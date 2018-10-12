@@ -1,6 +1,8 @@
 package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -28,13 +30,15 @@ public class Pueblo extends Ubicacion
 
 
 
-    public Especie BuscarEspecie(){
+    @Override
+    public Bicho buscarBicho(Entrenador entrenador){
         int porcentaje ;
         porcentaje = probabilidad();
-        Especie especie = null;
+        Bicho bicho = null;
         for ( ProbabilidadDeEspecie probabilidadDeEspecie: probabilidadDeEspeciesDelPueblo) {
             if (probabilidadDeEspecie.posibilidad > porcentaje){
-                especie = probabilidadDeEspecie.especie;
+                bicho = new Bicho(probabilidadDeEspecie.especie,"");
+                bicho.setEnergia(probabilidadDeEspecie.especie.getEnergiaInicial());
                 break;
 
             }
@@ -44,12 +48,12 @@ public class Pueblo extends Ubicacion
             }
         }
 
-        return especie;
+        return bicho;
 
     }
 
     public int probabilidad(){
-        return (int) Math.random()* 100;
+        return (int) (Math.random()* 100);
     }
 
 

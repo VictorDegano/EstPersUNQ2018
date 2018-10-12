@@ -1,7 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
-
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -41,4 +41,36 @@ public class Guarderia extends Ubicacion
     public void setRegistroDeBichosAbandonados(List<RegistroDeAbandono> registroDeBichosAbandonados) {
         this.registroDeBichosAbandonados = registroDeBichosAbandonados;
     }
+
+    @Override
+    public Bicho buscarBicho(Entrenador entrenador){
+        List<RegistroDeAbandono> registroDeAbandonosSinLosMios = sacarSiEsMio(entrenador);
+        if (registroDeAbandonosSinLosMios.isEmpty())
+        {
+            return null;
+        }
+
+        else{
+            int bichoElegido = (int) (Math.random()* registroDeAbandonosSinLosMios.size());
+            RegistroDeAbandono registro = getRegistroDeBichosAbandonados().get(bichoElegido);
+            getBichosAbandonados().remove(registro);
+            bichosAbandonados.remove(registro.getBichomon());
+            return registro.getBichomon();
+        }
+
+
+
+    }
+
+    private List<RegistroDeAbandono> sacarSiEsMio(Entrenador entrenador){
+        List<RegistroDeAbandono> registroDeBichos = new ArrayList<RegistroDeAbandono>();
+        for ( RegistroDeAbandono registro: registroDeBichosAbandonados){
+            if (registro.getEntrenador().getNombre() != entrenador.getNombre()){
+                registroDeBichos.add(registro);
+            }
+        }
+        return registroDeBichos;
+    }
+
+
 }

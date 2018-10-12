@@ -105,13 +105,12 @@ public class Dojo extends Ubicacion
         return registroDeLucha;
     }
 
-    public Bicho buscar(Entrenador entrenador){
-        Bicho premio = new Bicho();
-        if (entrenador.getNivel().getNroDeNivel()* (Math.random()*1) >0.5)
-        {
-            premio= new Bicho(campeonActual.getBichoCampeon().getEvolucionBase(),"");
-        }
+    @Override
+    public Bicho buscarBicho(Entrenador entrenador) {
+        Bicho premio= new Bicho(campeonActual.getBichoCampeon().getEvolucionBase(),"");
+        premio.setEnergia(premio.getEspecie().getEnergiaInicial());
         return premio;
     }
+
 
 }
