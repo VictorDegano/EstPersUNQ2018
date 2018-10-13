@@ -57,6 +57,7 @@ public class Dojo extends Ubicacion
         }
         nuevoCampeon.setBichoCampeon(ganador);
         nuevoCampeon.setFechaInicioDeCampeon(Timestamp.valueOf(LocalDateTime.now()));
+        nuevoCampeon.setDojo(this);
         this.campeonActual=nuevoCampeon;
     }
 
