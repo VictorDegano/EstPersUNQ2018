@@ -1,6 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.service.mapa;
 
 import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
+import ar.edu.unq.epers.bichomon.backend.excepcion.MoverException;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
@@ -40,7 +41,7 @@ public class MapaServiceImplementacion implements MapaService
                                         this.getUbicacionDAO().actualizar(ubicacionAMoverse);
                                     }
                                     else
-                                    {   throw new RuntimeException("Nombre de entrenador: " + entrenador + " o nombre de ubicacion: "+ ubicacion +" incorrectos");  }
+                                    {   throw new MoverException(entrenador, ubicacion);  }
                                     return null;
                                   }
                            );

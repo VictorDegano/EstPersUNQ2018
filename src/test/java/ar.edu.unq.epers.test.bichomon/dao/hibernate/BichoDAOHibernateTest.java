@@ -116,7 +116,6 @@ public class BichoDAOHibernateTest {
                                     return null;
                                 });
         //Test(Then)
-        fail("No hubo Excepcion");
     }
 
     @Test(expected = PersistenceException.class)
@@ -129,6 +128,5 @@ public class BichoDAOHibernateTest {
                                     bichoDAOSut.actualizar(aModificar);
                                     return null;});
         //Test(Then)
-        fail("No hubo Excepcion");
     }
 }

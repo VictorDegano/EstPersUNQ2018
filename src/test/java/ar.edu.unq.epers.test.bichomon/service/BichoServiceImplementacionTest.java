@@ -129,7 +129,6 @@ public class BichoServiceImplementacionTest {
         //Exercise(When)
         bichoServiceSut.puedeEvolucionar("Pepe Enpepado", 66);
         //Test(Then)
-        fail("No Hubo Excepcion");
     }
 
     @Test
@@ -151,7 +150,6 @@ public class BichoServiceImplementacionTest {
         //Exercise(When)
         bichoEvolucionado   = bichoServiceSut.evolucionar("Pepe Enpepado", 19092);
         //Test(Then)
-        fail("No Hubo Excepcion");
     }
 
     @Test(expected = NoResultException.class)
@@ -163,7 +161,6 @@ public class BichoServiceImplementacionTest {
         //Exercise(When)
         bichoEvolucionado   = bichoServiceSut.evolucionar("Pepe Enpepado Super Fiesta", 12);
         //Test(Then)
-        fail("No Hubo Excepcion");
     }
 
     @Test
@@ -237,7 +234,6 @@ public class BichoServiceImplementacionTest {
         //Exercise(When)
         bichoServiceSut.duelo("Pepe Pepon", 2);
         //Test(Then)
-        fail("No hubo Excepcion");
     }
 
     @Test(expected = UbicacionIncorrectaException.class)
@@ -248,7 +244,6 @@ public class BichoServiceImplementacionTest {
         //Exercise(When)
         bichoServiceSut.duelo("Pepe Pepon", 2);
         //Test(Then)
-        fail("No hubo Excepcion");
     }
 
     @Test

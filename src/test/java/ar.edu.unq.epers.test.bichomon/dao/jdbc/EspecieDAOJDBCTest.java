@@ -114,7 +114,6 @@ public class EspecieDAOJDBCTest {
         especieDAOJDBCSut.guardar(copiaE);
 
         // Test(When)
-        fail("No Hubo Exepcion");
     }
 
     @Test
@@ -138,7 +137,6 @@ public class EspecieDAOJDBCTest {
         // Exercise(Then)
         especieDAOJDBCSut.borrarEspecie("Preguntamon");
         // Test(When)
-        fail("No Hubo Exepcion");
     }
 
     @Test
@@ -161,7 +159,6 @@ public class EspecieDAOJDBCTest {
         especieDAOJDBCSut.actualizar(especiePrueba);
 
         //Test (WHEN)
-        fail("No hubo excepcion");
     }
 }
 
