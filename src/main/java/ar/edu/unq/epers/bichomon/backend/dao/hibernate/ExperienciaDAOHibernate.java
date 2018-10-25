@@ -17,13 +17,11 @@ public class ExperienciaDAOHibernate implements ExperienciaDAO
     public Experiencia recuperar(TipoExperiencia nombre)
     {
         Session session = Runner.getCurrentSession();
-        String hql = "FROM Experiencia e WHERE e.nombre = :unNombre";
+        String hql = "FROM Experiencia e " +
+                     "WHERE e.nombre = :unNombre";
         Query<Experiencia> query = session.createQuery(hql, Experiencia.class);
-//        Query query = session.createNativeQuery("SELECT experiencia from experiencia where nombre = :nombre");
         query.setParameter("unNombre", nombre);
         return query.getSingleResult();
-//        return session.get(Experiencia.class, nombre);
-
     }
 
     @Override

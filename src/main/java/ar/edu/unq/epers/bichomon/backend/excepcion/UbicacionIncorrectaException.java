@@ -18,11 +18,11 @@ public class UbicacionIncorrectaException extends RuntimeException
     }
 
     @Override
-    public String getMessage() {
-        if (this.mensajeOpcional == null) {
-            return "La Ubicacion: " + ubicacion + " es incorrecta.";
-        } else {
-            return "La Ubicacion: " + ubicacion + " es incorrecta. " + this.mensajeOpcional;
-        }
+    public String getMessage()
+    {
+        if (this.mensajeOpcional == null)
+        {   return "La Ubicacion: " + ubicacion + " es incorrecta.";    }
+        else
+        {   return "La Ubicacion: " + ubicacion + " es incorrecta. " + this.mensajeOpcional;    }
     }
 }

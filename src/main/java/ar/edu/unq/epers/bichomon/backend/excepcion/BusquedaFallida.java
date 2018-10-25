@@ -1,21 +1,14 @@
 package ar.edu.unq.epers.bichomon.backend.excepcion;
 
-public class BusquedaFallida extends RuntimeException {
-
+public class BusquedaFallida extends RuntimeException
+{
 
     private String mensajeOpcional;
 
-
-
     public BusquedaFallida(String mensajeAdicional)
-    {
-        this.mensajeOpcional = mensajeAdicional;
-    }
+    {   this.mensajeOpcional = mensajeAdicional;    }
 
-    public BusquedaFallida( )
-    {
-
-    }
+    public BusquedaFallida( ) {   }
 
     @Override
     public String getMessage()

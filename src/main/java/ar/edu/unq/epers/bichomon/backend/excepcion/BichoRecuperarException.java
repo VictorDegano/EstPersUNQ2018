@@ -7,13 +7,13 @@ public class BichoRecuperarException extends RuntimeException
 
     public BichoRecuperarException(int idBicho)
     {
-        this.idBicho            = idBicho;
+        this.idBicho         = idBicho;
         this.mensajeOpcional = "";
     }
 
     public BichoRecuperarException(int idBicho, String mensajeAdicional)
     {
-        this.idBicho            = idBicho;
+        this.idBicho         = idBicho;
         this.mensajeOpcional = mensajeAdicional;
     }
 

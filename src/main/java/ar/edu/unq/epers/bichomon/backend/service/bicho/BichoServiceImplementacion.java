@@ -29,28 +29,29 @@ public class BichoServiceImplementacion implements BichoService
      * @return El {@link Bicho} que fue capturado si fue exitoso.
      */
     @Override
-    public Bicho buscar(String entrenador) {
-
-       return Runner.runInSession(() -> {Entrenador unEntrenador = this.getEntrenadorDao().recuperar(entrenador);
-                                   Bicho bicho = unEntrenador.buscarBicho();
-                                   if (bicho != null ){
-
-                                       if (!unEntrenador.getUbicacion().soyGuarderia()) {
-
-                                           this.getEntrenadorDao().actualizar(unEntrenador);
-                                           this.getBichoDao().guardar(bicho);
-                                       }
-                                       else {
-                                           this.getEntrenadorDao().actualizar(unEntrenador);
-                                           this.getBichoDao().actualizar(bicho);
-                                       }
-                                       unEntrenador.subirExperiencia(this.experienciaDao.recuperar(TipoExperiencia.CAPTURA).getExperiencia());
-                                   }
-                                   else{
-                                       throw new BusquedaFallida();
-                                   }
-                                  return bicho; });
-
+    public Bicho buscar(String entrenador)
+    {
+       return Runner.runInSession(() -> {
+                Entrenador unEntrenador = this.getEntrenadorDao().recuperar(entrenador);
+                Bicho bicho = unEntrenador.buscarBicho();
+                if (bicho != null )
+                {
+                    if (!unEntrenador.getUbicacion().soyGuarderia())
+                    {
+                       this.getEntrenadorDao().actualizar(unEntrenador);
+                       this.getBichoDao().guardar(bicho);
+                    }
+                    else
+                    {
+                        this.getEntrenadorDao().actualizar(unEntrenador);
+                        this.getBichoDao().actualizar(bicho);
+                    }
+                    unEntrenador.subirExperiencia(this.experienciaDao.recuperar(TipoExperiencia.CAPTURA).getExperiencia());
+                }
+                else
+                {   throw new BusquedaFallida();    }
+                return bicho;
+            });
     }
 
     /**
@@ -62,7 +63,8 @@ public class BichoServiceImplementacion implements BichoService
     @Override
     public void abandonar(String entrenador, int bicho)
     {
-        Runner.runInSession(() -> { Bicho unBicho           = this.getBichoDao().recuperar(bicho);
+        Runner.runInSession(() -> {
+                                    Bicho unBicho           = this.getBichoDao().recuperar(bicho);
                                     Entrenador unEntrenador = this.getEntrenadorDao().recuperar(entrenador);
                                     unEntrenador.abandonarBicho(unBicho);
                                     this.getEntrenadorDao().actualizar(unEntrenador);
@@ -81,8 +83,7 @@ public class BichoServiceImplementacion implements BichoService
     @Override
     public boolean puedeEvolucionar(String entrenador, int bicho)
     {
-        return Runner.runInSession(() -> {  Bicho unBicho           = this.getBichoDao().recuperar(bicho);
-
+        return Runner.runInSession(() -> {  Bicho unBicho   = this.getBichoDao().recuperar(bicho);
                                             if(unBicho == null)
                                             {   throw new BichoRecuperarException(bicho);   }
                                             return unBicho.puedeEvolucionar();});
@@ -101,25 +102,26 @@ public class BichoServiceImplementacion implements BichoService
     public Bicho evolucionar(String entrenador, int bicho)
     {
         return Runner.runInSession(() -> {
-                                    Especie especieAntesDeEvolucion;
-                                    Bicho unBicho                   = this.getBichoDao().recuperar(bicho);
-                                    Entrenador unEntrenador         = this.getEntrenadorDao().recuperar(entrenador);
+                Especie especieAntesDeEvolucion;
+                Bicho unBicho           = this.getBichoDao().recuperar(bicho);
+                Entrenador unEntrenador = this.getEntrenadorDao().recuperar(entrenador);
 
-                                    if(unBicho == null)
-                                    {   throw new BichoRecuperarException(bicho);   }
+                if(unBicho == null)
+                {   throw new BichoRecuperarException(bicho);   }
 
-                                    especieAntesDeEvolucion = unBicho.getEspecie();
-                                    unBicho.evolucionar();
-                                    if (especieAntesDeEvolucion != unBicho.getEspecie())
-                                    {
-                                        unEntrenador.subirExperiencia(this.experienciaDao.recuperar(TipoExperiencia.EVOLUCION).getExperiencia());
-                                        this.getEntrenadorDao().actualizar(unEntrenador);
-                                        this.getBichoDao().actualizar(unBicho);
-                                        this.getEspecieDao().actualizar(especieAntesDeEvolucion);
-                                        this.getEspecieDao().actualizar(unBicho.getEspecie());
-                                    }
+                especieAntesDeEvolucion = unBicho.getEspecie();
+                unBicho.evolucionar();
+                if (especieAntesDeEvolucion != unBicho.getEspecie())
+                {
+                    unEntrenador.subirExperiencia(this.experienciaDao.recuperar(TipoExperiencia.EVOLUCION).getExperiencia());
+                    this.getEntrenadorDao().actualizar(unEntrenador);
+                    this.getBichoDao().actualizar(unBicho);
+                    this.getEspecieDao().actualizar(especieAntesDeEvolucion);
+                    this.getEspecieDao().actualizar(unBicho.getEspecie());
+                }
 
-                                    return unBicho;});
+                return unBicho;
+            });
     }
 
     /**
@@ -134,23 +136,24 @@ public class BichoServiceImplementacion implements BichoService
     public Registro duelo(String entrenador, int bicho)
     {
         return Runner.runInSession(() -> {
-                        Bicho unBicho                   = this.getBichoDao().recuperar(bicho);
-                        Entrenador unEntrenador         = this.getEntrenadorDao().recuperar(entrenador);
-                        Registro registroDeBatalla;
+                    Bicho unBicho           = this.getBichoDao().recuperar(bicho);
+                    Entrenador unEntrenador = this.getEntrenadorDao().recuperar(entrenador);
+                    Registro registroDeBatalla;
 
-                        if(unBicho == null)
-                        {   throw new BichoRecuperarException(bicho);   }
+                    if(unBicho == null)
+                    {   throw new BichoRecuperarException(bicho);   }
 
-                        registroDeBatalla   = unEntrenador.retar(unBicho);
+                    registroDeBatalla   = unEntrenador.retar(unBicho);
 
-                        if (registroDeBatalla.getGanador().getId() == unBicho.getId())
-                        {
-                            unEntrenador.subirExperiencia(this.experienciaDao.recuperar(TipoExperiencia.COMBATE).getExperiencia());
-                            this.getEntrenadorDao().actualizar(unEntrenador);
-                        }
-                        this.getUbicacionDao().actualizar(unEntrenador.getUbicacion());
+                    if (registroDeBatalla.getGanador().getId() == unBicho.getId())
+                    {
+                        unEntrenador.subirExperiencia(this.experienciaDao.recuperar(TipoExperiencia.COMBATE).getExperiencia());
+                        this.getEntrenadorDao().actualizar(unEntrenador);
+                    }
+                    this.getUbicacionDao().actualizar(unEntrenador.getUbicacion());
 
-                        return registroDeBatalla;});
+                    return registroDeBatalla;
+                });
     }
 
     /*[--------]Constructors[--------]*/
@@ -165,7 +168,7 @@ public class BichoServiceImplementacion implements BichoService
         this.experienciaDao = experienciaDao;
     }
 
-/*[--------]Getters & Setters[--------]*/
+    /*[--------]Getters & Setters[--------]*/
     public UbicacionDAO getUbicacionDao() { return ubicacionDao;    }
     public void setUbicacionDao(UbicacionDAO ubicacionDao) {    this.ubicacionDao = ubicacionDao;   }
 

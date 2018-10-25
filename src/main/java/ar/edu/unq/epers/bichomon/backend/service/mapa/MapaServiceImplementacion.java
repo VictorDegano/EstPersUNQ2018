@@ -32,7 +32,7 @@ public class MapaServiceImplementacion implements MapaService
 
                                     if( (entrenadorAMoverse != null) && (ubicacionAMoverse != null))
                                     {
-                                        Ubicacion ubicacionVieja        = entrenadorAMoverse.getUbicacion();
+                                        Ubicacion ubicacionVieja    = entrenadorAMoverse.getUbicacion();
 
                                         entrenadorAMoverse.moverse(ubicacionAMoverse);
 

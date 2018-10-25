@@ -25,7 +25,8 @@ public class EntrenadorDAOHibernate implements EntrenadorDAO {
     public Entrenador recuperar(String nombre)
     {
         Session session = Runner.getCurrentSession();
-        String hql = "FROM Entrenador e WHERE e.nombre = :unNombre";
+        String hql = "FROM Entrenador e " +
+                     "WHERE e.nombre = :unNombre";
         Query<Entrenador> query = session.createQuery(hql, Entrenador.class);
         query.setParameter("unNombre", nombre);
         return query.getSingleResult();

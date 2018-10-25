@@ -9,9 +9,8 @@ import ar.edu.unq.epers.bichomon.backend.service.especie.EspecieService;
 import java.util.Collection;
 import java.util.List;
 
-public class EspecieServiceHibernate implements EspecieService {
-
-
+public class EspecieServiceHibernate implements EspecieService
+{
     private EspecieDAOHibernate especieDAO;
 
     public EspecieServiceHibernate(EspecieDAOHibernate especieDAO) {
@@ -19,46 +18,51 @@ public class EspecieServiceHibernate implements EspecieService {
     }
 
     @Override
-    public void crearEspecie(Especie especie) {
+    public void crearEspecie(Especie especie)
+    {
         Runner.runInSession(() -> {
-            especieDAO.guardar(especie);
-            return null;
-        });
+                                    especieDAO.guardar(especie);
+                                    return null;
+                                  });
     }
 
     @Override
-    public Especie getEspecie(String nombreEspecie) {
-        return Runner.runInSession(() -> {
-            return this.especieDAO.recuperar(nombreEspecie);
-        });
-    }
-
-    @Override
-    public List<Especie> getAllEspecies() {
+    public Especie getEspecie(String nombreEspecie)
+    {
         return Runner.runInSession(()->{
-           return this.especieDAO.recuperarTodos();
-        });
+                                        return this.especieDAO.recuperar(nombreEspecie);
+                                       });
     }
 
     @Override
-    public Bicho crearBicho(String nombreEspecie, String nombreBicho) {
+    public List<Especie> getAllEspecies()
+    {
         return Runner.runInSession(()->{
-            return this.especieDAO.crearBicho(nombreEspecie,nombreBicho);
-        });
+                                        return this.especieDAO.recuperarTodos();
+                                       });
     }
 
     @Override
-    public List<Especie> populares(){
+    public Bicho crearBicho(String nombreEspecie, String nombreBicho)
+    {
         return Runner.runInSession(()->{
-            return this.especieDAO.populares();
-        });
+                                        return this.especieDAO.crearBicho(nombreEspecie,nombreBicho);
+                                       });
     }
 
     @Override
-    public List<Especie> impopulares(){
+    public List<Especie> populares()
+    {
         return Runner.runInSession(()->{
-            return this.especieDAO.impopulares();
-        });
+                                        return this.especieDAO.populares();
+                                       });
     }
 
+    @Override
+    public List<Especie> impopulares()
+    {
+        return Runner.runInSession(()->{
+                                        return this.especieDAO.impopulares();
+                                       });
+    }
 }

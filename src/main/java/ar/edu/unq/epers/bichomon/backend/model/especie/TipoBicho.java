@@ -1,7 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.model.especie;
 
-public enum TipoBicho {
-
+public enum TipoBicho
+{
 	FUEGO,
 	AGUA,
 	TIERRA,
@@ -9,5 +9,4 @@ public enum TipoBicho {
 	PLANTA,
 	AIRE,
 	CHOCOLATE
-
 }

@@ -131,7 +131,8 @@ public class Especie {
     public Especie getEvolucion() { return evolucion;   }
     public void setEvolucion(Especie evolucion) {   this.evolucion = evolucion; }
 
-	public Bicho crearBicho(String nombreBicho){
+	public Bicho crearBicho(String nombreBicho)
+	{
 		this.cantidadBichos++;
 		return new Bicho(this, nombreBicho);
 	}
