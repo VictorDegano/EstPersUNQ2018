@@ -8,11 +8,15 @@ public interface EspecieDAO {
 	
 	void guardar(Especie especie);
 
-    void actualizar(Especie especie);
+	void actualizar(Especie especie);
 
 	Especie recuperar(String nombreEspecie);
 
 	List<Especie> recuperarTodos();
 
-    Especie especieLider();
+	Especie especieLider();
+
+	public List<Especie> populares();
+
+	public List<Especie> impopulares();
 }
