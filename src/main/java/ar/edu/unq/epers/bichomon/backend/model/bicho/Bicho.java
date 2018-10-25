@@ -1,5 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
+import ar.edu.unq.epers.bichomon.backend.excepcion.EvolucionException;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import javax.persistence.*;
@@ -58,6 +59,8 @@ public class Bicho {
             especieNueva.setCantidadBichos(especieVieja.getCantidadBichos()+1);
             this.aumentarEnergiaSiCorresponde();
         }
+        else
+        {   throw new EvolucionException(this.getDuenio().getNombre()); }
     }
 
     private void aumentarEnergiaSiCorresponde()

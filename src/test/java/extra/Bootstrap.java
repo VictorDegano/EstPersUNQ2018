@@ -128,6 +128,7 @@ public class Bootstrap
         red.setPeso(75);
         red.setEnergiaIncial(100);
         red.setUrlFoto("/image/rojomon.jpg");
+        red.setEspecieBase(red);
 
         Especie amarillo = new Especie();
         amarillo.setNombre("Amarillomon");
@@ -136,6 +137,7 @@ public class Bootstrap
         amarillo.setPeso(69);
         amarillo.setEnergiaIncial(300);
         amarillo.setUrlFoto("/image/amarillomon.png");
+        amarillo.setEspecieBase(amarillo);
 
         Especie green = new Especie();
         green.setNombre("Verdemon");
@@ -144,6 +146,7 @@ public class Bootstrap
         green.setPeso(55);
         green.setEnergiaIncial(5000);
         green.setUrlFoto("/image/verdemon.jpg");
+        green.setEspecieBase(green);
 
         Especie tierronmon = new Especie();
         tierronmon.setNombre("Tierramon");
@@ -152,6 +155,7 @@ public class Bootstrap
         tierronmon.setPeso(99);
         tierronmon.setEnergiaIncial(5000);
         tierronmon.setUrlFoto("/image/tierramon.jpg");
+        tierronmon.setEspecieBase(tierronmon);
 
         Especie fantasmon = new Especie();
         fantasmon.setNombre("Fantasmon");
@@ -160,6 +164,7 @@ public class Bootstrap
         fantasmon.setPeso(99);
         fantasmon.setEnergiaIncial(5000);
         fantasmon.setUrlFoto("/image/fantasmon.jpg");
+        fantasmon.setEspecieBase(fantasmon);
 
         Especie vampiron = new Especie();
         vampiron.setNombre("Vanpiron");
@@ -168,6 +173,7 @@ public class Bootstrap
         vampiron.setPeso(99);
         vampiron.setEnergiaIncial(5000);
         vampiron.setUrlFoto("/image/vampiromon.jpg");
+        vampiron.setEspecieBase(vampiron);
 
         Especie fortmon = new Especie();
         fortmon.setNombre("Fortmon");
@@ -176,6 +182,7 @@ public class Bootstrap
         fortmon.setPeso(99);
         fortmon.setEnergiaIncial(5000);
         fortmon.setUrlFoto("/image/fortmon.png");
+        fortmon.setEspecieBase(fortmon);
 
         Especie dientemon = new Especie();
         dientemon.setNombre("Dientemon");
@@ -184,9 +191,9 @@ public class Bootstrap
         dientemon.setPeso(99);
         dientemon.setEnergiaIncial(5000);
         dientemon.setUrlFoto("/image/dientmon.jpg");
+        dientemon.setEspecieBase(dientemon);
 
         // Creadas para Testear
-
         Especie pikachu = new Especie();
         pikachu.setNombre("Pikachu");
         pikachu.setTipo(TipoBicho.ELECTRICIDAD);
@@ -194,6 +201,7 @@ public class Bootstrap
         pikachu.setPeso(40);
         pikachu.setEnergiaIncial(300);
         pikachu.setUrlFoto("/image.pikachu.jpg");
+        pikachu.setEspecieBase(pikachu);
 
         Especie digimon = new Especie();
         digimon.setNombre("Digimon");
@@ -202,6 +210,7 @@ public class Bootstrap
         digimon.setPeso(40);
         digimon.setEnergiaIncial(690);
         digimon.setUrlFoto("/image.digimon.jpg");
+        digimon.setEspecieBase(digimon);
 
         Especie miguelmon = new Especie();
         miguelmon.setNombre("Miguelmon");
@@ -210,6 +219,7 @@ public class Bootstrap
         miguelmon.setPeso(213);
         miguelmon.setEnergiaIncial(6000);
         miguelmon.setUrlFoto("/image.miguelmon.jpg");
+        miguelmon.setEspecieBase(miguelmon);
 
         Especie raichu = new Especie();
         raichu.setNombre("Raichu");

@@ -93,21 +93,15 @@ public class BichoServiceImplementacion implements BichoService
     public Bicho evolucionar(String entrenador, int bicho)
     {
         return Runner.runInSession(() -> {
-                Especie especieAntesDeEvolucion;
                 Bicho unBicho           = this.getBichoDao().recuperar(bicho);
                 Entrenador unEntrenador = this.getEntrenadorDao().recuperar(entrenador);
 
                 if(unBicho == null)
                 {   throw new BichoRecuperarException(bicho);   }
 
-                especieAntesDeEvolucion = unBicho.getEspecie();
                 unBicho.evolucionar();
-
-                if (especieAntesDeEvolucion != unBicho.getEspecie())
-                {
-                    unEntrenador.subirExperiencia(this.experienciaDao.recuperar(TipoExperiencia.EVOLUCION).getExperiencia());
-                    this.getEntrenadorDao().actualizar(unEntrenador);
-                }
+                unEntrenador.subirExperiencia(this.experienciaDao.recuperar(TipoExperiencia.EVOLUCION).getExperiencia());
+                this.getEntrenadorDao().actualizar(unEntrenador);
 
                 return unBicho;
             });

@@ -2,6 +2,7 @@ package ar.edu.unq.epers.test.bichomon.service;
 
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.*;
 import ar.edu.unq.epers.bichomon.backend.excepcion.BichoRecuperarException;
+import ar.edu.unq.epers.bichomon.backend.excepcion.EvolucionException;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
@@ -205,7 +206,10 @@ public class BichoServiceImplementacionTest {
         Especie especieNueva;
         setUpBichoSinCumplirCondicion();
         //Exercise(When)
-        bichoEvolucionado   = bichoServiceSut.evolucionar("Pepe Enpepado", 24);
+        try
+        {   bichoEvolucionado   = bichoServiceSut.evolucionar("Pepe Enpepado", 24); }
+        catch (EvolucionException e)
+        {   bichoEvolucionado   = Runner.runInSession(()-> { return bichoDao.recuperar(24);});  }
         bichoRecuperado     = Runner.runInSession(()-> { return bichoDao.recuperar(24);});
         entrenadorRecuperado= Runner.runInSession(()-> { return entrenadorDao.recuperar("Pepe Enpepado");});
         especieVieja        = Runner.runInSession(()-> { return especieDao.recuperar("Lagartomon");});

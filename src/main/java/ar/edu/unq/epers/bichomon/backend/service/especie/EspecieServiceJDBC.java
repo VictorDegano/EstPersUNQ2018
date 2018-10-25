@@ -7,11 +7,11 @@ import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 
 
-public class EspecieServiceImpl implements EspecieService {
+public class EspecieServiceJDBC implements EspecieService {
 
 	private EspecieDAO especieDAO;
 
-	public EspecieServiceImpl(EspecieDAO dao){
+	public EspecieServiceJDBC(EspecieDAO dao){
 		this.especieDAO = dao;
 	}
 	
