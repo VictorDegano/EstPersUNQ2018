@@ -1,5 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
+import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionCampeonException;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon;
@@ -52,7 +53,7 @@ public abstract class Ubicacion
      * @return El {@link Bicho} campeon del dojo
      */
     public Bicho campeonActual()
-    { return null;    }
+    { throw new UbicacionCampeonException(); }
 
     /**
      * Abandona el bicho especificado del entrenador en su ubicacion actual.

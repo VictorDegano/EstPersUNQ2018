@@ -1,5 +1,6 @@
 package ar.edu.unq.epers.test.bichomon.model;
 
+import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionCampeonException;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon;
@@ -51,7 +52,7 @@ public class UbicacionTest {
         ubicacionSUT4.setNombre("Dojo Campeonus");
     }
 
-    @Test
+    @Test(expected = UbicacionCampeonException.class)
     public void SiLePidoElcampeonActualAUnaGuarderiaOPuebloMeDevuelveNull()
     {
         //Setup(Given)
@@ -63,8 +64,7 @@ public class UbicacionTest {
         campeonPueblo   = ubicacionSUT1.campeonActual();
 
         //Test(Then)
-        assertNull(campeonGuarderia);
-        assertNull(campeonPueblo);
+        fail("En esta ubicacion no existen los campeones.");
     }
 
     @Test
