@@ -4,6 +4,8 @@ import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionCampeonException;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon;
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.Nivel;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
@@ -110,6 +112,21 @@ public class UbicacionTest {
         ubicacionSUT1.refugiar(nuevoBicho);
 
         //Test(Then)
+    }
+
+    @Test
+    public void SiSebuscaUnBichomonEnUnDojoDondeNoHayCampeonSeDevuelveUnNull()
+    {
+        //Setup(Given)
+        Entrenador unEntrenador = new Entrenador();
+        unEntrenador.setExperiencia(10000);
+        unEntrenador.setNivel(new Nivel(10, 7000, 7999, 13));
+
+        //Exercise(When)
+        Bicho bichoEncontrado   = ubicacionSUT3.buscar(unEntrenador);
+
+        //Test(Then)
+        assertNull(bichoEncontrado);
     }
 
 }

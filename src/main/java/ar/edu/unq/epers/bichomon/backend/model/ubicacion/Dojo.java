@@ -89,9 +89,13 @@ public class Dojo extends Ubicacion
     }
 
     @Override
+    boolean busquedaEsExitosa(Entrenador entrenador)
+    {   return (this.getCampeonActual() != null) && super.busquedaEsExitosa(entrenador);   }
+
+    @Override
     public Bicho buscarBicho(Entrenador entrenador)
     {
-        Bicho premio= campeonActual.getBichoCampeon().getEvolucionBase().crearBicho();
+        Bicho premio  = campeonActual.getBichoCampeon().getEvolucionBase().crearBicho();
         premio.setEnergia(campeonActual.getBichoCampeon().getEspecie().getEnergiaInicial());
         return premio;
     }

@@ -70,10 +70,13 @@ public abstract class Ubicacion
     public Bicho buscar(Entrenador entrenador)
     {
         Bicho premio = null;
-        if (entrenador.getNivel().getNroDeNivel()* (Math.random()*1) >0.5)
+        if (busquedaEsExitosa(entrenador))
         {   premio  = this.buscarBicho(entrenador); }
         return premio;
     }
+
+    boolean busquedaEsExitosa(Entrenador entrenador)
+    {   return entrenador.getNivel().getNroDeNivel()* (Math.random()*1) >0.5;   }
 
     protected abstract Bicho buscarBicho(Entrenador entrenador);
 
