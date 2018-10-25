@@ -127,7 +127,9 @@ public class EspecieDAOJDBC implements ar.edu.unq.epers.bichomon.backend.dao.Esp
     }
 
     @Override
-    public Especie especieLider() { return null;    }
+    public List<Especie> impopulares() {
+        return null;
+    }
 
 
     public void borrarEspecie(String especieABorrar)
@@ -240,5 +242,13 @@ public class EspecieDAOJDBC implements ar.edu.unq.epers.bichomon.backend.dao.Esp
                     ps.close();
                     return null;
                 }    );
+    }
+
+    @Override
+    public Especie especieLider() { return null;    }
+
+    @Override
+    public List<Especie> populares() {
+        return null;
     }
 }

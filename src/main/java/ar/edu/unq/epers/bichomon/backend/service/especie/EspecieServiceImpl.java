@@ -46,12 +46,12 @@ public class EspecieServiceImpl implements EspecieService {
 
 	@Override
 	public List<Especie> populares() {
-			return null;
+			return this.especieDAO.populares();
 		}
 
 	@Override
 	public List<Especie> impopulares() {
-		return null;
+		return this.especieDAO.impopulares();
 	}
 
 
