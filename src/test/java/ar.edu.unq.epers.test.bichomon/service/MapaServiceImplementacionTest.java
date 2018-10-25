@@ -5,7 +5,6 @@ import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EntrenadorDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EspecieDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.UbicacionDAOHibernate;
-import ar.edu.unq.epers.bichomon.backend.excepcion.MoverException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
@@ -20,6 +19,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.persistence.NoResultException;
 import java.sql.Timestamp;
 
 import static org.junit.Assert.*;
@@ -107,7 +107,7 @@ public class MapaServiceImplementacionTest
         assertEquals("Dojo Desert", entrenador.getUbicacion().getNombre() );
     }
 
-    @Test(expected = MoverException.class)
+    @Test(expected = NoResultException.class)
     public void siElMapaServiceIntentaMoverAUnEntrenadorAUnaUbicacionQueNoExisteTiraUnaExcepcion()
     {
         //Setup(Given)
@@ -117,7 +117,7 @@ public class MapaServiceImplementacionTest
         //Test(Then)
     }
 
-    @Test(expected = MoverException.class)
+    @Test(expected = NoResultException.class)
     public void siElMapaServiceIntentaMoverAUnEntrenadorQueNoExisteTiraUnaExcepcion()
     {
         //Setup(Given)
@@ -137,7 +137,7 @@ public class MapaServiceImplementacionTest
         //Exercise(When)
         try
         {   mapaServiceSUT.mover("Pepe DePrueba", "Volcanos");    }
-        catch (RuntimeException e)
+        catch (NoResultException e)
         {   mensajeDeError  = e.getMessage();   }
         ubicacionViejaBD= Runner.runInSession(() -> { return ubicacionDAO.recuperar("El Origen 2");});
         entrenador      = Runner.runInSession(() -> { return entrenadorDAO.recuperar("Pepe DePrueba");});
@@ -178,7 +178,7 @@ public class MapaServiceImplementacionTest
         //Exercise(When)
         try
         {   mapaServiceSUT.cantidadEntrenadores("Missing Field");    }
-        catch (RuntimeException e)
+        catch (NoResultException e)
         {   mensajeDeError  = e.getMessage();   }
 
         //Test(Then)

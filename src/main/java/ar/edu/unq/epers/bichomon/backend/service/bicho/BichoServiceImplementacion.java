@@ -36,16 +36,7 @@ public class BichoServiceImplementacion implements BichoService
                 Bicho bicho = unEntrenador.buscarBicho();
                 if (bicho != null )
                 {
-                    if (!unEntrenador.getUbicacion().soyGuarderia())
-                    {
-                       this.getEntrenadorDao().actualizar(unEntrenador);
-                       this.getBichoDao().guardar(bicho);
-                    }
-                    else
-                    {
-                        this.getEntrenadorDao().actualizar(unEntrenador);
-                        this.getBichoDao().actualizar(bicho);
-                    }
+                   this.getEntrenadorDao().actualizar(unEntrenador);
                     unEntrenador.subirExperiencia(this.experienciaDao.recuperar(TipoExperiencia.CAPTURA).getExperiencia());
                 }
                 else
@@ -111,13 +102,11 @@ public class BichoServiceImplementacion implements BichoService
 
                 especieAntesDeEvolucion = unBicho.getEspecie();
                 unBicho.evolucionar();
+
                 if (especieAntesDeEvolucion != unBicho.getEspecie())
                 {
                     unEntrenador.subirExperiencia(this.experienciaDao.recuperar(TipoExperiencia.EVOLUCION).getExperiencia());
                     this.getEntrenadorDao().actualizar(unEntrenador);
-                    this.getBichoDao().actualizar(unBicho);
-                    this.getEspecieDao().actualizar(especieAntesDeEvolucion);
-                    this.getEspecieDao().actualizar(unBicho.getEspecie());
                 }
 
                 return unBicho;
