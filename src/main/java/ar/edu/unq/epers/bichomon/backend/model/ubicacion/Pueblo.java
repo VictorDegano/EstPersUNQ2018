@@ -25,7 +25,7 @@ public class Pueblo extends Ubicacion
         {
             if (probabilidadDeEspecie.posibilidad > porcentaje)
             {
-                bicho = new Bicho(probabilidadDeEspecie.especie,"");
+                bicho   = probabilidadDeEspecie.especie.crearBicho();
                 bicho.setEnergia(probabilidadDeEspecie.especie.getEnergiaInicial());
                 break;
             }

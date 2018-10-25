@@ -29,7 +29,7 @@ public class Especie {
 	private int cantidadBichos;
 	@ManyToOne
 	private Especie especieBase;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Especie evolucion;
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<CondicionEvolucion> condicionesDeEvolucion;

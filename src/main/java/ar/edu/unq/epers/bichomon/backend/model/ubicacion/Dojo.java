@@ -29,24 +29,7 @@ public class Dojo extends Ubicacion
         return this.campeonActual.getBichoCampeon();
     }
 
-/*[--------]Constructors[--------]*/
-    public Dojo() {}
-
-/*[--------]Getters & Setters[--------]*/
-    public Campeon getCampeonActual() { return campeonActual;   }
-    public void setCampeonActual(Campeon campeonActual) {   this.campeonActual = campeonActual; }
-
-    public List<Registro> getHistorial() {
-       return this.historial;
-    }
-
-    private void agregarAHistorialDeCampeones(Campeon campeon) {    this.getHistorialDeCampeones().add(campeon); }
-    public void setHistorial(List<Registro> historial) {    this.historial = historial; }
-
-    public List<Campeon> getHistorialDeCampeones() {    return this.campeonesHistoricos;    }
-    public void setHistorialDeCampeones(List<Campeon> historialDeCampeones) {   this.campeonesHistoricos = historialDeCampeones;    }
-
-/*------------Duelos--------------*/
+    /*------------Duelos--------------*/
 
     private void coronarANuevoCampeon(Bicho ganador) {
         Campeon nuevoCampeon = new Campeon();
@@ -108,10 +91,26 @@ public class Dojo extends Ubicacion
     @Override
     public Bicho buscarBicho(Entrenador entrenador)
     {
-        Bicho premio= new Bicho(campeonActual.getBichoCampeon().getEvolucionBase(),"");
+        Bicho premio= campeonActual.getBichoCampeon().getEvolucionBase().crearBicho();
         premio.setEnergia(campeonActual.getBichoCampeon().getEspecie().getEnergiaInicial());
         return premio;
     }
 
+    /*[--------]Constructors[--------]*/
+    public Dojo() {}
+
+    /*[--------]Getters & Setters[--------]*/
+    public Campeon getCampeonActual() { return campeonActual;   }
+    public void setCampeonActual(Campeon campeonActual) {   this.campeonActual = campeonActual; }
+
+    public List<Registro> getHistorial() {
+        return this.historial;
+    }
+
+    private void agregarAHistorialDeCampeones(Campeon campeon) {    this.getHistorialDeCampeones().add(campeon); }
+    public void setHistorial(List<Registro> historial) {    this.historial = historial; }
+
+    public List<Campeon> getHistorialDeCampeones() {    return this.campeonesHistoricos;    }
+    public void setHistorialDeCampeones(List<Campeon> historialDeCampeones) {   this.campeonesHistoricos = historialDeCampeones;    }
 
 }
