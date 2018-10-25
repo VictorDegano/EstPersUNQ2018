@@ -1,6 +1,9 @@
 package ar.edu.unq.epers.test.bichomon.model;
 
+import ar.edu.unq.epers.bichomon.backend.excepcion.EvolucionException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.Nivel;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEnergia;
@@ -26,6 +29,11 @@ public class BichoTest {
 
     @Before
     public void setUp() throws Exception {
+        Entrenador pepePepon  = new Entrenador();
+        pepePepon.setNombre("Pepe Pepon");
+        pepePepon.setExperiencia(0);
+        pepePepon.setNivel(new Nivel(1, 1, 99, 4));
+
         sinevomon   = new Especie();
         sinevomon.setNombre("Sinevomon");
         sinevomon.setCantidadBichos(1);
@@ -37,7 +45,8 @@ public class BichoTest {
         bichoSutSinEvo.setEnergia(sinevomon.getEnergiaInicial());
         bichoSutSinEvo.setFechaDeCaptura(Timestamp.valueOf(LocalDateTime.now()));
         bichoSutSinEvo.setVictorias(0);
-
+        bichoSutSinEvo.setDuenio(pepePepon);
+        
         lagartomon  = new Especie();
         lagartomon.setNombre("Lagartomon");
         lagartomon.setTipo(TipoBicho.TIERRA);
@@ -75,7 +84,10 @@ public class BichoTest {
     {
         //Setup(Given)
         //Exercise(When)
-        bichoSutSinEvo.evolucionar();
+        try
+        {   bichoSutSinEvo.evolucionar();   }
+        catch (EvolucionException e)
+        {   }
         //Test(Then)
         assertEquals(sinevomon, bichoSutSinEvo.getEspecie());
         assertEquals(555, bichoSutSinEvo.getEnergia());
