@@ -1,7 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.service.mapa;
 
 import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
-import ar.edu.unq.epers.bichomon.backend.excepcion.MoverException;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
@@ -27,24 +26,19 @@ public class MapaServiceImplementacion implements MapaService
     public void mover(String entrenador, String ubicacion)
     {
         Runner.runInSession(() -> {
-                                    Entrenador entrenadorAMoverse   = this.getEntrenadorDAO().recuperar(entrenador);
-                                    Ubicacion ubicacionAMoverse     = this.getUbicacionDAO().recuperar(ubicacion);
+                Entrenador entrenadorAMoverse   = this.getEntrenadorDAO().recuperar(entrenador);
+                Ubicacion ubicacionAMoverse     = this.getUbicacionDAO().recuperar(ubicacion);
 
-                                    if( (entrenadorAMoverse != null) && (ubicacionAMoverse != null))
-                                    {
-                                        Ubicacion ubicacionVieja    = entrenadorAMoverse.getUbicacion();
+                Ubicacion ubicacionVieja    = entrenadorAMoverse.getUbicacion();
 
-                                        entrenadorAMoverse.moverse(ubicacionAMoverse);
+                entrenadorAMoverse.moverse(ubicacionAMoverse);
 
-                                        this.getEntrenadorDAO().actualizar(entrenadorAMoverse);
-                                        this.getUbicacionDAO().actualizar(ubicacionVieja);
-                                        this.getUbicacionDAO().actualizar(ubicacionAMoverse);
-                                    }
-                                    else
-                                    {   throw new MoverException(entrenador, ubicacion);  }
-                                    return null;
-                                  }
-                           );
+                this.getEntrenadorDAO().actualizar(entrenadorAMoverse);
+                this.getUbicacionDAO().actualizar(ubicacionVieja);
+                this.getUbicacionDAO().actualizar(ubicacionAMoverse);
+
+                return null;
+              });
     }
 
     /**
@@ -63,8 +57,7 @@ public class MapaServiceImplementacion implements MapaService
                     {   return unaUbicacion.cantidadDeEntrenadores();   }
                     else
                     {   throw new UbicacionIncorrectaException(ubicacion);  }
-                }
-        );
+                });
     }
 
     /**
