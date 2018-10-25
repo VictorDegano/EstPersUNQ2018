@@ -5,6 +5,7 @@ import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EntrenadorDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EspecieDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.UbicacionDAOHibernate;
+import ar.edu.unq.epers.bichomon.backend.excepcion.MoverException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
@@ -106,7 +107,7 @@ public class MapaServiceImplementacionTest
         assertEquals("Dojo Desert", entrenador.getUbicacion().getNombre() );
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = MoverException.class)
     public void siElMapaServiceIntentaMoverAUnEntrenadorAUnaUbicacionQueNoExisteTiraUnaExcepcion()
     {
         //Setup(Given)
@@ -116,7 +117,7 @@ public class MapaServiceImplementacionTest
         //Test(Then)
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = MoverException.class)
     public void siElMapaServiceIntentaMoverAUnEntrenadorQueNoExisteTiraUnaExcepcion()
     {
         //Setup(Given)

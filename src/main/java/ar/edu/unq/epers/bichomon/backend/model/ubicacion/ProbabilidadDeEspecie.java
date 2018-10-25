@@ -5,8 +5,8 @@ import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import javax.persistence.*;
 
 @Entity
-public class ProbabilidadDeEspecie {
-
+public class ProbabilidadDeEspecie
+{
     @Id @GeneratedValue(strategy = GenerationType.TABLE)
     private int id;
     @OneToOne
@@ -16,7 +16,8 @@ public class ProbabilidadDeEspecie {
 
     public ProbabilidadDeEspecie() { }
 
-    public ProbabilidadDeEspecie(Especie especie,int posibilidad){
+    public ProbabilidadDeEspecie(Especie especie,int posibilidad)
+    {
         this.especie = especie;
         this.posibilidad = posibilidad;
     }

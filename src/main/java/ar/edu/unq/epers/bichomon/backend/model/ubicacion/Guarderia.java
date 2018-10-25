@@ -18,8 +18,8 @@ public class Guarderia extends Ubicacion
     private List<RegistroDeAbandono> registroDeBichosAbandonados = new  ArrayList<>();
 
     @Override
-    public void refugiar(Bicho bichoAbandonado){
-
+    public void refugiar(Bicho bichoAbandonado)
+    {
         RegistroDeAbandono registro = new RegistroDeAbandono(bichoAbandonado.getDuenio(),bichoAbandonado);
         this.registroDeBichosAbandonados.add(registro);
         this.bichosAbandonados.add(bichoAbandonado);
@@ -27,7 +27,7 @@ public class Guarderia extends Ubicacion
         bichoAbandonado.setDuenio(null);
     }
 
-/*[--------]Constructors[--------]*/
+    /*[--------]Constructors[--------]*/
     public Guarderia() {   }
 
     /*[--------]Getters & Setters[--------]*/
@@ -37,37 +37,32 @@ public class Guarderia extends Ubicacion
     public List<RegistroDeAbandono> getRegistroDeBichosAbandonados() {
         return registroDeBichosAbandonados;
     }
-
-    public void setRegistroDeBichosAbandonados(List<RegistroDeAbandono> registroDeBichosAbandonados) {
-        this.registroDeBichosAbandonados = registroDeBichosAbandonados;
-    }
+    public void setRegistroDeBichosAbandonados(List<RegistroDeAbandono> registroDeBichosAbandonados)
+    {   this.registroDeBichosAbandonados = registroDeBichosAbandonados; }
 
     @Override
-    public Bicho buscarBicho(Entrenador entrenador){
+    public Bicho buscarBicho(Entrenador entrenador)
+    {
         List<RegistroDeAbandono> registroDeAbandonosSinLosMios = sacarSiEsMio(entrenador);
         if (registroDeAbandonosSinLosMios.isEmpty())
+        {   return null;    }
+        else
         {
-            return null;
-        }
-
-        else{
-            int bichoElegido = (int) (Math.random()* registroDeAbandonosSinLosMios.size());
+            int bichoElegido            = (int) (Math.random()* registroDeAbandonosSinLosMios.size());
             RegistroDeAbandono registro = getRegistroDeBichosAbandonados().get(bichoElegido);
             getBichosAbandonados().remove(registro);
             bichosAbandonados.remove(registro.getBichomon());
             return registro.getBichomon();
         }
-
-
-
     }
 
-    private List<RegistroDeAbandono> sacarSiEsMio(Entrenador entrenador){
+    private List<RegistroDeAbandono> sacarSiEsMio(Entrenador entrenador)
+    {
         List<RegistroDeAbandono> registroDeBichos = new ArrayList<RegistroDeAbandono>();
-        for ( RegistroDeAbandono registro: registroDeBichosAbandonados){
-            if (registro.getEntrenador().getNombre() != entrenador.getNombre()){
-                registroDeBichos.add(registro);
-            }
+        for ( RegistroDeAbandono registro: registroDeBichosAbandonados)
+        {
+            if (registro.getEntrenador().getNombre() != entrenador.getNombre())
+            {   registroDeBichos.add(registro); }
         }
         return registroDeBichos;
     }
@@ -76,5 +71,4 @@ public class Guarderia extends Ubicacion
     public Boolean soyGuarderia(){
         return true;
     }
-
 }

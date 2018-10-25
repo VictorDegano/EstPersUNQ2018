@@ -45,9 +45,8 @@ public class Entrenador
      */
     public void abandonarBicho(Bicho bichoAAbandonar)
     {
-        if(this.bichosCapturados.contains(bichoAAbandonar)){
-            this.getUbicacion().refugiar(bichoAAbandonar);
-        }
+        if(this.bichosCapturados.contains(bichoAAbandonar))
+        {   this.getUbicacion().refugiar(bichoAAbandonar);  }
     }
 
     /**
@@ -63,16 +62,16 @@ public class Entrenador
 
     public Bicho buscarBicho(){
        Bicho bicho = getUbicacion().buscar(this);
-       if (bicho != null){
+       if (bicho != null)
+       {
            getBichosCapturados().add(bicho);
            bicho.setDuenio(this);
            return bicho;
        }
-       else{
-           return null;
-       }
-
+       else
+       {    return null;    }
     }
+
 /*[--------]Constructors[--------]*/
     public Entrenador() {   }
 

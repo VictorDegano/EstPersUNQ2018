@@ -21,12 +21,12 @@ public class EspecieDAOHibernate implements ar.edu.unq.epers.bichomon.backend.da
         Session session = Runner.getCurrentSession();
         session.save(especie);
     }
-    // falta HQL
+
     @Override
     public Especie recuperar(String nombreEspecie) {
         Session session = Runner.getCurrentSession();
-        String hql =  "FROM Especie i "
-                + "WHERE i.nombre = :unNombre ";
+        String hql = "FROM Especie i " +
+                     "WHERE i.nombre = :unNombre ";
         Query<Especie> query = session.createQuery(hql,  Especie.class);
         query.setParameter("unNombre", nombreEspecie);
         return query.getSingleResult();
@@ -42,7 +42,8 @@ public class EspecieDAOHibernate implements ar.edu.unq.epers.bichomon.backend.da
     @Override
     public List<Especie> recuperarTodos() {
         Session session = Runner.getCurrentSession();
-        String hql = "FROM Especie e order by e.nombre asc";
+        String hql = "FROM Especie e " +
+                     "ORDER BY e.nombre ASC";
         Query<Especie> query = session.createQuery(hql,  Especie.class);
         return query.getResultList();
     }
@@ -71,7 +72,11 @@ public class EspecieDAOHibernate implements ar.edu.unq.epers.bichomon.backend.da
 
     public List<Especie> populares(){
         Session session = Runner.getCurrentSession();
-        String hql = "select bicho.especie from Bicho bicho where bicho.duenio is not null group by bicho.especie order by count(bicho.especie)";
+        String hql = "SELECT bicho.especie " +
+                     "FROM Bicho bicho " +
+                     "WHERE bicho.duenio IS NOT NULL " +
+                     "GROUP BY bicho.especie " +
+                     "ORDER BY COUNT(bicho.especie)";
         Query<Especie> query = session.createQuery(hql,  Especie.class);
         query.setMaxResults(10);
         return query.getResultList();
@@ -80,7 +85,11 @@ public class EspecieDAOHibernate implements ar.edu.unq.epers.bichomon.backend.da
 
     public List<Especie> impopulares() {
         Session session = Runner.getCurrentSession();
-        String hql = "select bicho.especie from Bicho bicho where bicho.duenio is null group by bicho.especie order by count(bicho.especie)";
+        String hql = "SELECT bicho.especie " +
+                     "FROM Bicho bicho " +
+                     "WHERE bicho.duenio IS NULL " +
+                     "GROUP BY bicho.especie " +
+                     "ORDER BY COUNT(bicho.especie)";
         Query<Especie> query = session.createQuery(hql,  Especie.class);
         query.setMaxResults(10);
         return query.getResultList();

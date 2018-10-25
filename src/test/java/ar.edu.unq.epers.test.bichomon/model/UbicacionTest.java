@@ -100,7 +100,6 @@ public class UbicacionTest {
         ubicacionSUT4.refugiar(nuevoBicho);
 
         //Test(Then)
-        fail("No hubo Excepcion");
     }
 
     @Test(expected = UbicacionIncorrectaException.class)
@@ -111,7 +110,6 @@ public class UbicacionTest {
         ubicacionSUT1.refugiar(nuevoBicho);
 
         //Test(Then)
-        fail("No hubo Excepcion");
     }
 
 }

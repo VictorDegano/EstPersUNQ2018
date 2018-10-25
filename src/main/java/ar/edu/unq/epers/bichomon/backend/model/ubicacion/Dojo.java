@@ -65,38 +65,37 @@ public class Dojo extends Ubicacion
         Registro registroDeLucha = new Registro();
 
         // si hay un campeon comienza un duelo
-        if(campeonActual != null) {
-
+        if(campeonActual != null)
+        {
             int contadorDeTurno = 0;
             int energiaInicialCampeon = campeonActual.getBichoCampeon().getEnergia();
             int energiaInicialRetador = bichoRetador.getEnergia();
             Bicho campeon = this.campeonActual.getBichoCampeon();
 
             //inicia el duelo
-            while (campeon.getEnergia() > 0 && bichoRetador.getEnergia() > 0 && contadorDeTurno != 10) {
-
+            while (campeon.getEnergia() > 0 && bichoRetador.getEnergia() > 0 && contadorDeTurno != 10)
+            {
                 registroDeLucha.agregarComentario(new Turno((bichoRetador.getNombre() + "Ataca"), bichoRetador.atacar(campeon)));
                 registroDeLucha.agregarComentario(new Turno((campeon.getNombre() + "Ataca"), campeon.atacar(bichoRetador)));
                 contadorDeTurno++;
             }
 
             // se corona al nuevo campeon
-            if (campeon.getEnergia() <= 0) {
+            if (campeon.getEnergia() <= 0)
+            {
                 registroDeLucha.setGanador(bichoRetador);
                 this.coronarANuevoCampeon(registroDeLucha.getGanador());
             }
-            else{
-                registroDeLucha.setGanador(campeon);}
+            else
+            {   registroDeLucha.setGanador(campeon);    }
 
             // se restaura la vida de los bichos
             Double randVal= Math.random() * 5;
             campeon.setEnergia(energiaInicialCampeon + randVal.intValue());
             bichoRetador.setEnergia(energiaInicialRetador + randVal.intValue());
-
         }
-
-        // si no hay campeon, es coronado el retador
-        else{
+        else // si no hay campeon, es coronado el retador
+        {
             coronarANuevoCampeon(bichoRetador);
             registroDeLucha.setGanador(bichoRetador);
         }
@@ -107,8 +106,8 @@ public class Dojo extends Ubicacion
     }
 
     @Override
-    public Bicho buscarBicho(Entrenador entrenador) {
-
+    public Bicho buscarBicho(Entrenador entrenador)
+    {
         Bicho premio= new Bicho(campeonActual.getBichoCampeon().getEvolucionBase(),"");
         premio.setEnergia(campeonActual.getBichoCampeon().getEspecie().getEnergiaInicial());
         return premio;

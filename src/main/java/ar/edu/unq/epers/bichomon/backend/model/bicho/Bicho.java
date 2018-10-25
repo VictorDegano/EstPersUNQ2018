@@ -17,7 +17,7 @@ public class Bicho {
 	@Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
     @Transient
-	private String nombre; // TODO: 23/09/2018 en el tp 2 ya no se necesita que tengan nombre, hay que quitarselo
+	private String nombre;
     @ManyToOne(cascade = CascadeType.ALL)
 	private Especie especie;
 	private int energia;
@@ -68,7 +68,8 @@ public class Bicho {
 
     public Bicho() {}
 
-	public Bicho(Especie especie, String nombre) {
+	public Bicho(Especie especie, String nombre)
+	{
 		this.especie = especie;
 		this.nombre = nombre;
 	}
