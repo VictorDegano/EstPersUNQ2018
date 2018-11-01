@@ -14,14 +14,11 @@ public class Guarderia extends Ubicacion
     @OneToMany
     private List<Bicho> bichosAbandonados   = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<RegistroDeAbandono> registroDeBichosAbandonados = new  ArrayList<>();
 
     @Override
     public void refugiar(Bicho bichoAbandonado)
     {
-        RegistroDeAbandono registro = new RegistroDeAbandono(bichoAbandonado.getDuenio(),bichoAbandonado);
-        this.registroDeBichosAbandonados.add(registro);
+        bichoAbandonado.getEntrenadoresAntiguos().add(bichoAbandonado.getDuenio());
         this.bichosAbandonados.add(bichoAbandonado);
         bichoAbandonado.getDuenio().getBichosCapturados().remove(bichoAbandonado);
         bichoAbandonado.setDuenio(null);
@@ -34,37 +31,30 @@ public class Guarderia extends Ubicacion
     public List<Bicho> getBichosAbandonados() { return bichosAbandonados;   }
     public void setBichosAbandonados(List<Bicho> bichosAbandonados) {   this.bichosAbandonados = bichosAbandonados; }
 
-    public List<RegistroDeAbandono> getRegistroDeBichosAbandonados() {
-        return registroDeBichosAbandonados;
-    }
-    public void setRegistroDeBichosAbandonados(List<RegistroDeAbandono> registroDeBichosAbandonados)
-    {   this.registroDeBichosAbandonados = registroDeBichosAbandonados; }
-
     @Override
     public Bicho buscarBicho(Entrenador entrenador)
     {
-        List<RegistroDeAbandono> registroDeAbandonosSinLosMios = sacarSiEsMio(entrenador);
-        if (registroDeAbandonosSinLosMios.isEmpty())
+        List<Bicho> bichosSinLosMios = sacarSiEsMio(entrenador);
+        if (bichosSinLosMios.isEmpty())
         {   return null;    }
         else
         {
-            int bichoElegido            = (int) (Math.random()* registroDeAbandonosSinLosMios.size());
-            RegistroDeAbandono registro = getRegistroDeBichosAbandonados().get(bichoElegido);
-            getBichosAbandonados().remove(registro);
-            bichosAbandonados.remove(registro.getBichomon());
-            return registro.getBichomon();
+            int bichoElegido            = (int) (Math.random()* bichosSinLosMios.size());
+            Bicho bicho = bichosAbandonados.get(bichoElegido);
+            bichosAbandonados.remove(bicho);
+            return bicho;
         }
     }
 
-    private List<RegistroDeAbandono> sacarSiEsMio(Entrenador entrenador)
+    private List<Bicho> sacarSiEsMio(Entrenador entrenador)
     {
-        List<RegistroDeAbandono> registroDeBichos = new ArrayList<RegistroDeAbandono>();
-        for ( RegistroDeAbandono registro: registroDeBichosAbandonados)
+        List<Bicho> bichosSinLosMios = new ArrayList<Bicho>();
+        for ( Bicho bicho: bichosAbandonados)
         {
-            if (registro.getEntrenador().getNombre() != entrenador.getNombre())
-            {   registroDeBichos.add(registro); }
+            if (bicho.getEntrenadoresAntiguos().contains(entrenador))
+            {   bichosSinLosMios.add(bicho); }
         }
-        return registroDeBichos;
+        return bichosSinLosMios;
     }
 
     @Override

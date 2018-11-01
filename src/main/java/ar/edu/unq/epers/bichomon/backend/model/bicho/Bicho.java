@@ -5,6 +5,8 @@ import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Un {@link Bicho} existente en el sistema, el mismo tiene un nombre
@@ -27,6 +29,10 @@ public class Bicho {
 	private int victorias;
     private Timestamp fechaDeCaptura;
     private int poder;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Entrenador> entrenadoresAntiguos = new ArrayList<Entrenador>();
+
+
 
 	public int atacar(Bicho contrincante)
 	{
@@ -72,6 +78,7 @@ public class Bicho {
     public Bicho() {}
 
 	public Bicho(Especie especie, String nombre)
+
 	{
 		this.especie = especie;
 		this.nombre = nombre;
@@ -122,4 +129,6 @@ public class Bicho {
 
     public int getPoder() { return poder;   }
     public void setPoder(int poder) {   this.poder = poder; }
+
+	public List<Entrenador> getEntrenadoresAntiguos() { return entrenadoresAntiguos;   }
 }
