@@ -79,6 +79,12 @@ public class UbicacionDAONeo4jTest  {
         assertFalse(ubicacionDAONEO4J.existeUbicacion("Inimputable"));
     }
 
+    @Test
+    public void ConectarDosCaminos(){
+
+        ubicacionDAONEO4J.conectar(guarderiaSut.getNombre(),dojoConCampeon.getNombre(),"aereo");
+    }
+
 
 
 

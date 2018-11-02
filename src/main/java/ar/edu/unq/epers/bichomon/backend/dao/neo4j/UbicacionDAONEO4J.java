@@ -54,7 +54,31 @@ public class UbicacionDAONEO4J
     }
 
 
+    public void conectar(String ubicacion1 , String ubicacion2 , String tipoCamino){
 
+        Session session = this.driver.session();
+        try{
+            String query = "MATCH (ubicacion1:Ubicacion {nombre:{elNombre1} }) "+
+                           "MATCH (ubicacion2:Ubicacion {nombre:{elNombre2}}) " +
+                           "MERGE (ubicacion1) -[:" + tipoCamino +"] -> (ubicacion2) ";
+
+            session.run(query,Values.parameters(
+                    "elNombre1",ubicacion1,
+                                  "elNombre2",ubicacion2));
+        }
+
+        finally {
+            session.close();
+        }
+
+       /* MATCH (u:Ubicacion{nombre: "Guarderia No te quiere nadie"})
+        MATCH (u2:Ubicacion{nombre:"Dojo"})
+        MATCH (u)-[r]->(u2)
+        return r*/
+
+
+
+    }
 
 
 
