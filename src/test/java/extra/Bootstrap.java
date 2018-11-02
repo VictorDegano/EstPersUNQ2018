@@ -119,6 +119,12 @@ public class Bootstrap
         entrenador6.setUbicacion(dojo);
         dojo.agregarEntrenador(entrenador6);
 
+        entrenador1.setBilletera(50);
+        entrenador2.setBilletera(20);
+        entrenador3.setBilletera(40);
+        entrenador4.setBilletera(10);
+        entrenador5.setBilletera(60);
+        entrenador6.setBilletera(70);
 
         /*----------[CREACION DE ESPECIES]----------*/
         Especie red = new Especie();

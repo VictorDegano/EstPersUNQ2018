@@ -26,7 +26,7 @@ public class Entrenador
     private Ubicacion ubicacion = null;
     @OneToMany(cascade=CascadeType.ALL) @LazyCollection(LazyCollectionOption.FALSE)
     private List<Bicho> bichosCapturados = new ArrayList<>();
-
+    private int billetera;
     /**
      * Mueve al entrenador a una ubicacion
      * @param unaNuevaUbicacion - {@link Ubicacion} la nueva ubicacion a la cual se va a mover
@@ -94,6 +94,9 @@ public class Entrenador
     public List<Bicho> getBichosCapturados() {  return bichosCapturados;    }
     public void setBichosCapturados(List<Bicho> bichosCapturados) { this.bichosCapturados = bichosCapturados;   }
 
+    public int getBilletera() { return billetera; }
+
+    public void setBilletera(int billetera) {this.billetera = billetera;}
 
 /*---------------Duelos-----------------*/
 
