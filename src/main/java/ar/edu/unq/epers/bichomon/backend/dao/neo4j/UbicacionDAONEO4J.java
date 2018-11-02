@@ -4,6 +4,7 @@ import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import org.neo4j.driver.v1.*;
 
+import javax.swing.plaf.nimbus.State;
 import java.util.List;
 
 public class UbicacionDAONEO4J
@@ -30,6 +31,28 @@ public class UbicacionDAONEO4J
         }
     }
 
+
+    public Boolean existeUbicacion(String nombre){
+        Session session = this.driver.session();
+        try{
+            String query = "MATCH (u:Ubicacion{nombre: {elNombre}})" +
+                    "return u";
+
+
+            StatementResult result = session.run(query,Values.parameters("elNombre",nombre));
+
+            if (result.hasNext()){
+                return true;
+            }
+            else{
+                return false;
+            }
+
+        }
+        finally{
+            session.close();
+        }
+    }
 
 
 

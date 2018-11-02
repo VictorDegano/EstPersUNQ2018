@@ -63,9 +63,11 @@ public class UbicacionDAONeo4jTest  {
     public void CrearUbicacion()
     {
         ubicacionDAONEO4J.create(guarderiaSut);
-        System.out.print(guarderiaSut.getClass().getName());
-        assertTrue(true);
+        assertTrue(ubicacionDAONEO4J.existeUbicacion(guarderiaSut.getNombre()));
+        assertFalse(ubicacionDAONEO4J.existeUbicacion("Inimputable"));
     }
+
+
 
 
 }
