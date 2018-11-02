@@ -7,6 +7,7 @@ import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,6 +21,8 @@ public class UbicacionDAONeo4jTest  {
     private Bicho bicho2;
     private Entrenador entrenador2;
     private UbicacionDAONEO4J ubicacionDAONEO4J;
+    private Dojo dojoConCampeon;
+    private Pueblo pueblo;
     @Before
     public void setUp() throws Exception
     {
@@ -41,7 +44,12 @@ public class UbicacionDAONeo4jTest  {
         amarillo.setEnergiaIncial(300);
         amarillo.setUrlFoto("/image/amarillomon.png");
 
-        Dojo dojoConCampeon = new Dojo();
+        dojoConCampeon = new Dojo();
+        dojoConCampeon.setNombre("Dojo");
+
+        pueblo = new Pueblo();
+        pueblo.setNombre("Pueblo");
+
         nuevoBicho          = new Bicho(rojomon, "");
         bicho2 = new Bicho(amarillo,"");
         guarderiaSut   = new Guarderia();
@@ -63,7 +71,11 @@ public class UbicacionDAONeo4jTest  {
     public void CrearUbicacion()
     {
         ubicacionDAONEO4J.create(guarderiaSut);
+        ubicacionDAONEO4J.create(dojoConCampeon);
+        ubicacionDAONEO4J.create(pueblo);
         assertTrue(ubicacionDAONEO4J.existeUbicacion(guarderiaSut.getNombre()));
+        assertTrue(ubicacionDAONEO4J.existeUbicacion(dojoConCampeon.getNombre()));
+        assertTrue(ubicacionDAONEO4J.existeUbicacion(pueblo.getNombre()));
         assertFalse(ubicacionDAONEO4J.existeUbicacion("Inimputable"));
     }
 

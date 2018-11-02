@@ -19,12 +19,11 @@ public class UbicacionDAONEO4J
     public void create(Ubicacion ubicacion) {
         Session session = this.driver.session();
         try {
-            String query = "MERGE (u:Ubicacion {tipo: {elTipo}})" +
+            String query = "MERGE (u:Ubicacion :" + ubicacion.getClass().getSimpleName() + ")" +
                     "SET u.nombre = {elNombre} ";
             session.run(query, Values.parameters(
-                    "elId", ubicacion.getId(),
-                    "elNombre", ubicacion.getNombre(),
-                    "elTipo",ubicacion.getClass().getSimpleName()));
+                    "elNombre", ubicacion.getNombre()));
+
 
         } finally {
             session.close();
