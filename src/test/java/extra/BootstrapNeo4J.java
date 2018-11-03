@@ -24,47 +24,47 @@ public class BootstrapNeo4J
                             "CREATE (u4:Ubicacion :Dojo {name:'Dojo Origen'}) " +
 
                             "CREATE (u1)-[camino:CaminoA]->(u2) " +
-                            "SET camino.tipo = 'Aereo' " +
+                            "SET camino.tipo = 'AEREO' " +
                             "SET camino.costo = 5 " +
 
                             "CREATE (u4)-[camino2:CaminoA]->(u1) " +
-                            "SET camino2.tipo = 'Aereo' " +
+                            "SET camino2.tipo = 'AEREO' " +
                             "SET camino2.costo = 5 " +
 
                             "CREATE (u1)-[camino3:CaminoA]->(u3) " +
-                            "SET camino3.tipo = 'Terrestre' " +
+                            "SET camino3.tipo = 'TERRESTRE' " +
                             "SET camino3.costo = 1 " +
 
                             "CREATE (u3)-[camino4:CaminoA]->(u1) " +
-                            "SET camino4.tipo = 'Terrestre' " +
+                            "SET camino4.tipo = 'TERRESTRE' " +
                             "SET camino4.costo = 1 " +
 
                             "CREATE (u4)-[camino5:CaminoA]->(u3) " +
-                            "SET camino5.tipo = 'Terrestre' " +
+                            "SET camino5.tipo = 'TERRESTRE' " +
                             "SET camino5.costo = 1 " +
 
                             "CREATE (u3)-[camino6:CaminoA]->(u4) " +
-                            "SET camino6.tipo = 'Terrestre' " +
+                            "SET camino6.tipo = 'TERRESTRE' " +
                             "SET camino6.costo = 1 " +
 
                             "CREATE (u2)-[camino7:CaminoA]->(u1) " +
-                            "SET camino7.tipo = 'Terrestre' " +
+                            "SET camino7.tipo = 'TERRESTRE' " +
                             "SET camino7.costo = 1 " +
 
                             "CREATE (u2)-[camino8:CaminoA]->(u4) " +
-                            "SET camino8.tipo = 'Maritimo' " +
+                            "SET camino8.tipo = 'MARITIMO' " +
                             "SET camino8.costo = 2 " +
 
                             "CREATE (u2)-[camino9:CaminoA]->(u3) " +
-                            "SET camino9.tipo = 'Maritimo' " +
+                            "SET camino9.tipo = 'MARITIMO' " +
                             "SET camino9.costo = 2 " +
 
                             "CREATE (u2)-[camino10:CaminoA]->(u4) " +
-                            "SET camino10.tipo = 'Aereo' " +
+                            "SET camino10.tipo = 'AEREO' " +
                             "SET camino10.costo = 5 " +
 
                             "CREATE (u1)-[camino11:CaminoA]->(u2) " +
-                            "SET camino11.tipo = 'Terrestre' " +
+                            "SET camino11.tipo = 'TERRESTRE' " +
                             "SET camino11.costo = 1 ";
 
             session.run(query);

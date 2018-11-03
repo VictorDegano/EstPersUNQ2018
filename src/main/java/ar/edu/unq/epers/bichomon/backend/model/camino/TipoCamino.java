@@ -1,6 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.model.camino;
 
-public enum TipoUbicacion
+public enum TipoCamino
 {
     TERRESTRE,
     MARITIMO,
