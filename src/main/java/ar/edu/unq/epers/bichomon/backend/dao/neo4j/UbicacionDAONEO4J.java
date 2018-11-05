@@ -1,10 +1,15 @@
 package ar.edu.unq.epers.bichomon.backend.dao.neo4j;
 
-import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
+import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionMuyLejanaException;
+import ar.edu.unq.epers.bichomon.backend.model.camino.Camino;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import org.neo4j.driver.v1.*;
+import org.neo4j.driver.v1.types.Path;
+import org.neo4j.driver.v1.types.Path.Segment;
+import org.neo4j.driver.v1.types.Relationship;
 
-import javax.swing.plaf.nimbus.State;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UbicacionDAONEO4J
@@ -80,9 +85,85 @@ public class UbicacionDAONEO4J
 
     }
 
+    public Camino caminoA(String nombreUbicacionOrigen, String nombreUbicacionDestino)
+    {
+        Session session = this.driver.session();
+        try
+        {
+            String query =  "MATCH (u1:Ubicacion {name: {ubicacionOrigen}}) " +
+                            "MATCH (u2:Ubicacion {name: {ubicacionDonde}}) " +
+                            "MATCH path = (u1)-[*1]->(u2) " +
+                            "WITH path, EXTRACT(p in relationships(path) | p.costo) AS costo " +
+                            "RETURN path " +
+                            "ORDER BY costo " +
+                            "LIMIT 1";
+
+            StatementResult result = session.run(query, Values.parameters("ubicacionOrigen", nombreUbicacionOrigen, "ubicacionDonde", nombreUbicacionDestino));
+
+            if (result.hasNext())
+                return result.list(record -> {
+                                        Value ruta          = record.get(0);
+                                        Relationship camino = ruta.asPath().relationships().iterator().next();
+
+                                        String inicio   = ruta.asPath().start().get("name").asString();
+                                        String tipo     = camino.get("tipo").asString();
+                                        int costo       = camino.get("costo").asInt();
+                                        String donde    = ruta.asPath().end().get("name").asString();
+                                        return new Camino(inicio, donde, tipo, costo);
+                                    }).get(0);
+            else
+            {   throw new UbicacionMuyLejanaException(nombreUbicacionDestino);  }
+        }
+        finally
+        {   session.close();    }
+    }
 
 
+    public List<Camino> caminoMasCortoA(String nombreUbicacionOrigen, String nombreUbicacionDestino) {
+        Session session = this.driver.session();
+        try {
+            String query =  "MATCH (u1:Ubicacion {name: {ubicacionOrigen}}) " +
+                            "MATCH (u2:Ubicacion {name: {ubicacionDonde}}) " +
+                            "RETURN shortestPath( (u1)-[*1..]->(u2))";
 
+            StatementResult result = session.run(query, Values.parameters("ubicacionOrigen", nombreUbicacionOrigen, "ubicacionDonde", nombreUbicacionDestino));
+
+            Value resultRecord  = result.single().get(0);
+            if (resultRecord.isNull())
+            {   throw new UbicacionMuyLejanaException(nombreUbicacionDestino);  }
+
+            Path ruta           = resultRecord.asPath();
+            List<Camino> caminos= new ArrayList<>();
+            for (Segment segmento : ruta)
+            {
+                String inicio = segmento.start().get("name").asString();
+                String tipo = segmento.relationship().get("tipo").asString();
+                int costo = segmento.relationship().get("costo").asInt();
+                String donde = segmento.end().get("name").asString();
+                caminos.add(new Camino(inicio, donde, tipo, costo));
+            }
+            return caminos;
+        }
+        finally
+        {   session.close();    }
+    }
+
+
+    public List<String> conectados(String tipoDeCamino, String ubicacion)
+    {
+        Session session = this.driver.session();
+        try {
+            String query =  "MATCH (u1:Ubicacion {name: {ubicacion}}) " +
+                            "MATCH (ubicacion:Ubicacion)-[:CaminoA{tipo:{tipoDeCamino}}]->(u1) " +
+                            "RETURN ubicacion";
+
+            StatementResult result = session.run(query, Values.parameters("tipoDeCamino", tipoDeCamino, "ubicacion", ubicacion));
+
+            return result.list(record -> {  return record.get(0).asNode().get("name").asString();  });
+        }
+        finally
+        {   session.close();    }
+    }
 }
 
 
