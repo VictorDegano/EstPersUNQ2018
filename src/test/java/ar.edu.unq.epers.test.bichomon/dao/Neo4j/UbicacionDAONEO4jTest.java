@@ -16,6 +16,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -115,9 +117,8 @@ public class UbicacionDAONEO4jTest {
     public void SiLePidoElCaminoADojoLavandaDesdePuebloOrigenMeDevuelveUnaExcepcion()
     {
         //Setup (Given)
-        Camino camino;
         //Exercise (When)
-        camino  = this.ubicacionDAONEO4J.caminoA("Pueblo Origen", "Dojo Lavanda");
+        this.ubicacionDAONEO4J.caminoA("Pueblo Origen", "Dojo Lavanda");
         //Test (Then)
     }
 
@@ -130,13 +131,13 @@ public class UbicacionDAONEO4jTest {
         caminos = this.ubicacionDAONEO4J.caminoMasCortoA("Pueblo Origen", "Dojo Lavanda");
         //Test (Then)
         assertEquals(2, caminos.size());
+        assertEquals("Pueblo Origen", caminos.get(0).getDesdeUbicacion());
         assertEquals(TipoCamino.TERRESTRE, caminos.get(0).getTipo());
         assertEquals(1, caminos.get(0).getCosto());
-        assertEquals("Pueblo Origen", caminos.get(0).getDesdeUbicacion());
         assertEquals("Pueblo Lavanda", caminos.get(0).getHastaUbicacion());
-        assertEquals(TipoCamino.TERRESTRE, caminos.get(1).getTipo());
-        assertEquals(1, caminos.get(1).getCosto());
         assertEquals("Pueblo Lavanda", caminos.get(1).getDesdeUbicacion());
+        assertTrue(caminos.get(1).getTipo() == TipoCamino.TERRESTRE || caminos.get(1).getTipo() == TipoCamino.AEREO);
+        assertEquals(1, caminos.get(1).getCosto());
         assertEquals("Dojo Lavanda", caminos.get(1).getHastaUbicacion());
     }
 
@@ -144,19 +145,54 @@ public class UbicacionDAONEO4jTest {
     public void SiLePidoElCaminoMasCortoADojoLavandaDesdeLaGuarderiaMeDaUnaExcepcion()
     {
         //Setup (Given)
-        List<Camino> caminos;
         //Exercise (When)
-        caminos = this.ubicacionDAONEO4J.caminoMasCortoA("La Guarderia", "Dojo Lavanda");
+        this.ubicacionDAONEO4J.caminoMasCortoA("La Guarderia", "Dojo Lavanda");
         //Test (Then)
-//        assertEquals(2, caminos.size());
-//        assertEquals(TipoCamino.TERRESTRE, caminos.get(0).getTipo());
-//        assertEquals(1, caminos.get(0).getCosto());
-//        assertEquals("Pueblo Origen", caminos.get(0).getDesdeUbicacion());
-//        assertEquals("Pueblo Lavanda", caminos.get(0).getHastaUbicacion());
-//        assertEquals(TipoCamino.TERRESTRE, caminos.get(1).getTipo());
-//        assertEquals(1, caminos.get(1).getCosto());
-//        assertEquals("Pueblo Lavanda", caminos.get(1).getDesdeUbicacion());
-//        assertEquals("Dojo Lavanda", caminos.get(1).getHastaUbicacion());
+    }
+
+    @Test
+    public void AlPreguntarLasUbicacionesConectadasPorCaminosTerrestresAPuebloLavandaRespondePuebloOrigenYDojoLavanda()
+    {
+        //Setup (Given)
+        List<String> ubicacionesConectadas;
+        //Exercise (When)
+        ubicacionesConectadas   = this.ubicacionDAONEO4J.conectados(TipoCamino.TERRESTRE.name(), "Pueblo Lavanda");
+        //Test (Then)
+        assertEquals(2, ubicacionesConectadas.size());
+        assertTrue(ubicacionesConectadas.containsAll(Arrays.asList("Dojo Lavanda","Pueblo Origen")));
+    }
+
+    @Test
+    public void AlPreguntarLasUbicacionesConectadasPorCaminosAereosADojoLavandaRespondeDojoOrigen()
+    {
+        //Setup (Given)
+        List<String> ubicacionesConectadas;
+        //Exercise (When)
+        ubicacionesConectadas   = this.ubicacionDAONEO4J.conectados(TipoCamino.AEREO.name(), "Dojo Lavanda");
+        //Test (Then)
+        assertArrayEquals(new String[]{"Pueblo Lavanda"}, ubicacionesConectadas.toArray());
+    }
+
+    @Test
+    public void AlPreguntarLasUbicacionesConectadasPorCaminosMaritimosAPuebloOrigenRespondeDojoLavanda()
+    {
+        //Setup (Given)
+        List<String> ubicacionesConectadas;
+        //Exercise (When)
+        ubicacionesConectadas   = this.ubicacionDAONEO4J.conectados(TipoCamino.MARITIMO.name(), "Pueblo Origen");
+        //Test (Then)
+        assertArrayEquals(new String[]{"Dojo Lavanda"}, ubicacionesConectadas.toArray());
+    }
+
+    @Test
+    public void AlPreguntarLasUbicacionesConectadasPorCaminosTerrestresALaGuarderiaRespondeUnaListaVacia()
+    {
+        //Setup (Given)
+        List<String> ubicacionesConectadas;
+        //Exercise (When)
+        ubicacionesConectadas   = this.ubicacionDAONEO4J.conectados(TipoCamino.TERRESTRE.name(), "La Guarderia");
+        //Test (Then)
+        assertArrayEquals(new String[]{}, ubicacionesConectadas.toArray());
     }
 
 }

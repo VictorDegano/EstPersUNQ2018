@@ -1,5 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.dao.neo4j;
 
+import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionMuyLejanaException;
 import ar.edu.unq.epers.bichomon.backend.model.camino.Camino;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
@@ -142,6 +143,23 @@ public class UbicacionDAONEO4J
                 caminos.add(new Camino(inicio, donde, tipo, costo));
             }
             return caminos;
+        }
+        finally
+        {   session.close();    }
+    }
+
+
+    public List<String> conectados(String tipoDeCamino, String ubicacion)
+    {
+        Session session = this.driver.session();
+        try {
+            String query =  "MATCH (u1:Ubicacion {name: {ubicacion}}) " +
+                            "MATCH (ubicacion:Ubicacion)-[:CaminoA{tipo:{tipoDeCamino}}]->(u1) " +
+                            "RETURN ubicacion";
+
+            StatementResult result = session.run(query, Values.parameters("tipoDeCamino", tipoDeCamino, "ubicacion", ubicacion));
+
+            return result.list(record -> {  return record.get(0).asNode().get("name").asString();  });
         }
         finally
         {   session.close();    }
