@@ -1,6 +1,7 @@
 package ar.edu.unq.epers.test.bichomon.dao.Neo4j;
 
 import ar.edu.unq.epers.bichomon.backend.dao.neo4j.UbicacionDAONEO4J;
+import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionMuyLejanaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.camino.Camino;
 import ar.edu.unq.epers.bichomon.backend.model.camino.TipoCamino;
@@ -14,6 +15,8 @@ import extra.BootstrapNeo4J;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -71,8 +74,6 @@ public class UbicacionDAONEO4jTest {
 
         this.bootstrapNeo4j         = new BootstrapNeo4J();
         this.bootstrapNeo4j.crearDatos();
-
-
     }
 
     @After
@@ -90,14 +91,14 @@ public class UbicacionDAONEO4jTest {
         assertFalse(ubicacionDAONEO4J.existeUbicacion("Inimputable"));
     }
 
-    @Test
+    @Test // TODO: 05/11/2018 FALTA COMPLETAR EL TEST!
     public void ConectarDosCaminos(){
 
         ubicacionDAONEO4J.conectar(guarderiaSut.getNombre(),dojoConCampeon.getNombre(),"aereo");
     }
 
     @Test
-    public void SiLePidoElCaminoADojoOrigenDesdePuebloOrigenMeDevuelveElCaminoMasBaratocaminoA()
+    public void SiLePidoElCaminoADojoOrigenDesdePuebloOrigenMeDevuelveElCaminoMasBarato()
     {
         //Setup (Given)
         Camino camino;
@@ -108,6 +109,54 @@ public class UbicacionDAONEO4jTest {
         assertEquals(TipoCamino.TERRESTRE, camino.getTipo());
         assertEquals(1, camino.getCosto());
         assertEquals("Dojo Origen", camino.getHastaUbicacion());
+    }
+
+    @Test(expected = UbicacionMuyLejanaException.class)
+    public void SiLePidoElCaminoADojoLavandaDesdePuebloOrigenMeDevuelveUnaExcepcion()
+    {
+        //Setup (Given)
+        Camino camino;
+        //Exercise (When)
+        camino  = this.ubicacionDAONEO4J.caminoA("Pueblo Origen", "Dojo Lavanda");
+        //Test (Then)
+    }
+
+    @Test
+    public void SiLePidoElCaminoMasCortoADojoLavandaDesdePuebloOrigenMeDevuelveUnaListaDeDosCaminos()
+    {
+        //Setup (Given)
+        List<Camino> caminos;
+        //Exercise (When)
+        caminos = this.ubicacionDAONEO4J.caminoMasCortoA("Pueblo Origen", "Dojo Lavanda");
+        //Test (Then)
+        assertEquals(2, caminos.size());
+        assertEquals(TipoCamino.TERRESTRE, caminos.get(0).getTipo());
+        assertEquals(1, caminos.get(0).getCosto());
+        assertEquals("Pueblo Origen", caminos.get(0).getDesdeUbicacion());
+        assertEquals("Pueblo Lavanda", caminos.get(0).getHastaUbicacion());
+        assertEquals(TipoCamino.TERRESTRE, caminos.get(1).getTipo());
+        assertEquals(1, caminos.get(1).getCosto());
+        assertEquals("Pueblo Lavanda", caminos.get(1).getDesdeUbicacion());
+        assertEquals("Dojo Lavanda", caminos.get(1).getHastaUbicacion());
+    }
+
+    @Test(expected = UbicacionMuyLejanaException.class)
+    public void SiLePidoElCaminoMasCortoADojoLavandaDesdeLaGuarderiaMeDaUnaExcepcion()
+    {
+        //Setup (Given)
+        List<Camino> caminos;
+        //Exercise (When)
+        caminos = this.ubicacionDAONEO4J.caminoMasCortoA("La Guarderia", "Dojo Lavanda");
+        //Test (Then)
+//        assertEquals(2, caminos.size());
+//        assertEquals(TipoCamino.TERRESTRE, caminos.get(0).getTipo());
+//        assertEquals(1, caminos.get(0).getCosto());
+//        assertEquals("Pueblo Origen", caminos.get(0).getDesdeUbicacion());
+//        assertEquals("Pueblo Lavanda", caminos.get(0).getHastaUbicacion());
+//        assertEquals(TipoCamino.TERRESTRE, caminos.get(1).getTipo());
+//        assertEquals(1, caminos.get(1).getCosto());
+//        assertEquals("Pueblo Lavanda", caminos.get(1).getDesdeUbicacion());
+//        assertEquals("Dojo Lavanda", caminos.get(1).getHastaUbicacion());
     }
 
 }

@@ -22,6 +22,7 @@ public class BootstrapNeo4J
                             "CREATE (u2:Ubicacion :Dojo {name:'Dojo Lavanda'}) " +
                             "CREATE (u3:Ubicacion :Pueblo {name:'Pueblo Origen'}) " +
                             "CREATE (u4:Ubicacion :Dojo {name:'Dojo Origen'}) " +
+                            "CREATE (u5:Ubicacion :Guarderia {name:'La Guarderia'}) " +
 
                             "CREATE (u1)-[camino:CaminoA]->(u2) " +
                             "SET camino.tipo = 'AEREO' " +
@@ -65,7 +66,11 @@ public class BootstrapNeo4J
 
                             "CREATE (u1)-[camino11:CaminoA]->(u2) " +
                             "SET camino11.tipo = 'TERRESTRE' " +
-                            "SET camino11.costo = 1 ";
+                            "SET camino11.costo = 1 " +
+
+                            "CREATE (u3)-[camino12:CaminoA]->(u5) " +
+                            "SET camino12.tipo = 'AEREO' " +
+                            "SET camino12.costo = 5 ";
 
             session.run(query);
         }
