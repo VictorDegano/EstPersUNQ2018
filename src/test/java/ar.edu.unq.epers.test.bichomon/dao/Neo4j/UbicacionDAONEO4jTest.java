@@ -25,11 +25,7 @@ import static org.junit.Assert.*;
 public class UbicacionDAONEO4jTest {
 
     private BootstrapNeo4J bootstrapNeo4j;
-    private Bicho nuevoBicho;
     private Guarderia guarderiaSut;
-    private Entrenador entrenador;
-    private Bicho bicho2;
-    private Entrenador entrenador2;
     private UbicacionDAONEO4J ubicacionDAONEO4J;
     private Dojo dojoConCampeon;
     private Pueblo pueblo;
@@ -38,39 +34,14 @@ public class UbicacionDAONEO4jTest {
     {
         ubicacionDAONEO4J = new UbicacionDAONEO4J();
 
-        Especie rojomon     = new Especie();
-        rojomon.setNombre("Rojomon");
-        rojomon.setTipo(TipoBicho.FUEGO);
-        rojomon.setAltura(180);
-        rojomon.setPeso(75);
-        rojomon.setEnergiaIncial(100);
-        rojomon.setUrlFoto("/image/rojomon.jpg");
-
-        Especie amarillo = new Especie();
-        amarillo.setNombre("Amarillomon");
-        amarillo.setTipo(TipoBicho.ELECTRICIDAD);
-        amarillo.setAltura(170);
-        amarillo.setPeso(69);
-        amarillo.setEnergiaIncial(300);
-        amarillo.setUrlFoto("/image/amarillomon.png");
-
         dojoConCampeon = new Dojo();
         dojoConCampeon.setNombre("Dojo");
 
         pueblo = new Pueblo();
         pueblo.setNombre("Pueblo");
 
-        nuevoBicho          = new Bicho(rojomon, "");
-        bicho2 = new Bicho(amarillo,"");
+
         guarderiaSut   = new Guarderia();
-        entrenador = new Entrenador();
-        entrenador.getBichosCapturados().add(nuevoBicho);
-        entrenador.setNombre("Carlos");
-        entrenador2 = new Entrenador();
-        entrenador2.getBichosCapturados().add(bicho2);
-        entrenador2.setNombre("Pepe");
-        nuevoBicho.setDuenio(entrenador);
-        bicho2.setDuenio(entrenador2);
         guarderiaSut.setId(10);
         guarderiaSut.setNombre("Guarderia No te quiere nadie");
 
@@ -93,10 +64,14 @@ public class UbicacionDAONEO4jTest {
         assertFalse(ubicacionDAONEO4J.existeUbicacion("Inimputable"));
     }
 
-    @Test // TODO: 05/11/2018 FALTA COMPLETAR EL TEST!
+    @Test
     public void ConectarDosCaminos(){
 
+        ubicacionDAONEO4J.create(guarderiaSut);
+        ubicacionDAONEO4J.create(dojoConCampeon);
         ubicacionDAONEO4J.conectar(guarderiaSut.getNombre(),dojoConCampeon.getNombre(),"aereo");
+        assertTrue(ubicacionDAONEO4J.estanConectados(guarderiaSut.getNombre(),dojoConCampeon.getNombre()));
+
     }
 
     @Test
