@@ -125,17 +125,20 @@ public class MapaServiceImplementacion implements MapaService
 
     @Override
     public List<String> conectados(String ubicacion, String tipoCamino) {
-        return null;
+
+        return this.ubicacionDAONEO4J.conectados(ubicacion, tipoCamino);
     }
 
     @Override
     public void crearUbicacion(Ubicacion ubicacion) {
+        this.ubicacionDAO.guardar(ubicacion);
+        this.ubicacionDAONEO4J.create(ubicacion);
 
     }
 
     @Override
     public void conectar(String ubicacion1, String ubicacion2, String tipoCamino) {
-
+        this.ubicacionDAONEO4J.conectar(ubicacion1, ubicacion2, tipoCamino);
     }
 
 }
