@@ -9,6 +9,7 @@ import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -124,21 +125,30 @@ public class MapaServiceImplementacion implements MapaService
     }
 
     @Override
-    public List<String> conectados(String ubicacion, String tipoCamino) {
-
-        return this.ubicacionDAONEO4J.conectados(ubicacion, tipoCamino);
+    public List<Ubicacion> conectados(String ubicacion, String tipoCamino) {
+        return Runner.runInSession(() -> {
+            List<String> nombresDeUbicaciones = this.ubicacionDAONEO4J.conectados(ubicacion, tipoCamino);
+            return  this.ubicacionDAO.recuperarUbicaciones(nombresDeUbicaciones);
+        });
     }
+
 
     @Override
     public void crearUbicacion(Ubicacion ubicacion) {
-        this.ubicacionDAO.guardar(ubicacion);
-        this.ubicacionDAONEO4J.create(ubicacion);
+        Runner.runInSession(() -> {
+            this.ubicacionDAO.guardar(ubicacion);
+            this.ubicacionDAONEO4J.create(ubicacion);
+            return null;
+        });
 
     }
 
     @Override
     public void conectar(String ubicacion1, String ubicacion2, String tipoCamino) {
-        this.ubicacionDAONEO4J.conectar(ubicacion1, ubicacion2, tipoCamino);
+        Runner.runInSession(() -> {
+            this.ubicacionDAONEO4J.conectar(ubicacion1, ubicacion2, tipoCamino);
+            return null;
+        });
     }
 
 }
