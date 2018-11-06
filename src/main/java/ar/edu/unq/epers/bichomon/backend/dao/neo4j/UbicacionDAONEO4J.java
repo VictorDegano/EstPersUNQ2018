@@ -45,12 +45,7 @@ public class UbicacionDAONEO4J
 
             StatementResult result = session.run(query,Values.parameters("elNombre",nombre));
 
-            if (result.hasNext()){
-                return true;
-            }
-            else{
-                return false;
-            }
+            return result.hasNext();
 
         }
         finally{
@@ -76,14 +71,24 @@ public class UbicacionDAONEO4J
             session.close();
         }
 
-       /* MATCH (u:Ubicacion{nombre: "Guarderia No te quiere nadie"})
-        MATCH (u2:Ubicacion{nombre:"Dojo"})
-        MATCH (u)-[r]->(u2)
-        return r*/
-
-
-
     }
+    public Boolean estanConectados(String ubicacion1,String ubicacion2){
+            Session session = this.driver.session();
+            try{
+                String query = "MATCH (u:Ubicacion{nombre:{laUbicacion1}})" +
+                               "MATCH (u2 : Ubicacion{nombre:{laUbicacion2}})"+
+                               "MATCH (u)-[r]->(u2)"+
+                               "return r";
+                StatementResult result =  session.run(query,Values.parameters(
+                        "laUbicacion1",ubicacion1,
+                        "laUbicacion2",ubicacion2));
+               return result.hasNext();
+            }
+            finally {
+                session.close();
+            }
+        }
+
 
     public Camino caminoA(String nombreUbicacionOrigen, String nombreUbicacionDestino)
     {
