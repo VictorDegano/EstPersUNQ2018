@@ -1,6 +1,7 @@
 package ar.edu.unq.epers.test.bichomon.service;
 
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.*;
+import ar.edu.unq.epers.bichomon.backend.dao.neo4j.UbicacionDAONEO4J;
 import ar.edu.unq.epers.bichomon.backend.excepcion.BichoRecuperarException;
 import ar.edu.unq.epers.bichomon.backend.excepcion.EvolucionException;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
@@ -40,6 +41,7 @@ public class BichoServiceImplementacionTest {
     private BichoServiceImplementacion bichoServiceSut;
     private EntrenadorDAOHibernate entrenadorDao;
     private UbicacionDAOHibernate ubicacionDao;
+    private UbicacionDAONEO4J ubicacionDAONEO4J;
     private BichoDAOHibernate bichoDao;
     private EspecieDAOHibernate especieDao;
     private CondicionDeEvolucionDAOHibernate condicionDao;
@@ -54,14 +56,15 @@ public class BichoServiceImplementacionTest {
         bootstraper     = new Bootstrap();
         Runner.runInSession(()-> {  bootstraper.crearDatos();
                                     return null;});
-        entrenadorDao   = new EntrenadorDAOHibernate();
-        ubicacionDao    = new UbicacionDAOHibernate();
-        bichoDao        = new BichoDAOHibernate();
-        especieDao      = new EspecieDAOHibernate();
-        experienciaDao  = new ExperienciaDAOHibernate();
-        bichoServiceSut = new BichoServiceImplementacion(entrenadorDao, ubicacionDao, bichoDao, especieDao, experienciaDao);
-        condicionDao    = new CondicionDeEvolucionDAOHibernate();
-        mapaService     = new MapaServiceImplementacion(entrenadorDao, ubicacionDao);
+        entrenadorDao     = new EntrenadorDAOHibernate();
+        ubicacionDao      = new UbicacionDAOHibernate();
+        ubicacionDAONEO4J = new UbicacionDAONEO4J();
+        bichoDao          = new BichoDAOHibernate();
+        especieDao        = new EspecieDAOHibernate();
+        experienciaDao    = new ExperienciaDAOHibernate();
+        bichoServiceSut   = new BichoServiceImplementacion(entrenadorDao, ubicacionDao, bichoDao, especieDao, experienciaDao);
+        condicionDao      = new CondicionDeEvolucionDAOHibernate();
+        mapaService       = new MapaServiceImplementacion(entrenadorDao, ubicacionDao, ubicacionDAONEO4J);
     }
 
     @After
@@ -91,7 +94,7 @@ public class BichoServiceImplementacionTest {
     public void siSeAbandonaUnBichomonEnUnaGuarderiaElEntrenadorNoTieneMasAlBichomon()
     {
         //Setup(Given)
-        MapaService unMapaService   = new MapaServiceImplementacion(entrenadorDao, ubicacionDao);
+        MapaService unMapaService   = new MapaServiceImplementacion(entrenadorDao, ubicacionDao,ubicacionDAONEO4J);
         unMapaService.mover("Pepe Pepon", "La Guarderia");
         Entrenador pepePepon;
         //Exercise(When)

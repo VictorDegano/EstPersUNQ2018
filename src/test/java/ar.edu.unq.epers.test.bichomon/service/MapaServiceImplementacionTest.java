@@ -5,6 +5,7 @@ import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EntrenadorDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EspecieDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.UbicacionDAOHibernate;
+import ar.edu.unq.epers.bichomon.backend.dao.neo4j.UbicacionDAONEO4J;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
@@ -29,6 +30,7 @@ public class MapaServiceImplementacionTest
     private MapaServiceImplementacion mapaServiceSUT;
     private EntrenadorDAO entrenadorDAO;
     private UbicacionDAO ubicacionDAO;
+    private UbicacionDAONEO4J ubicacionDAONEO4J;
     private Ubicacion unaUbicacion;
     private Ubicacion unaUbicacionNueva;
     private Ubicacion dojoDeshabitado;
@@ -44,7 +46,8 @@ public class MapaServiceImplementacionTest
 
         entrenadorDAO       = new EntrenadorDAOHibernate();
         ubicacionDAO        = new UbicacionDAOHibernate();
-        mapaServiceSUT      = new MapaServiceImplementacion(entrenadorDAO, ubicacionDAO);
+        ubicacionDAONEO4J   = new UbicacionDAONEO4J();
+        mapaServiceSUT      = new MapaServiceImplementacion(entrenadorDAO, ubicacionDAO, ubicacionDAONEO4J);
         pepePrueba          = new Entrenador();
         unaUbicacion        = new Pueblo();
         unaUbicacion.setNombre("El Origen 2");

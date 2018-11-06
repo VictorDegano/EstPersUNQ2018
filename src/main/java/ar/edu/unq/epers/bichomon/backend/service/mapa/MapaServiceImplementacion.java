@@ -1,12 +1,15 @@
 package ar.edu.unq.epers.bichomon.backend.service.mapa;
 
 import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.neo4j.UbicacionDAONEO4J;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
+
+import java.util.List;
 
 /**
  * Clase que implementa los servicios necesarios para la utilizacion de un "mapa".
@@ -15,6 +18,7 @@ public class MapaServiceImplementacion implements MapaService
 {
     private EntrenadorDAO entrenadorDAO;
     private UbicacionDAO ubicacionDAO;
+    private UbicacionDAONEO4J ubicacionDAONEO4J;
 
     /**
      * El entrenador se movera a la ubicacion especificada
@@ -94,11 +98,12 @@ public class MapaServiceImplementacion implements MapaService
         });
     }
 
-/*[--------]Constructors[--------]*/
-    public MapaServiceImplementacion(EntrenadorDAO unEntrenadorDAO, UbicacionDAO unUbicacionDAO)
+    /*[--------]Constructors[--------]*/
+    public MapaServiceImplementacion(EntrenadorDAO unEntrenadorDAO, UbicacionDAO unUbicacionDAO, UbicacionDAONEO4J ubicacionDAONEO4J)
     {
         this.setEntrenadorDAO(unEntrenadorDAO);
         this.setUbicacionDAO(unUbicacionDAO);
+        this.setUbicacionDAONEO4J(ubicacionDAONEO4J);
     }
 
 /*[--------]Getters & Setters[--------]*/
@@ -107,4 +112,30 @@ public class MapaServiceImplementacion implements MapaService
 
     private UbicacionDAO getUbicacionDAO() { return ubicacionDAO;    }
     private void setUbicacionDAO(UbicacionDAO ubicacionDAO) {    this.ubicacionDAO = ubicacionDAO;   }
+
+    private UbicacionDAONEO4J getUbicacionDAONEO4J(){return ubicacionDAONEO4J;}
+    private void setUbicacionDAONEO4J(UbicacionDAONEO4J ubicacionDAONEO4J){this.ubicacionDAONEO4J=ubicacionDAONEO4J;}
+
+/*[--------]Neo4J[--------]*/
+
+    @Override
+    public void moverMasCorto(String entrenador, String ubicacion) {
+
+    }
+
+    @Override
+    public List<String> conectados(String ubicacion, String tipoCamino) {
+        return null;
+    }
+
+    @Override
+    public void crearUbicacion(Ubicacion ubicacion) {
+
+    }
+
+    @Override
+    public void conectar(String ubicacion1, String ubicacion2, String tipoCamino) {
+
+    }
+
 }
