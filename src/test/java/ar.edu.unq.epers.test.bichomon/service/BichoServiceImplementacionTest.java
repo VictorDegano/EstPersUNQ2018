@@ -6,6 +6,7 @@ import ar.edu.unq.epers.bichomon.backend.excepcion.BichoRecuperarException;
 import ar.edu.unq.epers.bichomon.backend.excepcion.EvolucionException;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.camino.TipoCamino;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Nivel;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
@@ -20,6 +21,7 @@ import ar.edu.unq.epers.bichomon.backend.service.mapa.MapaService;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.MapaServiceImplementacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 import extra.Bootstrap;
+import extra.BootstrapNeo4J;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -37,6 +39,7 @@ import static org.junit.Assert.*;
 public class BichoServiceImplementacionTest {
 
     private Bootstrap bootstraper;
+    private BootstrapNeo4J bootstraperNeo4j;
     private MapaService mapaService;
     private BichoServiceImplementacion bichoServiceSut;
     private EntrenadorDAOHibernate entrenadorDao;
@@ -53,12 +56,19 @@ public class BichoServiceImplementacionTest {
     @Before
     public void setUp() throws Exception
     {
-        bootstraper     = new Bootstrap();
+        bootstraper       = new Bootstrap();
+        bootstraperNeo4j  = new BootstrapNeo4J();
+        ubicacionDAONEO4J = new UbicacionDAONEO4J();
+        ubicacionDao      = new UbicacionDAOHibernate();
         Runner.runInSession(()-> {  bootstraper.crearDatos();
+                                    ubicacionDAONEO4J.create(ubicacionDao.recuperar("El Origen"));
+                                    ubicacionDAONEO4J.create(ubicacionDao.recuperar("Dojo Desert"));
+                                    ubicacionDAONEO4J.create(ubicacionDao.recuperar("La Guarderia"));
+                                    ubicacionDAONEO4J.conectar("El Origen", "La Guarderia", TipoCamino.TERRESTRE);
+                                    ubicacionDAONEO4J.conectar("El Origen", "Dojo Desert", TipoCamino.TERRESTRE);
                                     return null;});
         entrenadorDao     = new EntrenadorDAOHibernate();
-        ubicacionDao      = new UbicacionDAOHibernate();
-        ubicacionDAONEO4J = new UbicacionDAONEO4J();
+
         bichoDao          = new BichoDAOHibernate();
         especieDao        = new EspecieDAOHibernate();
         experienciaDao    = new ExperienciaDAOHibernate();
@@ -69,9 +79,8 @@ public class BichoServiceImplementacionTest {
 
     @After
     public void tearDown() throws Exception
-    {
-        Runner.runInSession(()-> {  bootstraper.limpiarTabla();
-                                    return null;});
+    {bootstraper.limpiarTabla();
+                                    bootstraperNeo4j.limpiarTabla();
     }
 
     @Test

@@ -10,6 +10,7 @@ import ar.edu.unq.epers.bichomon.backend.excepcion.CaminoMuyCostoso;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionMuyLejanaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon;
+import ar.edu.unq.epers.bichomon.backend.model.camino.TipoCamino;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
@@ -26,7 +27,6 @@ import org.junit.Test;
 import javax.persistence.NoResultException;
 import java.sql.Timestamp;
 
-import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
 public class MapaServiceImplementacionTest
@@ -54,7 +54,7 @@ public class MapaServiceImplementacionTest
 
         entrenadorDAO       = new EntrenadorDAOHibernate();
         ubicacionDAO        = new UbicacionDAOHibernate();
-        ubicacionDAONEO4J   = spy(new UbicacionDAONEO4J());
+        ubicacionDAONEO4J   = new UbicacionDAONEO4J();
         mapaServiceSUT      = new MapaServiceImplementacion(entrenadorDAO, ubicacionDAO, ubicacionDAONEO4J);
         pepePrueba          = new Entrenador();
         unaUbicacion        = new Pueblo();
@@ -66,6 +66,7 @@ public class MapaServiceImplementacionTest
 
         pepePrueba.setNombre("Pepe DePrueba");
         pepePrueba.setUbicacion(unaUbicacion);
+        pepePrueba.setBilletera(5);
         unaUbicacion.agregarEntrenador(pepePrueba);
 
         Ubicacion puebloOrigen  = Runner.runInSession(()-> {    return ubicacionDAO.recuperar("Pueblo Origen"); });
@@ -83,7 +84,7 @@ public class MapaServiceImplementacionTest
                                     ubicacionDAO.guardar(puebloOrigen);
                                     this.ubicacionDAONEO4J.create(unaUbicacion);
                                     this.ubicacionDAONEO4J.create(dojoDeshabitado);
-                                    this.ubicacionDAONEO4J.conectar("El Origen 2", "Dojo Deshabitado", "TERRESTRE");
+                                    this.ubicacionDAONEO4J.conectar("El Origen 2", "Dojo Deshabitado", TipoCamino.TERRESTRE);
                                     return null; });
 
 
@@ -103,8 +104,8 @@ public class MapaServiceImplementacionTest
         Ubicacion ubicacionViejaBD;
         Entrenador entrenador;
         //Exercise(When)
-        mapaServiceSUT.mover("Pepe DePrueba", "Volcano");
-        ubicacionNuevaBD= Runner.runInSession(() -> { return ubicacionDAO.recuperar("Volcano");});
+        mapaServiceSUT.mover("Pepe DePrueba", "Dojo Deshabitado");
+        ubicacionNuevaBD= Runner.runInSession(() -> { return ubicacionDAO.recuperar("Dojo Deshabitado");});
         ubicacionViejaBD= Runner.runInSession(() -> { return ubicacionDAO.recuperar("El Origen 2");});
         entrenador      = Runner.runInSession(() -> { return entrenadorDAO.recuperar("Pepe DePrueba");});
 
@@ -112,26 +113,26 @@ public class MapaServiceImplementacionTest
         assertFalse(ubicacionNuevaBD.getEntrenadores().isEmpty());
         assertEquals(1, ubicacionNuevaBD.getEntrenadores().size());
         assertTrue(ubicacionViejaBD.getEntrenadores().isEmpty());
-        assertEquals("Volcano", entrenador.getUbicacion().getNombre() );
+        assertEquals("Dojo Deshabitado", entrenador.getUbicacion().getNombre() );
+        assertEquals(4, entrenador.getBilletera());
     }
 
     @Test
     public void siElMapaServiceMueveUnEntrenadorAUnDojoSeActualizanSusDatos()
     {
         //Setup(Given)
-
         Ubicacion dojoBD;
         Ubicacion ubicacionViejaBD;
         Entrenador entrenador;
         //Exercise(When)
         mapaServiceSUT.mover("Pepe DePrueba", "Dojo Deshabitado");
-        dojoBD= Runner.runInSession(() -> { return ubicacionDAO.recuperar("Dojo Deshabitado");});
+        dojoBD          = Runner.runInSession(() -> { return ubicacionDAO.recuperar("Dojo Deshabitado");});
         ubicacionViejaBD= Runner.runInSession(() -> { return ubicacionDAO.recuperar("El Origen 2");});
         entrenador      = Runner.runInSession(() -> { return entrenadorDAO.recuperar("Pepe DePrueba");});
 
         //Test(Then)
         assertFalse(dojoBD.getEntrenadores().isEmpty());
-        assertEquals(2, dojoBD.getEntrenadores().size());
+        assertEquals(1, dojoBD.getEntrenadores().size());
         assertTrue(ubicacionViejaBD.getEntrenadores().isEmpty());
         assertEquals("Dojo Deshabitado", entrenador.getUbicacion().getNombre() );
     }

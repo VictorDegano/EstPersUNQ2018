@@ -7,6 +7,7 @@ import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
 import ar.edu.unq.epers.bichomon.backend.model.camino.Camino;
+import ar.edu.unq.epers.bichomon.backend.model.camino.TipoCamino;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
@@ -146,8 +147,7 @@ public class MapaServiceImplementacion implements MapaService
     }
 
     @Override
-    public void conectar(String ubicacion1, String ubicacion2, String tipoCamino) {
-        this.ubicacionDAONEO4J.conectar(ubicacion1, ubicacion2, tipoCamino);
-    }
+    public void conectar(String ubicacion1, String ubicacion2, String tipoCamino)
+    {   this.ubicacionDAONEO4J.conectar(ubicacion1, ubicacion2, TipoCamino.valueOf(tipoCamino));    }
 
 }

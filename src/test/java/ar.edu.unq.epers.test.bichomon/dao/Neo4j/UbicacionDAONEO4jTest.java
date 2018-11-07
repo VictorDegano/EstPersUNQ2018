@@ -69,7 +69,7 @@ public class UbicacionDAONEO4jTest {
 
         ubicacionDAONEO4J.create(guarderiaSut);
         ubicacionDAONEO4J.create(dojoConCampeon);
-        ubicacionDAONEO4J.conectar(guarderiaSut.getNombre(),dojoConCampeon.getNombre(),"aereo");
+        ubicacionDAONEO4J.conectar(guarderiaSut.getNombre(),dojoConCampeon.getNombre(),TipoCamino.AEREO);
         assertTrue(ubicacionDAONEO4J.estanConectados(guarderiaSut.getNombre(),dojoConCampeon.getNombre()));
 
     }
