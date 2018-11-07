@@ -69,7 +69,7 @@ public class UbicacionDAONEO4jTest {
 
         ubicacionDAONEO4J.create(guarderiaSut);
         ubicacionDAONEO4J.create(dojoConCampeon);
-        ubicacionDAONEO4J.conectar(guarderiaSut.getNombre(),dojoConCampeon.getNombre(),"aereo");
+        ubicacionDAONEO4J.conectar(guarderiaSut.getNombre(),dojoConCampeon.getNombre(),TipoCamino.AEREO);
         assertTrue(ubicacionDAONEO4J.estanConectados(guarderiaSut.getNombre(),dojoConCampeon.getNombre()));
 
     }
@@ -112,7 +112,7 @@ public class UbicacionDAONEO4jTest {
         assertEquals("Pueblo Lavanda", caminos.get(0).getHastaUbicacion());
         assertEquals("Pueblo Lavanda", caminos.get(1).getDesdeUbicacion());
         assertTrue(caminos.get(1).getTipo() == TipoCamino.TERRESTRE || caminos.get(1).getTipo() == TipoCamino.AEREO);
-        assertEquals(1, caminos.get(1).getCosto());
+        assertTrue(caminos.get(1).getCosto() == 1 || caminos.get(1).getCosto() == 5);
         assertEquals("Dojo Lavanda", caminos.get(1).getHastaUbicacion());
     }
 
