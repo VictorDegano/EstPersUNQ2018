@@ -1,6 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.model.entrenador;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.camino.Camino;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Registro;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import org.hibernate.annotations.Fetch;
@@ -101,6 +102,12 @@ public class Entrenador
 /*---------------Duelos-----------------*/
 
     public Registro retar(Bicho bichoDeCombate) {   return  this.ubicacion.duelo(bichoDeCombate); }
+
+    public boolean puedeCostearViaje(int montoACostear)
+    {   return this.getBilletera() > montoACostear; }
+
+    public void sacarDeBilletera(int monedasAGastar)
+    {   this.setBilletera(this.getBilletera() - monedasAGastar);    }
 }
 
 

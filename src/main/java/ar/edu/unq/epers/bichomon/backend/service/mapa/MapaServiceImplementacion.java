@@ -2,9 +2,11 @@ package ar.edu.unq.epers.bichomon.backend.service.mapa;
 
 import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.neo4j.UbicacionDAONEO4J;
+import ar.edu.unq.epers.bichomon.backend.excepcion.CaminoMuyCostoso;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
+import ar.edu.unq.epers.bichomon.backend.model.camino.Camino;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
@@ -31,15 +33,22 @@ public class MapaServiceImplementacion implements MapaService
     {
         Runner.runInSession(() -> {
                 Entrenador entrenadorAMoverse   = this.getEntrenadorDAO().recuperar(entrenador);
-                Ubicacion ubicacionAMoverse     = this.getUbicacionDAO().recuperar(ubicacion);
+                Ubicacion ubicacionAMoverse = this.getUbicacionDAO().recuperar(ubicacion);
+                Ubicacion ubicacionVieja = entrenadorAMoverse.getUbicacion();
 
-                Ubicacion ubicacionVieja    = entrenadorAMoverse.getUbicacion();
+                Camino caminoATransitar         = this.getUbicacionDAONEO4J().caminoA(entrenadorAMoverse.getUbicacion().getNombre(),ubicacion);
 
-                entrenadorAMoverse.moverse(ubicacionAMoverse);
+                if (entrenadorAMoverse.puedeCostearViaje(caminoATransitar.getCosto()))
+                {
+                    entrenadorAMoverse.moverse(ubicacionAMoverse);
+                    entrenadorAMoverse.sacarDeBilletera(caminoATransitar.getCosto());
 
-                this.getEntrenadorDAO().actualizar(entrenadorAMoverse);
-                this.getUbicacionDAO().actualizar(ubicacionVieja);
-                this.getUbicacionDAO().actualizar(ubicacionAMoverse);
+                    this.getEntrenadorDAO().actualizar(entrenadorAMoverse);
+                    this.getUbicacionDAO().actualizar(ubicacionVieja);
+                    this.getUbicacionDAO().actualizar(ubicacionAMoverse);
+                }
+                else
+                {   throw new CaminoMuyCostoso(ubicacion);   }
 
                 return null;
               });

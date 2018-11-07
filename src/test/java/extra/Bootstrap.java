@@ -63,12 +63,23 @@ public class Bootstrap
         Ubicacion dojoDesert    = new Dojo();
         dojoDesert.setNombre("Dojo Desert");
 
-        Ubicacion dojo   = new Dojo();
+        Ubicacion dojo          = new Dojo();
         dojo.setNombre("Dojo");
 
         Ubicacion laGuarderia   = new Guarderia();
         laGuarderia.setNombre("La Guarderia");
 
+        Ubicacion puebloOrigen  = new Pueblo();
+        puebloOrigen.setNombre("Pueblo Origen");
+
+        Ubicacion dojoOrigen    = new Dojo();
+        dojoOrigen.setNombre("Dojo Origen");
+
+        Ubicacion puebloLavanda = new Pueblo();
+        puebloLavanda.setNombre("Pueblo Lavanda");
+
+        Ubicacion dojoLavanda   = new Dojo();
+        dojoLavanda.setNombre("Dojo Lavanda");
 
         /*----------[CREACION DE ENTRENADORES]----------*/
         Entrenador entrenador1  = new Entrenador();
@@ -421,6 +432,10 @@ public class Bootstrap
         session.save(puebloDesert);
         session.save(dojoDesert);
         session.save(laGuarderia);
+        session.save(puebloOrigen);
+        session.save(dojoOrigen);
+        session.save(puebloLavanda);
+        session.save(dojoLavanda);
 
         session.save(entrenador1);
         session.save(entrenador2);
