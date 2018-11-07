@@ -37,7 +37,7 @@ public interface MapaService
 
     void moverMasCorto(String entrenador, String ubicacion);
 
-    List<String> conectados(String ubicacion, String tipoCamino);
+    List<Ubicacion> conectados(String ubicacion, String tipoCamino);
 
     void crearUbicacion(Ubicacion ubicacion);
 

@@ -7,6 +7,7 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,6 +47,11 @@ public class UbicacionDAOMock implements UbicacionDAO
 
     @Override
     public Bicho recuperarCampeonHistoricoDe(String dojo) {
+        return null;
+    }
+
+    @Override
+    public List<Ubicacion> recuperarUbicaciones(List<String> nombresDeUbicaciones) {
         return null;
     }
 }

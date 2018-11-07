@@ -8,10 +8,13 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+
+import java.util.ArrayList;
 import java.util.Date;
 import javax.persistence.PersistenceException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class UbicacionDAOHibernate implements UbicacionDAO
 {
@@ -68,6 +71,15 @@ public class UbicacionDAOHibernate implements UbicacionDAO
         query.setParameter("unNombre", dojo);
         query.setMaxResults(1);
         return query.getSingleResult();
+    }
+
+    @Override
+    public List<Ubicacion> recuperarUbicaciones(List<String> nombresDeUbicaciones) {
+        List<Ubicacion> ubicaciones = new ArrayList<Ubicacion>();
+        for(String nombreUbicacion: nombresDeUbicaciones){
+            ubicaciones.add(this.recuperar(nombreUbicacion));
+        }
+        return ubicaciones;
     }
 
 }
