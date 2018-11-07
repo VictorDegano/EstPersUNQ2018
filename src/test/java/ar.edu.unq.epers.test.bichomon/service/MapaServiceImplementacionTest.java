@@ -330,5 +330,29 @@ public class MapaServiceImplementacionTest
         //Test (Then)
     }
 
+    @Test
+    public void PuedoMoverUnEntrenadorMasDeUnaUbicacionConMoverMasCorto()
+    {
+
+        Runner.runInSession(() -> { Entrenador pepe = entrenadorDAO.recuperar("Pepe Empepado");
+                                    pepe.setBilletera(10);
+                                    entrenadorDAO.guardar(pepe);
+                                    return null;});
+
+        this.mapaServiceSUT.moverMasCorto("Pepe Empepado","Dojo Lavanda");
+
+        Entrenador entrenador = Runner.runInSession(() -> { return this.entrenadorDAO.recuperar("Pepe Empepado");});
+
+
+        assertEquals(entrenador.getUbicacion().getNombre(), "Dojo Lavanda");
+        assertTrue(entrenador.getBilletera() == 4 || entrenador.getBilletera() == 8);
+    }
+
+    @Test(expected = CaminoMuyCostoso.class)
+    public void NoPuedoMoverUnEntrenadorMasDeUnaUbicacionConMoverMasCortoSiElCostoDeTodosLosViajesSuperanLaBilleteraDelEntrenador()
+    {
+        this.mapaServiceSUT.moverMasCorto("Pepe Empepado","Dojo Lavanda");
+    }
+
 
 }

@@ -170,4 +170,5 @@ public class UbicacionDAONEO4jTest {
         assertArrayEquals(new String[]{}, ubicacionesConectadas.toArray());
     }
 
+
 }

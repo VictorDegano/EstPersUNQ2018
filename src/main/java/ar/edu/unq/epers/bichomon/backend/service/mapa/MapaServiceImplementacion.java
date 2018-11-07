@@ -131,7 +131,26 @@ public class MapaServiceImplementacion implements MapaService
 
     @Override
     public void moverMasCorto(String entrenador, String ubicacion) {
+        Runner.runInSession(() -> {
+            Entrenador    entrenadorRecuperado  = this.entrenadorDAO.recuperar(entrenador);
+            Ubicacion     ubicacionActual       = entrenadorRecuperado.getUbicacion();
+            Ubicacion     ubicacionDestino      = this.ubicacionDAO.recuperar(ubicacion);
+            List<Camino>  caminos               = this.ubicacionDAONEO4J.caminoMasCortoA(ubicacionActual.getNombre(), ubicacion);
+            int costo                           = caminos.stream().mapToInt(camino -> camino.getCosto()).sum();
+            if (entrenadorRecuperado.puedeCostearViaje(costo))
+            {
+                entrenadorRecuperado.moverse(ubicacionDestino);
+                entrenadorRecuperado.sacarDeBilletera(costo);
 
+                this.getEntrenadorDAO().actualizar(entrenadorRecuperado);
+                this.getUbicacionDAO().actualizar(ubicacionActual);
+                this.getUbicacionDAO().actualizar(ubicacionDestino);
+            }
+            else
+            {   throw new CaminoMuyCostoso(ubicacion);   }
+
+            return null;
+        });
     }
 
     @Override
