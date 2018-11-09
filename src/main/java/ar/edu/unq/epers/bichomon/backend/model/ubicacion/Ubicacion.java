@@ -1,5 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
+import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionCampeonException;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon;
@@ -35,10 +36,7 @@ public abstract class Ubicacion
      * @param unEntrenador - {@link Entrenador} el entrenador que se retira de la ubicacion.
      */
     public void quitarEntrenador(Entrenador unEntrenador)
-    {
-        this.getEntrenadores().remove(unEntrenador);    //No es necesario advertir de una excepcion por que el remove(Object)
-                                                        // si no tiene al elemento no hace nada
-    }
+    {   this.getEntrenadores().remove(unEntrenador);    }
 
     /**
      * Retorna la Cantidad de Entrenadores que se encuentran en su ubicacion.
@@ -52,7 +50,7 @@ public abstract class Ubicacion
      * @return El {@link Bicho} campeon del dojo
      */
     public Bicho campeonActual()
-    { return null;    }
+    { throw new UbicacionCampeonException(); }
 
     /**
      * Abandona el bicho especificado del entrenador en su ubicacion actual.
@@ -61,6 +59,26 @@ public abstract class Ubicacion
      */
     public void refugiar(Bicho bicho)
     { throw new UbicacionIncorrectaException(this.getNombre(), "No se puede refugiar un bichomon en esta Ubicacion");  }
+
+    public Registro duelo(Bicho bichoDeCombate)
+    { throw new UbicacionIncorrectaException(this.getNombre(), "No se puede pelear en esta Ubicacion");  }
+
+    public Boolean soyGuarderia(){
+        return false;
+    }
+
+    public Bicho buscar(Entrenador entrenador)
+    {
+        Bicho premio = null;
+        if (busquedaEsExitosa(entrenador))
+        {   premio  = this.buscarBicho(entrenador); }
+        return premio;
+    }
+
+    boolean busquedaEsExitosa(Entrenador entrenador)
+    {   return entrenador.getNivel().getNroDeNivel()* (Math.random()*1) >0.5;   }
+
+    protected abstract Bicho buscarBicho(Entrenador entrenador);
 
 /*[--------]Constructors[--------]*/
     public Ubicacion() {    }
@@ -76,22 +94,4 @@ public abstract class Ubicacion
 
     public int getId() {    return id;  }
     public void setId(int id) { this.id = id;   }
-/*------------------Duelos---------------*/
-    public Registro duelo(Bicho bichoDeCombate)
-    { throw new UbicacionIncorrectaException(this.getNombre(), "No se puede pelear en esta Ubicacion");  }
-
-    public Boolean soyGuarderia(){
-        return false;
-    }
-    public Bicho buscar(Entrenador entrenador){
-        Bicho premio = null;
-        if (entrenador.getNivel().getNroDeNivel()* (Math.random()*1) >0.5)
-        {
-            premio  = this.buscarBicho(entrenador);
-        }
-        return premio;
-    }
-
-    protected abstract Bicho buscarBicho(Entrenador entrenador);
-
 }

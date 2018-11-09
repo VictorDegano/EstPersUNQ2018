@@ -1,6 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.model.entrenador;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.camino.Camino;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Registro;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import org.hibernate.annotations.Fetch;
@@ -26,7 +27,7 @@ public class Entrenador
     private Ubicacion ubicacion = null;
     @OneToMany(cascade=CascadeType.ALL) @LazyCollection(LazyCollectionOption.FALSE)
     private List<Bicho> bichosCapturados = new ArrayList<>();
-
+    private int billetera;
     /**
      * Mueve al entrenador a una ubicacion
      * @param unaNuevaUbicacion - {@link Ubicacion} la nueva ubicacion a la cual se va a mover
@@ -45,9 +46,8 @@ public class Entrenador
      */
     public void abandonarBicho(Bicho bichoAAbandonar)
     {
-        if(this.bichosCapturados.contains(bichoAAbandonar)){
-            this.getUbicacion().refugiar(bichoAAbandonar);
-        }
+        if(this.bichosCapturados.contains(bichoAAbandonar))
+        {   this.getUbicacion().refugiar(bichoAAbandonar);  }
     }
 
     /**
@@ -63,16 +63,16 @@ public class Entrenador
 
     public Bicho buscarBicho(){
        Bicho bicho = getUbicacion().buscar(this);
-       if (bicho != null){
+       if (bicho != null)
+       {
            getBichosCapturados().add(bicho);
            bicho.setDuenio(this);
            return bicho;
        }
-       else{
-           return null;
-       }
-
+       else
+       {    return null;    }
     }
+
 /*[--------]Constructors[--------]*/
     public Entrenador() {   }
 
@@ -95,10 +95,19 @@ public class Entrenador
     public List<Bicho> getBichosCapturados() {  return bichosCapturados;    }
     public void setBichosCapturados(List<Bicho> bichosCapturados) { this.bichosCapturados = bichosCapturados;   }
 
+    public int getBilletera() { return billetera; }
+
+    public void setBilletera(int billetera) {this.billetera = billetera;}
 
 /*---------------Duelos-----------------*/
 
     public Registro retar(Bicho bichoDeCombate) {   return  this.ubicacion.duelo(bichoDeCombate); }
+
+    public boolean puedeCostearViaje(int montoACostear)
+    {   return this.getBilletera() > montoACostear; }
+
+    public void sacarDeBilletera(int monedasAGastar)
+    {   this.setBilletera(this.getBilletera() - monedasAGastar);    }
 }
 
 

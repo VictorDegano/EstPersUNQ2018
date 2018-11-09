@@ -32,6 +32,13 @@
 			<version>5.2.2.Final</version>
 		</dependency>
 
+		<!--Neo4j-->
+		<dependency>
+			<groupId>org.neo4j.driver</groupId>
+			<artifactId>neo4j-java-driver</artifactId>
+			<version>1.4.4</version>
+		</dependency>
+
         <!-- Conectores-->
         <dependency>
             <groupId>mysql</groupId>

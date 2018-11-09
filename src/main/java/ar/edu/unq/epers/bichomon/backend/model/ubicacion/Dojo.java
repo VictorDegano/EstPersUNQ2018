@@ -29,24 +29,7 @@ public class Dojo extends Ubicacion
         return this.campeonActual.getBichoCampeon();
     }
 
-/*[--------]Constructors[--------]*/
-    public Dojo() {}
-
-/*[--------]Getters & Setters[--------]*/
-    public Campeon getCampeonActual() { return campeonActual;   }
-    public void setCampeonActual(Campeon campeonActual) {   this.campeonActual = campeonActual; }
-
-    public List<Registro> getHistorial() {
-       return this.historial;
-    }
-
-    private void agregarAHistorialDeCampeones(Campeon campeon) {    this.getHistorialDeCampeones().add(campeon); }
-    public void setHistorial(List<Registro> historial) {    this.historial = historial; }
-
-    public List<Campeon> getHistorialDeCampeones() {    return this.campeonesHistoricos;    }
-    public void setHistorialDeCampeones(List<Campeon> historialDeCampeones) {   this.campeonesHistoricos = historialDeCampeones;    }
-
-/*------------Duelos--------------*/
+    /*------------Duelos--------------*/
 
     private void coronarANuevoCampeon(Bicho ganador) {
         Campeon nuevoCampeon = new Campeon();
@@ -65,38 +48,37 @@ public class Dojo extends Ubicacion
         Registro registroDeLucha = new Registro();
 
         // si hay un campeon comienza un duelo
-        if(campeonActual != null) {
-
+        if(campeonActual != null)
+        {
             int contadorDeTurno = 0;
             int energiaInicialCampeon = campeonActual.getBichoCampeon().getEnergia();
             int energiaInicialRetador = bichoRetador.getEnergia();
             Bicho campeon = this.campeonActual.getBichoCampeon();
 
             //inicia el duelo
-            while (campeon.getEnergia() > 0 && bichoRetador.getEnergia() > 0 && contadorDeTurno != 10) {
-
+            while (campeon.getEnergia() > 0 && bichoRetador.getEnergia() > 0 && contadorDeTurno != 10)
+            {
                 registroDeLucha.agregarComentario(new Turno((bichoRetador.getNombre() + "Ataca"), bichoRetador.atacar(campeon)));
                 registroDeLucha.agregarComentario(new Turno((campeon.getNombre() + "Ataca"), campeon.atacar(bichoRetador)));
                 contadorDeTurno++;
             }
 
             // se corona al nuevo campeon
-            if (campeon.getEnergia() <= 0) {
+            if (campeon.getEnergia() <= 0)
+            {
                 registroDeLucha.setGanador(bichoRetador);
                 this.coronarANuevoCampeon(registroDeLucha.getGanador());
             }
-            else{
-                registroDeLucha.setGanador(campeon);}
+            else
+            {   registroDeLucha.setGanador(campeon);    }
 
             // se restaura la vida de los bichos
             Double randVal= Math.random() * 5;
             campeon.setEnergia(energiaInicialCampeon + randVal.intValue());
             bichoRetador.setEnergia(energiaInicialRetador + randVal.intValue());
-
         }
-
-        // si no hay campeon, es coronado el retador
-        else{
+        else // si no hay campeon, es coronado el retador
+        {
             coronarANuevoCampeon(bichoRetador);
             registroDeLucha.setGanador(bichoRetador);
         }
@@ -107,12 +89,32 @@ public class Dojo extends Ubicacion
     }
 
     @Override
-    public Bicho buscarBicho(Entrenador entrenador) {
+    boolean busquedaEsExitosa(Entrenador entrenador)
+    {   return (this.getCampeonActual() != null) && super.busquedaEsExitosa(entrenador);   }
 
-        Bicho premio= new Bicho(campeonActual.getBichoCampeon().getEvolucionBase(),"");
+    @Override
+    public Bicho buscarBicho(Entrenador entrenador)
+    {
+        Bicho premio  = campeonActual.getBichoCampeon().getEvolucionBase().crearBicho();
         premio.setEnergia(campeonActual.getBichoCampeon().getEspecie().getEnergiaInicial());
         return premio;
     }
 
+    /*[--------]Constructors[--------]*/
+    public Dojo() {}
+
+    /*[--------]Getters & Setters[--------]*/
+    public Campeon getCampeonActual() { return campeonActual;   }
+    public void setCampeonActual(Campeon campeonActual) {   this.campeonActual = campeonActual; }
+
+    public List<Registro> getHistorial() {
+        return this.historial;
+    }
+
+    private void agregarAHistorialDeCampeones(Campeon campeon) {    this.getHistorialDeCampeones().add(campeon); }
+    public void setHistorial(List<Registro> historial) {    this.historial = historial; }
+
+    public List<Campeon> getHistorialDeCampeones() {    return this.campeonesHistoricos;    }
+    public void setHistorialDeCampeones(List<Campeon> historialDeCampeones) {   this.campeonesHistoricos = historialDeCampeones;    }
 
 }

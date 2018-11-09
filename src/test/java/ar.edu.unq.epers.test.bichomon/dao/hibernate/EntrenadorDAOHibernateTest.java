@@ -48,7 +48,6 @@ public class EntrenadorDAOHibernateTest {
             return entrenadorDAOSut.recuperar("El Irrecuperable");
         });
         //Test(Then)
-        fail("No hubo Excepcion");
     }
 
     @Test
@@ -80,7 +79,6 @@ public class EntrenadorDAOHibernateTest {
             return null;
         });
         //Test(Then)
-        fail("No hubo Excepcion");
     }
 
     @Test
@@ -116,7 +114,6 @@ public class EntrenadorDAOHibernateTest {
             return null;
         });
         //Test(Then)
-        fail("No hubo Excepcion");
     }
 
     @Test
@@ -147,7 +144,6 @@ public class EntrenadorDAOHibernateTest {
         Runner.runInSession(() -> {entrenadorDAOSut.actualizar(entrenadorAActualizar);
                                    return entrenadorDAOSut.recuperar("Pepe"); });
         //Test(Then)
-        fail("No Hubo Excepcion");
     }
 
     @Test

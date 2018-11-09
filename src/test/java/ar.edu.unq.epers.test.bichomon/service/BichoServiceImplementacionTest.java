@@ -1,9 +1,12 @@
 package ar.edu.unq.epers.test.bichomon.service;
 
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.*;
+import ar.edu.unq.epers.bichomon.backend.dao.neo4j.UbicacionDAONEO4J;
 import ar.edu.unq.epers.bichomon.backend.excepcion.BichoRecuperarException;
+import ar.edu.unq.epers.bichomon.backend.excepcion.EvolucionException;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.camino.TipoCamino;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Nivel;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
@@ -18,6 +21,7 @@ import ar.edu.unq.epers.bichomon.backend.service.mapa.MapaService;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.MapaServiceImplementacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 import extra.Bootstrap;
+import extra.BootstrapNeo4J;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -35,10 +39,12 @@ import static org.junit.Assert.*;
 public class BichoServiceImplementacionTest {
 
     private Bootstrap bootstraper;
+    private BootstrapNeo4J bootstraperNeo4j;
     private MapaService mapaService;
     private BichoServiceImplementacion bichoServiceSut;
     private EntrenadorDAOHibernate entrenadorDao;
     private UbicacionDAOHibernate ubicacionDao;
+    private UbicacionDAONEO4J ubicacionDAONEO4J;
     private BichoDAOHibernate bichoDao;
     private EspecieDAOHibernate especieDao;
     private CondicionDeEvolucionDAOHibernate condicionDao;
@@ -50,24 +56,31 @@ public class BichoServiceImplementacionTest {
     @Before
     public void setUp() throws Exception
     {
-        bootstraper     = new Bootstrap();
+        bootstraper       = new Bootstrap();
+        bootstraperNeo4j  = new BootstrapNeo4J();
+        ubicacionDAONEO4J = new UbicacionDAONEO4J();
+        ubicacionDao      = new UbicacionDAOHibernate();
         Runner.runInSession(()-> {  bootstraper.crearDatos();
+                                    ubicacionDAONEO4J.create(ubicacionDao.recuperar("El Origen"));
+                                    ubicacionDAONEO4J.create(ubicacionDao.recuperar("Dojo Desert"));
+                                    ubicacionDAONEO4J.create(ubicacionDao.recuperar("La Guarderia"));
+                                    ubicacionDAONEO4J.conectar("El Origen", "La Guarderia", TipoCamino.TERRESTRE);
+                                    ubicacionDAONEO4J.conectar("El Origen", "Dojo Desert", TipoCamino.TERRESTRE);
                                     return null;});
-        entrenadorDao   = new EntrenadorDAOHibernate();
-        ubicacionDao    = new UbicacionDAOHibernate();
-        bichoDao        = new BichoDAOHibernate();
-        especieDao      = new EspecieDAOHibernate();
-        experienciaDao  = new ExperienciaDAOHibernate();
-        bichoServiceSut = new BichoServiceImplementacion(entrenadorDao, ubicacionDao, bichoDao, especieDao, experienciaDao);
-        condicionDao    = new CondicionDeEvolucionDAOHibernate();
-        mapaService     = new MapaServiceImplementacion(entrenadorDao, ubicacionDao);
+        entrenadorDao     = new EntrenadorDAOHibernate();
+
+        bichoDao          = new BichoDAOHibernate();
+        especieDao        = new EspecieDAOHibernate();
+        experienciaDao    = new ExperienciaDAOHibernate();
+        bichoServiceSut   = new BichoServiceImplementacion(entrenadorDao, ubicacionDao, bichoDao, especieDao, experienciaDao);
+        condicionDao      = new CondicionDeEvolucionDAOHibernate();
+        mapaService       = new MapaServiceImplementacion(entrenadorDao, ubicacionDao, ubicacionDAONEO4J);
     }
 
     @After
     public void tearDown() throws Exception
-    {
-        Runner.runInSession(()-> {  bootstraper.limpiarTabla();
-                                    return null;});
+    {bootstraper.limpiarTabla();
+                                    bootstraperNeo4j.limpiarTabla();
     }
 
     @Test
@@ -90,7 +103,7 @@ public class BichoServiceImplementacionTest {
     public void siSeAbandonaUnBichomonEnUnaGuarderiaElEntrenadorNoTieneMasAlBichomon()
     {
         //Setup(Given)
-        MapaService unMapaService   = new MapaServiceImplementacion(entrenadorDao, ubicacionDao);
+        MapaService unMapaService   = new MapaServiceImplementacion(entrenadorDao, ubicacionDao,ubicacionDAONEO4J);
         unMapaService.mover("Pepe Pepon", "La Guarderia");
         Entrenador pepePepon;
         //Exercise(When)
@@ -129,7 +142,6 @@ public class BichoServiceImplementacionTest {
         //Exercise(When)
         bichoServiceSut.puedeEvolucionar("Pepe Enpepado", 66);
         //Test(Then)
-        fail("No Hubo Excepcion");
     }
 
     @Test
@@ -151,7 +163,6 @@ public class BichoServiceImplementacionTest {
         //Exercise(When)
         bichoEvolucionado   = bichoServiceSut.evolucionar("Pepe Enpepado", 19092);
         //Test(Then)
-        fail("No Hubo Excepcion");
     }
 
     @Test(expected = NoResultException.class)
@@ -163,7 +174,6 @@ public class BichoServiceImplementacionTest {
         //Exercise(When)
         bichoEvolucionado   = bichoServiceSut.evolucionar("Pepe Enpepado Super Fiesta", 12);
         //Test(Then)
-        fail("No Hubo Excepcion");
     }
 
     @Test
@@ -208,7 +218,10 @@ public class BichoServiceImplementacionTest {
         Especie especieNueva;
         setUpBichoSinCumplirCondicion();
         //Exercise(When)
-        bichoEvolucionado   = bichoServiceSut.evolucionar("Pepe Enpepado", 24);
+        try
+        {   bichoEvolucionado   = bichoServiceSut.evolucionar("Pepe Enpepado", 24); }
+        catch (EvolucionException e)
+        {   bichoEvolucionado   = Runner.runInSession(()-> { return bichoDao.recuperar(24);});  }
         bichoRecuperado     = Runner.runInSession(()-> { return bichoDao.recuperar(24);});
         entrenadorRecuperado= Runner.runInSession(()-> { return entrenadorDao.recuperar("Pepe Enpepado");});
         especieVieja        = Runner.runInSession(()-> { return especieDao.recuperar("Lagartomon");});
@@ -237,7 +250,6 @@ public class BichoServiceImplementacionTest {
         //Exercise(When)
         bichoServiceSut.duelo("Pepe Pepon", 2);
         //Test(Then)
-        fail("No hubo Excepcion");
     }
 
     @Test(expected = UbicacionIncorrectaException.class)
@@ -248,7 +260,6 @@ public class BichoServiceImplementacionTest {
         //Exercise(When)
         bichoServiceSut.duelo("Pepe Pepon", 2);
         //Test(Then)
-        fail("No hubo Excepcion");
     }
 
     @Test

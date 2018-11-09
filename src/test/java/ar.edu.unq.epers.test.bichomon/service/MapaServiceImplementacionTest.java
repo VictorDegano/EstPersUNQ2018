@@ -5,8 +5,12 @@ import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EntrenadorDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EspecieDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.UbicacionDAOHibernate;
+import ar.edu.unq.epers.bichomon.backend.dao.neo4j.UbicacionDAONEO4J;
+import ar.edu.unq.epers.bichomon.backend.excepcion.CaminoMuyCostoso;
+import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionMuyLejanaException;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon;
+import ar.edu.unq.epers.bichomon.backend.model.camino.TipoCamino;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
@@ -15,10 +19,12 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.MapaServiceImplementacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 import extra.Bootstrap;
+import extra.BootstrapNeo4J;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.persistence.NoResultException;
 import java.sql.Timestamp;
 
 import static org.junit.Assert.*;
@@ -28,22 +34,28 @@ public class MapaServiceImplementacionTest
     private MapaServiceImplementacion mapaServiceSUT;
     private EntrenadorDAO entrenadorDAO;
     private UbicacionDAO ubicacionDAO;
+    private UbicacionDAONEO4J ubicacionDAONEO4J;
     private Ubicacion unaUbicacion;
     private Ubicacion unaUbicacionNueva;
     private Ubicacion dojoDeshabitado;
     private Entrenador pepePrueba;
+    private Entrenador pepeEmpepeado;
     private Bootstrap bootstraper;
+    private BootstrapNeo4J bootstraperneo4j;
 
     @Before
     public void setUp() throws Exception
     {
         bootstraper         = new Bootstrap();
+        bootstraperneo4j    = new BootstrapNeo4J();
         Runner.runInSession(()-> {  bootstraper.crearDatos();
+                                    bootstraperneo4j.crearDatos();
                                     return null;});
 
         entrenadorDAO       = new EntrenadorDAOHibernate();
         ubicacionDAO        = new UbicacionDAOHibernate();
-        mapaServiceSUT      = new MapaServiceImplementacion(entrenadorDAO, ubicacionDAO);
+        ubicacionDAONEO4J   = new UbicacionDAONEO4J();
+        mapaServiceSUT      = new MapaServiceImplementacion(entrenadorDAO, ubicacionDAO, ubicacionDAONEO4J);
         pepePrueba          = new Entrenador();
         unaUbicacion        = new Pueblo();
         unaUbicacion.setNombre("El Origen 2");
@@ -54,17 +66,35 @@ public class MapaServiceImplementacionTest
 
         pepePrueba.setNombre("Pepe DePrueba");
         pepePrueba.setUbicacion(unaUbicacion);
+        pepePrueba.setBilletera(5);
         unaUbicacion.agregarEntrenador(pepePrueba);
+
+        Ubicacion puebloOrigen  = Runner.runInSession(()-> {    return ubicacionDAO.recuperar("Pueblo Origen"); });
+        pepeEmpepeado           = new Entrenador();
+        pepeEmpepeado.setNombre("Pepe Empepado");
+        pepeEmpepeado.setUbicacion(puebloOrigen);
+        pepeEmpepeado.setBilletera(1);
+        puebloOrigen.agregarEntrenador(pepeEmpepeado);
 
         Runner.runInSession(()-> {  entrenadorDAO.guardar(pepePrueba);
                                     ubicacionDAO.guardar(unaUbicacion);
                                     ubicacionDAO.guardar(unaUbicacionNueva);
                                     ubicacionDAO.guardar(dojoDeshabitado);
+                                    entrenadorDAO.guardar(pepeEmpepeado);
+                                    ubicacionDAO.guardar(puebloOrigen);
+                                    this.ubicacionDAONEO4J.create(unaUbicacion);
+                                    this.ubicacionDAONEO4J.create(dojoDeshabitado);
+                                    this.ubicacionDAONEO4J.conectar("El Origen 2", "Dojo Deshabitado", TipoCamino.TERRESTRE);
                                     return null; });
+
+
     }
     @After
     public void tearDown() throws Exception
-    {   bootstraper.limpiarTabla(); }
+    {
+        bootstraper.limpiarTabla();
+        bootstraperneo4j.limpiarTabla();
+    }
 
     @Test
     public void siElMapaServiceMueveUnEntrenadorAUnaNuevaUbicacionSeActualizanSusDatos()
@@ -74,8 +104,8 @@ public class MapaServiceImplementacionTest
         Ubicacion ubicacionViejaBD;
         Entrenador entrenador;
         //Exercise(When)
-        mapaServiceSUT.mover("Pepe DePrueba", "Volcano");
-        ubicacionNuevaBD= Runner.runInSession(() -> { return ubicacionDAO.recuperar("Volcano");});
+        mapaServiceSUT.mover("Pepe DePrueba", "Dojo Deshabitado");
+        ubicacionNuevaBD= Runner.runInSession(() -> { return ubicacionDAO.recuperar("Dojo Deshabitado");});
         ubicacionViejaBD= Runner.runInSession(() -> { return ubicacionDAO.recuperar("El Origen 2");});
         entrenador      = Runner.runInSession(() -> { return entrenadorDAO.recuperar("Pepe DePrueba");});
 
@@ -83,7 +113,8 @@ public class MapaServiceImplementacionTest
         assertFalse(ubicacionNuevaBD.getEntrenadores().isEmpty());
         assertEquals(1, ubicacionNuevaBD.getEntrenadores().size());
         assertTrue(ubicacionViejaBD.getEntrenadores().isEmpty());
-        assertEquals("Volcano", entrenador.getUbicacion().getNombre() );
+        assertEquals("Dojo Deshabitado", entrenador.getUbicacion().getNombre() );
+        assertEquals(4, entrenador.getBilletera());
     }
 
     @Test
@@ -94,19 +125,19 @@ public class MapaServiceImplementacionTest
         Ubicacion ubicacionViejaBD;
         Entrenador entrenador;
         //Exercise(When)
-        mapaServiceSUT.mover("Pepe DePrueba", "Dojo Desert");
-        dojoBD= Runner.runInSession(() -> { return ubicacionDAO.recuperar("Dojo Desert");});
+        mapaServiceSUT.mover("Pepe DePrueba", "Dojo Deshabitado");
+        dojoBD          = Runner.runInSession(() -> { return ubicacionDAO.recuperar("Dojo Deshabitado");});
         ubicacionViejaBD= Runner.runInSession(() -> { return ubicacionDAO.recuperar("El Origen 2");});
         entrenador      = Runner.runInSession(() -> { return entrenadorDAO.recuperar("Pepe DePrueba");});
 
         //Test(Then)
         assertFalse(dojoBD.getEntrenadores().isEmpty());
-        assertEquals(2, dojoBD.getEntrenadores().size());
+        assertEquals(1, dojoBD.getEntrenadores().size());
         assertTrue(ubicacionViejaBD.getEntrenadores().isEmpty());
-        assertEquals("Dojo Desert", entrenador.getUbicacion().getNombre() );
+        assertEquals("Dojo Deshabitado", entrenador.getUbicacion().getNombre() );
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = NoResultException.class)
     public void siElMapaServiceIntentaMoverAUnEntrenadorAUnaUbicacionQueNoExisteTiraUnaExcepcion()
     {
         //Setup(Given)
@@ -116,7 +147,7 @@ public class MapaServiceImplementacionTest
         //Test(Then)
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = NoResultException.class)
     public void siElMapaServiceIntentaMoverAUnEntrenadorQueNoExisteTiraUnaExcepcion()
     {
         //Setup(Given)
@@ -136,7 +167,7 @@ public class MapaServiceImplementacionTest
         //Exercise(When)
         try
         {   mapaServiceSUT.mover("Pepe DePrueba", "Volcanos");    }
-        catch (RuntimeException e)
+        catch (NoResultException e)
         {   mensajeDeError  = e.getMessage();   }
         ubicacionViejaBD= Runner.runInSession(() -> { return ubicacionDAO.recuperar("El Origen 2");});
         entrenador      = Runner.runInSession(() -> { return entrenadorDAO.recuperar("Pepe DePrueba");});
@@ -177,7 +208,7 @@ public class MapaServiceImplementacionTest
         //Exercise(When)
         try
         {   mapaServiceSUT.cantidadEntrenadores("Missing Field");    }
-        catch (RuntimeException e)
+        catch (NoResultException e)
         {   mensajeDeError  = e.getMessage();   }
 
         //Test(Then)
@@ -279,4 +310,49 @@ public class MapaServiceImplementacionTest
         assertEquals("Fortmon",campeonHistorico.getEspecie().getNombre());
 
     }
+
+
+    @Test(expected = CaminoMuyCostoso.class)
+    public void SiIntentoMoverAUnEntrenadorDeUnaUbicacionAOtraYNoTieneMonedasSuficientesDaUnaExcepcion()
+    {
+        //Setup(given)
+        //Exercise(when)
+        this.mapaServiceSUT.mover("Pepe Empepado","La Guarderia");
+        //Test (Then)
+    }
+
+    @Test(expected = UbicacionMuyLejanaException.class)
+    public void SiIntentoMoverAUnEntrenadorDeUnaUbicacionAOtraYLlevaMasDeUnCaminoLlegarDaUnaExcepcion()
+    {
+        //Setup(given)
+        //Exercise(when)
+        this.mapaServiceSUT.mover("Pepe Empepado","Dojo Lavanda");
+        //Test (Then)
+    }
+
+    @Test
+    public void PuedoMoverUnEntrenadorMasDeUnaUbicacionConMoverMasCorto()
+    {
+
+        Runner.runInSession(() -> { Entrenador pepe = entrenadorDAO.recuperar("Pepe Empepado");
+                                    pepe.setBilletera(10);
+                                    entrenadorDAO.guardar(pepe);
+                                    return null;});
+
+        this.mapaServiceSUT.moverMasCorto("Pepe Empepado","Dojo Lavanda");
+
+        Entrenador entrenador = Runner.runInSession(() -> { return this.entrenadorDAO.recuperar("Pepe Empepado");});
+
+
+        assertEquals(entrenador.getUbicacion().getNombre(), "Dojo Lavanda");
+        assertTrue(entrenador.getBilletera() == 4 || entrenador.getBilletera() == 8);
+    }
+
+    @Test(expected = CaminoMuyCostoso.class)
+    public void NoPuedoMoverUnEntrenadorMasDeUnaUbicacionConMoverMasCortoSiElCostoDeTodosLosViajesSuperanLaBilleteraDelEntrenador()
+    {
+        this.mapaServiceSUT.moverMasCorto("Pepe Empepado","Dojo Lavanda");
+    }
+
+
 }

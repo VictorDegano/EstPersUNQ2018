@@ -7,27 +7,25 @@ import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 
 
-public class EspecieServiceImpl implements EspecieService {
+public class EspecieServiceJDBC implements EspecieService {
 
 	private EspecieDAO especieDAO;
 
-	public EspecieServiceImpl(EspecieDAO dao){
+	public EspecieServiceJDBC(EspecieDAO dao){
 		this.especieDAO = dao;
 	}
 	
-
 	@Override
 	public void crearEspecie(Especie especie){
 		especieDAO.guardar(especie);
 	}
 	
-
 	@Override
-	public Especie getEspecie(String nombreEspecie){
+	public Especie getEspecie(String nombreEspecie)
+    {
 		Especie especie = especieDAO.recuperar(nombreEspecie);
-		if(especie == null){
-			throw new EspecieNoExistente(nombreEspecie);
-		}
+		if(especie == null)
+		{   throw new EspecieNoExistente(nombreEspecie);    }
 		return especie;
 	}
 
@@ -38,21 +36,22 @@ public class EspecieServiceImpl implements EspecieService {
 	}
 
 	@Override
-	public Bicho crearBicho(String nombreEspecie, String nombreBicho){
+	public Bicho crearBicho(String nombreEspecie, String nombreBicho)
+    {
 		Especie especie = especieDAO.recuperar(nombreEspecie);
-		Bicho bicho = especie.crearBicho(nombreBicho);
+		Bicho bicho     = especie.crearBicho(nombreBicho);
 		especieDAO.actualizar(especie);
 		return bicho;
     }
 
 	@Override
 	public List<Especie> populares() {
-			return null;
+			return this.especieDAO.populares();
 		}
 
 	@Override
 	public List<Especie> impopulares() {
-		return null;
+		return this.especieDAO.impopulares();
 	}
 
 

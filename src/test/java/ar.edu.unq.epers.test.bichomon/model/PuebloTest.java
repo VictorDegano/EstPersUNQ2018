@@ -74,7 +74,7 @@ public class PuebloTest {
         probRed.setEspecie(red);
         probRed.setPosibilidad(30);
 
-       probAmar = new ProbabilidadDeEspecie();
+        probAmar = new ProbabilidadDeEspecie();
         probAmar.setEspecie(amarillo);
         probAmar.setPosibilidad(40);
 
