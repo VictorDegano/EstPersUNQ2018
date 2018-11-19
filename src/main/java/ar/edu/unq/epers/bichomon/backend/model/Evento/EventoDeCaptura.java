@@ -2,7 +2,7 @@ package ar.edu.unq.epers.bichomon.backend.model.Evento;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 
-public class Captura extends Evento {
+public class EventoDeCaptura extends Evento {
     Bicho bichoCapturado;
 
     public Bicho getBichoCapturado() {

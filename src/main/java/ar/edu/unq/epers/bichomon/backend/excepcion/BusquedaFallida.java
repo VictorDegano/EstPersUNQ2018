@@ -12,5 +12,10 @@ public class BusquedaFallida extends RuntimeException
 
     @Override
     public String getMessage()
-    {   return "Fallo la busqueda" + this.mensajeOpcional;  }
+    {
+        if (this.mensajeOpcional == null )
+        {   return "Fallo la busqueda"; }
+        else
+        {   return "Fallo la busqueda" + this.mensajeOpcional;  }
+    }
 }
