@@ -1,6 +1,5 @@
 package ar.edu.unq.epers.bichomon.backend.model.Evento;
 
-import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 
 public class EventoDeCoronacion extends Evento {

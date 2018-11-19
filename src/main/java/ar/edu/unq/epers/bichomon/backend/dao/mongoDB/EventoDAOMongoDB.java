@@ -2,6 +2,7 @@ package ar.edu.unq.epers.bichomon.backend.dao.mongoDB;
 
 import ar.edu.unq.epers.bichomon.backend.dao.EventoDAO;
 import ar.edu.unq.epers.bichomon.backend.model.Evento.Evento;
+import org.bson.types.ObjectId;
 import org.jongo.MongoCollection;
 
 public class EventoDAOMongoDB implements EventoDAO {
@@ -9,18 +10,21 @@ public class EventoDAOMongoDB implements EventoDAO {
     protected MongoCollection mongoCollection;
     
     @Override
-    public void guardar(){
-
-    }
+    public void guardar(Evento evento) {   this.mongoCollection.insert(evento);    }
 
     @Override
-    public Evento recuperar(String id){
-        return null;
-    }
+    public Evento recuperar(String id){ return null;    }
 
     @Override
     public void actualizar(Evento evento) {
 
     }
 
+    public Evento getById(String id)
+    {
+        ObjectId objectId = new ObjectId(id);
+        return this.mongoCollection.findOne(objectId).as(Evento.class);
+    }
+
+    public void deleteAll()     {   this.mongoCollection.drop();    }
 }
