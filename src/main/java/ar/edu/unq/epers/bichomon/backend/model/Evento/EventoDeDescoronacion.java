@@ -1,15 +1,15 @@
 package ar.edu.unq.epers.bichomon.backend.model.Evento;
 
-import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
-
 public class EventoDeDescoronacion extends Evento {
-    public Entrenador getEntrenadorCoronado() {
+    private String entrenadorCoronado;
+
+    public String getEntrenadorCoronado() {
         return entrenadorCoronado;
     }
 
-    public void setEntrenadorCoronado(Entrenador entrenadorCoronado) {
+    public void setEntrenadorCoronado(String entrenadorCoronado) {
         this.entrenadorCoronado = entrenadorCoronado;
     }
 
-    Entrenador entrenadorCoronado;
+
 }

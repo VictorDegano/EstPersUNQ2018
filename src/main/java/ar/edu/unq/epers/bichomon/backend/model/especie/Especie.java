@@ -2,9 +2,7 @@ package ar.edu.unq.epers.bichomon.backend.model.especie;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEvolucion;
-
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

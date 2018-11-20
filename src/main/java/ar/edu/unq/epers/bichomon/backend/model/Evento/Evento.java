@@ -4,50 +4,44 @@ import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import org.bson.types.ObjectId;
 import org.jongo.marshall.jackson.oid.MongoId;
 import org.jongo.marshall.jackson.oid.MongoObjectId;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @JsonTypeInfo(use= JsonTypeInfo.Id.CLASS,property="_class")
 public abstract class Evento {
 
     @MongoId
     @MongoObjectId
-    private String id;
-    private Entrenador entrenador;
-    private Ubicacion ubicacion;
-    private LocalDateTime fechaDeEvento;
-
-    public Ubicacion getUbicacion() {
-        return ubicacion;
-    }
-
-    public void setUbicacion(Ubicacion ubicacion) {
-        this.ubicacion = ubicacion;
-    }
+    private ObjectId id;
+    private String entrenador;
+    private String ubicacion;
+    private String fechaDeEvento;
 
     public Evento() {  }
 
-    public Entrenador getEntrenador() {
-        return entrenador;
-    }
+    public ObjectId getId() {   return id;  }
 
-    public void setEntrenador(Entrenador entrenador) {
-        this.entrenador = entrenador;
-    }
+    public void setId(ObjectId id) {    this.id = id;   }
 
-    public String getId() {
-        return id;
-    }
+    public String getFechaDeEvento() {    return fechaDeEvento;   }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    public void setFechaDeEvento(String fechaDeEvento) {  this.fechaDeEvento = fechaDeEvento; }
 
-    public LocalDateTime getFechaDeEvento() {   return fechaDeEvento;   }
+    public String getEntrenador() { return entrenador;  }
 
-    public void setFechaDeEvento(LocalDateTime fechaDeEvento) { this.fechaDeEvento = fechaDeEvento; }
+    public void setEntrenador(String entrenador) {  this.entrenador = entrenador;   }
 
-    public Bicho getBichoCapturado() {  return null;  }
+    public String getUbicacion() {  return ubicacion;   }
+
+    public void setUbicacion(String ubicacion) {    this.ubicacion = ubicacion; }
+
+
+
+
+    public String getEspecieBichoCapturado() {  return "";   }
+    public void setEspecieBichoCapturado(String especieBichoCapturado) {    }
 }
