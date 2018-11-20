@@ -32,7 +32,7 @@ public class EventoDaoTestMongoDb
     public void tearDown()  {   eventoDAOSut.deleteAll();   }
 
     @Test
-    public void  SiGuardoUnEventoNuevoEsteSeGuardaCorrectamente()
+    public void  SiGuardoYRecuperoUnEventoNuevoEsteSeGuardaYRecuperaCorrectamente()
     {
         //Setup(Given)
         String fechaDeEvento = LocalDateTime.of(2018,11,23,22,25,30).toString();
@@ -47,7 +47,7 @@ public class EventoDaoTestMongoDb
 
         //Exercise(When)
         eventoDAOSut.guardar(nuevoEvento);
-        eventoRecuperado    = eventoDAOSut.getById(nuevoEvento.getId().toHexString());
+        eventoRecuperado    = eventoDAOSut.recuperar(nuevoEvento.getId().toHexString());
         //Test(Then)
         assertEquals(nuevoEvento.getId().toHexString(), eventoRecuperado.getId().toHexString());
         assertEquals("Capturalandia", eventoRecuperado.getUbicacion());
@@ -55,7 +55,6 @@ public class EventoDaoTestMongoDb
         assertEquals("Rojomon", eventoRecuperado.getEspecieBichoCapturado());
         assertEquals(fechaDeEvento, eventoRecuperado.getFechaDeEvento());
     }
-
 
     @Test
     public void  SeRealizaUnArriboYSeGuarda(){

@@ -24,17 +24,16 @@ public class EventoDAOMongoDB implements EventoDAO
     public void guardar(Evento evento) {   this.mongoCollection.insert(evento);    }
 
     @Override
-    public Evento recuperar(String id){ return null;    }
-
-    @Override
-    public void actualizar(Evento evento) {
-
-    }
-
-    public Evento getById(String id)
+    public Evento recuperar(String id)
     {
         ObjectId objectId = new ObjectId(id);
         return this.mongoCollection.findOne(objectId).as(Evento.class);
+    }
+
+    @Override
+    public void actualizar(Evento evento)
+    {
+
     }
 
     public void deleteAll()     {   this.mongoCollection.drop();    }
