@@ -1,16 +1,15 @@
 package ar.edu.unq.epers.bichomon.backend.model.Evento;
 
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 
 public class EventoDeArribo extends Evento {
-    private Ubicacion ubicacionPartida;
+    private String ubicacionPartida;
 
 
-    public Ubicacion getUbicacionPartida() {
+    public String getUbicacionPartida() {
         return ubicacionPartida;
     }
 
-    public void setUbicacionPartida(Ubicacion ubicacionPartida) {
+    public void setUbicacionPartida(String ubicacionPartida) {
         this.ubicacionPartida = ubicacionPartida;
     }
 

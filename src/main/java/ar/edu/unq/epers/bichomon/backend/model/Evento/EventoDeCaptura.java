@@ -1,18 +1,13 @@
 package ar.edu.unq.epers.bichomon.backend.model.Evento;
 
-import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
-
 public class EventoDeCaptura extends Evento {
-    Bicho bichoCapturado;
 
-    public Bicho getBichoCapturado() {
+    private String especieBichoCapturado;
 
-        return bichoCapturado;
-    }
-
-    public void setBichoCapturado(Bicho bichoCapturado) {
-        this.bichoCapturado = bichoCapturado;
-    }
+    public EventoDeCaptura() {}
 
 
+    public String getEspecieBichoCapturado() {  return especieBichoCapturado;   }
+
+    public void setEspecieBichoCapturado(String especieBichoCapturado) {    this.especieBichoCapturado = especieBichoCapturado; }
 }
