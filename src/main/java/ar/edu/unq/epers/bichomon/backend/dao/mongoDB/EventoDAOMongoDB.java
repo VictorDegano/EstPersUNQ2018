@@ -43,18 +43,18 @@ public class EventoDAOMongoDB implements EventoDAO
 
     public List<Evento> feedDeEntrenador(String entrenador)
     {
-        String query        = "{ &elemMatch {entrenador: # }  }";
+        String query        = "{ entrenador: # }";
         String querySort    = "{ fechaDeEvento: -1}";
         List<Evento> resultado  = new ArrayList<>();
         try
         {
             MongoCursor<Evento> all = this.mongoCollection.find(query,entrenador).sort(querySort).as(Evento.class);
 
-            all.forEach(resultado::add);
+            all.forEach(x -> resultado.add(x));
 
             all.close();
 
-            return resultado;
+                return resultado;
         }
         catch (IOException e)
         {   throw new RuntimeException(e);  }
