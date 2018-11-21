@@ -1,9 +1,10 @@
 package ar.edu.unq.epers.bichomon.backend.model.Evento;
 
-import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
-import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
+import ar.edu.unq.epers.bichomon.backend.model.Serializador.LocalDateTimeDeserializer;
+import ar.edu.unq.epers.bichomon.backend.model.Serializador.LocalDateTimeSerializer;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.bson.types.ObjectId;
 import org.jongo.marshall.jackson.oid.MongoId;
 import org.jongo.marshall.jackson.oid.MongoObjectId;
@@ -19,7 +20,10 @@ public abstract class Evento {
     private ObjectId id;
     private String entrenador;
     private String ubicacion;
-    private String fechaDeEvento;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime fechaDeEvento;
 
     public Evento() {  }
 
@@ -27,9 +31,9 @@ public abstract class Evento {
 
     public void setId(ObjectId id) {    this.id = id;   }
 
-    public String getFechaDeEvento() {    return fechaDeEvento;   }
+    public LocalDateTime getFechaDeEvento() {    return fechaDeEvento;   }
 
-    public void setFechaDeEvento(String fechaDeEvento) {  this.fechaDeEvento = fechaDeEvento; }
+    public void setFechaDeEvento(LocalDateTime fechaDeEvento) {  this.fechaDeEvento = fechaDeEvento; }
 
     public String getEntrenador() { return entrenador;  }
 
@@ -42,6 +46,9 @@ public abstract class Evento {
 
 
 
-    public String getEspecieBichoCapturado() {  return "";   }
-    public void setEspecieBichoCapturado(String especieBichoCapturado) {    }
+    public String getEspecieBichoCapturado(){   return "";  }
+    public String getUbicacionPartida()     {   return "";  }
+    public String getBichoAbandonado()      {   return "";  }
+    public String getEntrenadorDestronado() {   return "";  }
+    public String getEntrenadorCoronado()   {   return "";  }
 }
