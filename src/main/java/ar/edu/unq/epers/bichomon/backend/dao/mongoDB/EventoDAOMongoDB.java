@@ -80,6 +80,9 @@ public class EventoDAOMongoDB implements EventoDAO
     }
 
     @Override
+    public void guardarTodos(List<Evento> eventos) {   this.mongoCollection.insert(eventos.toArray());    }
+
+    @Override
     public void actualizar(Evento evento)
     {
 

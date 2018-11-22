@@ -6,6 +6,7 @@ import ar.edu.unq.epers.bichomon.backend.dao.mongoDB.EventoDAOMongoDB;
 import ar.edu.unq.epers.bichomon.backend.dao.neo4j.UbicacionDAONEO4J;
 import ar.edu.unq.epers.bichomon.backend.excepcion.CaminoMuyCostoso;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
+import ar.edu.unq.epers.bichomon.backend.model.Evento.Evento;
 import ar.edu.unq.epers.bichomon.backend.model.Evento.EventoDeArribo;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
@@ -153,6 +154,8 @@ public class MapaServiceImplementacion implements MapaService
                 entrenadorRecuperado.moverse(ubicacionDestino);
                 entrenadorRecuperado.sacarDeBilletera(costo);
 
+                this.crearEventosDeArriboPara(entrenador, caminos);
+
                 this.getEntrenadorDAO().actualizar(entrenadorRecuperado);
                 this.getUbicacionDAO().actualizar(ubicacionActual);
                 this.getUbicacionDAO().actualizar(ubicacionDestino);
@@ -162,6 +165,19 @@ public class MapaServiceImplementacion implements MapaService
 
             return null;
         });
+    }
+
+    private void crearEventosDeArriboPara(String entrenador, List<Camino> caminos)
+    {
+        List<Evento> eventosAAgregar    = new ArrayList<>();
+
+        for (Camino camino : caminos)
+        {   eventosAAgregar.add(new EventoDeArribo( entrenador,
+                                                    camino.getDesdeUbicacion(),
+                                                    camino.getHastaUbicacion(),
+                                                    LocalDateTime.now()));  }
+
+        eventoDAO.guardarTodos(eventosAAgregar);
     }
 
     @Override

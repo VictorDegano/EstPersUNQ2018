@@ -90,7 +90,9 @@ public class MapaServiceImplementacionTest
                                     ubicacionDAO.guardar(puebloOrigen);
                                     this.ubicacionDAONEO4J.create(unaUbicacion);
                                     this.ubicacionDAONEO4J.create(dojoDeshabitado);
+                                    this.ubicacionDAONEO4J.create(unaUbicacionNueva);
                                     this.ubicacionDAONEO4J.conectar("El Origen 2", "Dojo Deshabitado", TipoCamino.TERRESTRE);
+                                    this.ubicacionDAONEO4J.conectar("Dojo Deshabitado", "Volcano", TipoCamino.TERRESTRE);
                                     return null; });
 
 
@@ -377,5 +379,23 @@ public class MapaServiceImplementacionTest
         assertEquals("El Origen 2", eventoDeMovimiento.get(0).getUbicacionPartida());
     }
 
+    @Test
+    public void siUnEntrenadorSeMueveAUnaUbicacionPorElCaminoMasCortoSeGeneranLosEventoDeArriboPorCadaCaminoTransitado()
+    {
+        //Setup(Given)
+        List<Evento> eventoDeMovimiento;
+        //Exercise(When)
+        mapaServiceSUT.moverMasCorto("Pepe DePrueba", "Volcano");
+        eventoDeMovimiento  = eventoDAOMongoDB.feedDeEntrenador("Pepe DePrueba");
+
+        //Test(Then)
+        assertEquals(2, eventoDeMovimiento.size());
+        assertEquals("Pepe DePrueba", eventoDeMovimiento.get(0).getEntrenador());
+        assertEquals("El Origen 2", eventoDeMovimiento.get(0).getUbicacionPartida());
+        assertEquals("Dojo Deshabitado", eventoDeMovimiento.get(0).getUbicacion());
+        assertEquals("Pepe DePrueba", eventoDeMovimiento.get(1).getEntrenador());
+        assertEquals("Dojo Deshabitado", eventoDeMovimiento.get(1).getUbicacionPartida());
+        assertEquals("Volcano", eventoDeMovimiento.get(1).getUbicacion());
+    }
 
 }
