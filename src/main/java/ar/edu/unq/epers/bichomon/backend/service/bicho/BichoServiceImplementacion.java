@@ -5,16 +5,18 @@ import ar.edu.unq.epers.bichomon.backend.dao.hibernate.*;
 import ar.edu.unq.epers.bichomon.backend.excepcion.BichoRecuperarException;
 import ar.edu.unq.epers.bichomon.backend.excepcion.BusquedaFallida;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
-import ar.edu.unq.epers.bichomon.backend.model.Evento.EventoDeAbandono;
+import ar.edu.unq.epers.bichomon.backend.model.Evento.*;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.TipoExperiencia;
-import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Registro;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 
 import javax.persistence.NoResultException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BichoServiceImplementacion implements BichoService
 {
@@ -39,8 +41,12 @@ public class BichoServiceImplementacion implements BichoService
                 Bicho bicho = unEntrenador.buscarBicho();
                 if (bicho != null )
                 {
-                   this.getEntrenadorDao().actualizar(unEntrenador);
+                    this.getEntrenadorDao().actualizar(unEntrenador);
                     unEntrenador.subirExperiencia(this.experienciaDao.recuperar(TipoExperiencia.CAPTURA).getExperiencia());
+                    eventoDAO.guardar(new EventoDeCaptura(  entrenador,
+                                                            unEntrenador.getUbicacion().getNombre(),
+                                                            bicho.getEspecie().getNombre(),
+                                                            LocalDateTime.now()));
                 }
                 else
                 {   throw new BusquedaFallida();    }
@@ -125,8 +131,9 @@ public class BichoServiceImplementacion implements BichoService
     public Registro duelo(String entrenador, int bicho)
     {
         return Runner.runInSession(() -> {
-                    Bicho unBicho           = this.getBichoDao().recuperar(bicho);
-                    Entrenador unEntrenador = this.getEntrenadorDao().recuperar(entrenador);
+                    Bicho unBicho               = this.getBichoDao().recuperar(bicho);
+                    Entrenador unEntrenador     = this.getEntrenadorDao().recuperar(entrenador);
+                    Bicho campeonAntesDeDuelo   = unEntrenador.getUbicacion().campeonActual();
                     Registro registroDeBatalla;
 
                     if(unBicho == null)
@@ -138,11 +145,35 @@ public class BichoServiceImplementacion implements BichoService
                     {
                         unEntrenador.subirExperiencia(this.experienciaDao.recuperar(TipoExperiencia.COMBATE).getExperiencia());
                         this.getEntrenadorDao().actualizar(unEntrenador);
+                        this.crearEventosDeDuelo(entrenador, campeonAntesDeDuelo, unEntrenador.getUbicacion());
                     }
+
+
                     this.getUbicacionDao().actualizar(unEntrenador.getUbicacion());
 
                     return registroDeBatalla;
                 });
+    }
+
+    private void crearEventosDeDuelo(String entrenador, Bicho campeonAntesDeDuelo, Ubicacion unaUbicacion)
+    {
+        LocalDateTime fechaDeDuelo              = LocalDateTime.now();
+        List<Evento> eventosAAgregar            = new ArrayList<>();
+        EventoDeCoronacion eventoDeCoronacion   = new EventoDeCoronacion(   entrenador,
+                                                                            unaUbicacion.getNombre(),
+                                                        "",
+                                                                            fechaDeDuelo);
+        if (campeonAntesDeDuelo != null)
+        {
+            Evento eventoDeDescoronacion    = new EventoDeDescoronacion(campeonAntesDeDuelo.getDuenio().getNombre(),
+                                                                        unaUbicacion.getNombre(),
+                                                                        entrenador,
+                                                                        fechaDeDuelo);
+            eventoDeCoronacion.setEntrenadorDestronado(campeonAntesDeDuelo.getDuenio().getNombre());
+            eventosAAgregar.add(eventoDeDescoronacion);
+        }
+        eventosAAgregar.add(eventoDeCoronacion);
+        this.eventoDAO.guardarTodos(eventosAAgregar);
     }
 
     /*[--------]Constructors[--------]*/

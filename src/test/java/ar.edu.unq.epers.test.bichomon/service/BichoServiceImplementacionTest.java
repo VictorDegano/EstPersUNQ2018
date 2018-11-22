@@ -300,6 +300,42 @@ public class BichoServiceImplementacionTest {
 
     }
 
+    @Test
+    public void siSeAbandonaUnBichomonEnUnaGuarderiaSeGeneraUnEventoDeAbandono()
+    {
+        //Setup(Given)
+        List<Evento> eventoDeAbandono;
+        mapaService.mover("Pepe Pepon", "La Guarderia");
+        eventoDAOMongoDB.deleteAll();
+
+        //Exercise(When)
+        bichoServiceSut.abandonar("Pepe Pepon",1);
+        eventoDeAbandono  = eventoDAOMongoDB.feedDeEntrenador("Pepe Pepon");
+
+        //Test(Then)
+        assertEquals(1, eventoDeAbandono.size());
+        assertEquals("Pepe Pepon", eventoDeAbandono.get(0).getEntrenador());
+        assertEquals("La Guarderia", eventoDeAbandono.get(0).getUbicacion());
+        assertEquals("Fortmon", eventoDeAbandono.get(0).getBichoAbandonado());
+    }
+
+    @Test
+    public void SiUnRetadorRetaAUnDojoSinCampeonSeGeneraSoloUnEventoDeCoronacion()
+    {
+        //Setup(Given)
+        List<Evento> eventoDeDuelo;
+
+        //Exercise(When)
+        mapaService.mover("Pepe Pepon", "Dojo Desert");
+        eventoDeDuelo   = this.eventoDAOMongoDB.feedDeEntrenador("Pepe Pepon");
+
+        //Test(Then)
+        assertEquals(1, eventoDeDuelo.size());
+        assertEquals("Pepe Pepon", eventoDeDuelo.get(0).getEntrenador());
+        assertEquals("Dojo Desert", eventoDeDuelo.get(0).getUbicacion());
+        assertEquals("", eventoDeDuelo.get(0).getEntrenadorDestronado());
+    }
+
 
     private void setUpBichoSinCondicion()
     {   setUpBichoPuedeEvolucionar(Collections.emptyList());    }
@@ -309,8 +345,8 @@ public class BichoServiceImplementacionTest {
         CondicionEnergia condicion1 = new CondicionEnergia(80);
         CondicionVictoria condicion2= new CondicionVictoria(1);
         Runner.runInSession(()-> {  condicionDao.guardar(condicion1);
-                                    condicionDao.guardar(condicion2);
-                                    return null;});
+            condicionDao.guardar(condicion2);
+            return null;});
         setUpBichoPuedeEvolucionar(Arrays.asList( condicion1, condicion2));
     }
 
@@ -319,8 +355,8 @@ public class BichoServiceImplementacionTest {
         CondicionEnergia condicion1 = new CondicionEnergia(300);
         CondicionVictoria condicion2= new CondicionVictoria(33);
         Runner.runInSession(()-> {  condicionDao.guardar(condicion1);
-                                    condicionDao.guardar(condicion2);
-                                    return null;});
+            condicionDao.guardar(condicion2);
+            return null;});
         setUpBichoPuedeEvolucionar(Arrays.asList( condicion1, condicion2));
     }
 
@@ -363,28 +399,9 @@ public class BichoServiceImplementacionTest {
         lagortito.setDuenio(entrenadorPepe);
 
         Runner.runInSession(()-> {  especieDao.guardar(lagartomon);
-                                    especieDao.guardar(reptilmon);
-                                    bichoDao.guardar(lagortito);
-                                    entrenadorDao.guardar(entrenadorPepe);
-                                    return null;});
-    }
-
-    @Test
-    public void siSeAbandonaUnBichomonEnUnaGuarderiaSeGeneraUnEventoDeAbandono()
-    {
-        //Setup(Given)
-        List<Evento> eventoDeAbandono;
-        mapaService.mover("Pepe Pepon", "La Guarderia");
-        eventoDAOMongoDB.deleteAll();
-
-        //Exercise(When)
-        bichoServiceSut.abandonar("Pepe Pepon",1);
-        eventoDeAbandono  = eventoDAOMongoDB.feedDeEntrenador("Pepe Pepon");
-
-        //Test(Then)
-        assertEquals(1, eventoDeAbandono.size());
-        assertEquals("Pepe Pepon", eventoDeAbandono.get(0).getEntrenador());
-        assertEquals("La Guarderia", eventoDeAbandono.get(0).getUbicacion());
-        assertEquals("Fortmon", eventoDeAbandono.get(0).getBichoAbandonado());
+            especieDao.guardar(reptilmon);
+            bichoDao.guardar(lagortito);
+            entrenadorDao.guardar(entrenadorPepe);
+            return null;});
     }
 }
