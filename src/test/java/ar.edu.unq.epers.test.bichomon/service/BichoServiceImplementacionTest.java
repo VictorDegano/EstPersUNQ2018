@@ -27,7 +27,6 @@ import extra.Bootstrap;
 import extra.BootstrapNeo4J;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.persistence.NoResultException;
@@ -97,7 +96,7 @@ public class BichoServiceImplementacionTest {
         Entrenador pepePepon;
         //Exercise(When)
         try
-        {   bichoServiceSut.abandonar("Pepe Pepon",30); }
+        {   bichoServiceSut.abandonar("Pepe Pepon",2); }
         catch(UbicacionIncorrectaException e)
         {   }
         finally
@@ -324,9 +323,11 @@ public class BichoServiceImplementacionTest {
     {
         //Setup(Given)
         List<Evento> eventoDeDuelo;
+        mapaService.mover("Pepe Pepon", "Dojo Desert");
+        eventoDAOMongoDB.deleteAll();
 
         //Exercise(When)
-        mapaService.mover("Pepe Pepon", "Dojo Desert");
+        bichoServiceSut.duelo("Pepe Pepon", 2);
         eventoDeDuelo   = this.eventoDAOMongoDB.feedDeEntrenador("Pepe Pepon");
 
         //Test(Then)
@@ -334,6 +335,84 @@ public class BichoServiceImplementacionTest {
         assertEquals("Pepe Pepon", eventoDeDuelo.get(0).getEntrenador());
         assertEquals("Dojo Desert", eventoDeDuelo.get(0).getUbicacion());
         assertEquals("", eventoDeDuelo.get(0).getEntrenadorDestronado());
+    }
+
+    @Test
+    public void SiUnRetadorRetaAUnDojoConCampeonYGanaSeGeneranLosEventosDeCoronacionYDescoronacion()
+    {
+        //Setup(Given)
+        Entrenador retador  = new Entrenador();
+        retador.setNombre("Retador");
+        retador.setExperiencia(0);
+        retador.setNivel(new Nivel(1, 1, 99, 4));
+
+        Entrenador defensor = new Entrenador();
+        defensor.setNombre("Defensor");
+        defensor.setExperiencia(990);
+        defensor.setNivel(new Nivel(3, 400, 999, 6));
+
+        Dojo dojoRD    = new Dojo();
+        dojoRD.setNombre("Dojo RD");
+
+        retador.setUbicacion(dojoRD);
+        defensor.setUbicacion(dojoRD);
+
+        Especie loca = new Especie();
+        loca.setNombre("Loca");
+        loca.setTipo(TipoBicho.FUEGO);
+        loca.setAltura(150);
+        loca.setPeso(90);
+        loca.setEnergiaIncial(5000);
+        loca.setUrlFoto("");
+        loca.setEspecieBase(loca);
+
+        Bicho bichoRetador = new Bicho(loca,"");
+        bichoRetador.setEnergia(loca.getEnergiaInicial());
+        bichoRetador.setPoder(20);
+
+        Bicho bichoDefensor = new Bicho(loca,"");
+        bichoDefensor.setEnergia(1);
+        bichoDefensor.setPoder(10);
+        loca.setCantidadBichos(2);
+
+        bichoRetador.setDuenio(retador);
+        retador.getBichosCapturados().add(bichoRetador);
+
+        bichoDefensor.setDuenio(defensor);
+        defensor.getBichosCapturados().add(bichoDefensor);
+
+        Runner.runInSession(()-> {  especieDao.guardar(loca);
+                                    bichoDao.guardar(bichoDefensor);
+                                    bichoDao.guardar(bichoRetador);
+                                    ubicacionDao.guardar(dojoRD);
+                                    entrenadorDao.guardar(retador);
+                                    entrenadorDao.guardar(defensor);
+                                    return null;});
+
+        bichoServiceSut.duelo("Defensor", bichoDefensor.getId());
+        eventoDAOMongoDB.deleteAll();
+
+        //Exercise(When)
+        bichoServiceSut.duelo("Retador", bichoRetador.getId());
+        List<Evento> eventoDeDueloRetador   = this.eventoDAOMongoDB.feedDeEntrenador("Retador");
+        List<Evento> eventoDeDueloDefensor  = this.eventoDAOMongoDB.feedDeEntrenador("Defensor");
+
+        //Test(Then)
+        assertEquals(2, eventoDeDueloRetador.size());
+        assertEquals("Defensor", eventoDeDueloRetador.get(0).getEntrenador());
+        assertEquals("Dojo RD", eventoDeDueloRetador.get(0).getUbicacion());
+        assertEquals("Retador", eventoDeDueloRetador.get(0).getEntrenadorCoronado());
+        assertEquals("Retador", eventoDeDueloRetador.get(1).getEntrenador());
+        assertEquals("Dojo RD", eventoDeDueloRetador.get(1).getUbicacion());
+        assertEquals("Defensor", eventoDeDueloRetador.get(1).getEntrenadorDestronado());
+
+        assertEquals(2, eventoDeDueloDefensor.size());
+        assertEquals("Defensor", eventoDeDueloRetador.get(0).getEntrenador());
+        assertEquals("Dojo RD", eventoDeDueloRetador.get(0).getUbicacion());
+        assertEquals("Retador", eventoDeDueloRetador.get(0).getEntrenadorCoronado());
+        assertEquals("Retador", eventoDeDueloRetador.get(1).getEntrenador());
+        assertEquals("Dojo RD", eventoDeDueloRetador.get(1).getUbicacion());
+        assertEquals("Defensor", eventoDeDueloRetador.get(1).getEntrenadorDestronado());
     }
 
 

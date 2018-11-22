@@ -35,7 +35,6 @@ public class Dojo extends Ubicacion
         Campeon nuevoCampeon = new Campeon();
         if ( this.campeonActual != null){
             this.campeonActual.setFechaFinDeCampeon(Timestamp.valueOf(LocalDateTime.now()));
-            this.campeonesHistoricos.add(this.campeonActual);
             this.agregarAHistorialDeCampeones(this.campeonActual);
         }
         nuevoCampeon.setBichoCampeon(ganador);

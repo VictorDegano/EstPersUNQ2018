@@ -133,7 +133,7 @@ public class BichoServiceImplementacion implements BichoService
         return Runner.runInSession(() -> {
                     Bicho unBicho               = this.getBichoDao().recuperar(bicho);
                     Entrenador unEntrenador     = this.getEntrenadorDao().recuperar(entrenador);
-                    Bicho campeonAntesDeDuelo   = unEntrenador.getUbicacion().campeonActual();
+                    Bicho campeonAntesDeDuelo   = this.traerCampeonSiHay(unEntrenador.getUbicacion());
                     Registro registroDeBatalla;
 
                     if(unBicho == null)
@@ -148,18 +148,28 @@ public class BichoServiceImplementacion implements BichoService
                         this.crearEventosDeDuelo(entrenador, campeonAntesDeDuelo, unEntrenador.getUbicacion());
                     }
 
-
                     this.getUbicacionDao().actualizar(unEntrenador.getUbicacion());
 
                     return registroDeBatalla;
                 });
     }
 
-    private void crearEventosDeDuelo(String entrenador, Bicho campeonAntesDeDuelo, Ubicacion unaUbicacion)
+    private Bicho traerCampeonSiHay(Ubicacion ubicacion)
+    {
+        Bicho campeon   = null;
+        try
+        {   campeon = ubicacion.campeonActual();    }
+        catch (UbicacionIncorrectaException e)
+        {   }
+        finally
+        {   return campeon; }
+    }
+
+    private void crearEventosDeDuelo(String entrenadorRetador, Bicho campeonAntesDeDuelo, Ubicacion unaUbicacion)
     {
         LocalDateTime fechaDeDuelo              = LocalDateTime.now();
         List<Evento> eventosAAgregar            = new ArrayList<>();
-        EventoDeCoronacion eventoDeCoronacion   = new EventoDeCoronacion(   entrenador,
+        EventoDeCoronacion eventoDeCoronacion   = new EventoDeCoronacion(   entrenadorRetador,
                                                                             unaUbicacion.getNombre(),
                                                         "",
                                                                             fechaDeDuelo);
@@ -167,7 +177,7 @@ public class BichoServiceImplementacion implements BichoService
         {
             Evento eventoDeDescoronacion    = new EventoDeDescoronacion(campeonAntesDeDuelo.getDuenio().getNombre(),
                                                                         unaUbicacion.getNombre(),
-                                                                        entrenador,
+                                                                        entrenadorRetador,
                                                                         fechaDeDuelo);
             eventoDeCoronacion.setEntrenadorDestronado(campeonAntesDeDuelo.getDuenio().getNombre());
             eventosAAgregar.add(eventoDeDescoronacion);
