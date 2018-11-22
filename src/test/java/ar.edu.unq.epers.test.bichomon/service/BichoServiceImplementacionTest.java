@@ -1,6 +1,8 @@
 package ar.edu.unq.epers.test.bichomon.service;
 
+import ar.edu.unq.epers.bichomon.backend.dao.EventoDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.*;
+import ar.edu.unq.epers.bichomon.backend.dao.mongoDB.EventoDAOMongoDB;
 import ar.edu.unq.epers.bichomon.backend.dao.neo4j.UbicacionDAONEO4J;
 import ar.edu.unq.epers.bichomon.backend.excepcion.BichoRecuperarException;
 import ar.edu.unq.epers.bichomon.backend.excepcion.EvolucionException;
@@ -52,6 +54,7 @@ public class BichoServiceImplementacionTest {
     private Especie lagartomon;
     private Especie reptilmon;
     private Bicho lagortito;
+    private EventoDAO eventoDAOMongoDB;
 
     @Before
     public void setUp() throws Exception
@@ -60,6 +63,7 @@ public class BichoServiceImplementacionTest {
         bootstraperNeo4j  = new BootstrapNeo4J();
         ubicacionDAONEO4J = new UbicacionDAONEO4J();
         ubicacionDao      = new UbicacionDAOHibernate();
+        eventoDAOMongoDB  = new EventoDAOMongoDB();
         Runner.runInSession(()-> {  bootstraper.crearDatos();
                                     ubicacionDAONEO4J.create(ubicacionDao.recuperar("El Origen"));
                                     ubicacionDAONEO4J.create(ubicacionDao.recuperar("Dojo Desert"));
@@ -74,7 +78,7 @@ public class BichoServiceImplementacionTest {
         experienciaDao    = new ExperienciaDAOHibernate();
         bichoServiceSut   = new BichoServiceImplementacion(entrenadorDao, ubicacionDao, bichoDao, especieDao, experienciaDao);
         condicionDao      = new CondicionDeEvolucionDAOHibernate();
-        mapaService       = new MapaServiceImplementacion(entrenadorDao, ubicacionDao, ubicacionDAONEO4J);
+        mapaService       = new MapaServiceImplementacion(entrenadorDao, ubicacionDao, ubicacionDAONEO4J, eventoDAOMongoDB);
     }
 
     @After
@@ -103,7 +107,7 @@ public class BichoServiceImplementacionTest {
     public void siSeAbandonaUnBichomonEnUnaGuarderiaElEntrenadorNoTieneMasAlBichomon()
     {
         //Setup(Given)
-        MapaService unMapaService   = new MapaServiceImplementacion(entrenadorDao, ubicacionDao,ubicacionDAONEO4J);
+        MapaService unMapaService   = new MapaServiceImplementacion(entrenadorDao, ubicacionDao,ubicacionDAONEO4J, eventoDAOMongoDB);
         unMapaService.mover("Pepe Pepon", "La Guarderia");
         Entrenador pepePepon;
         //Exercise(When)

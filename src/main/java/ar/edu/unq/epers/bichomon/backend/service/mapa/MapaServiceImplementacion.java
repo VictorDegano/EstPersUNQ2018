@@ -1,9 +1,12 @@
 package ar.edu.unq.epers.bichomon.backend.service.mapa;
 
+import ar.edu.unq.epers.bichomon.backend.dao.EventoDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.mongoDB.EventoDAOMongoDB;
 import ar.edu.unq.epers.bichomon.backend.dao.neo4j.UbicacionDAONEO4J;
 import ar.edu.unq.epers.bichomon.backend.excepcion.CaminoMuyCostoso;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
+import ar.edu.unq.epers.bichomon.backend.model.Evento.EventoDeArribo;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
 import ar.edu.unq.epers.bichomon.backend.model.camino.Camino;
@@ -23,6 +26,7 @@ public class MapaServiceImplementacion implements MapaService
     private EntrenadorDAO entrenadorDAO;
     private UbicacionDAO ubicacionDAO;
     private UbicacionDAONEO4J ubicacionDAONEO4J;
+    private EventoDAO eventoDAO;
 
     /**
      * El entrenador se movera a la ubicacion especificada
@@ -35,8 +39,8 @@ public class MapaServiceImplementacion implements MapaService
     {
         Runner.runInSession(() -> {
                 Entrenador entrenadorAMoverse   = this.getEntrenadorDAO().recuperar(entrenador);
-                Ubicacion ubicacionAMoverse = this.getUbicacionDAO().recuperar(ubicacion);
-                Ubicacion ubicacionVieja = entrenadorAMoverse.getUbicacion();
+                Ubicacion ubicacionAMoverse     = this.getUbicacionDAO().recuperar(ubicacion);
+                Ubicacion ubicacionVieja        = entrenadorAMoverse.getUbicacion();
 
                 Camino caminoATransitar         = this.getUbicacionDAONEO4J().caminoA(entrenadorAMoverse.getUbicacion().getNombre(),ubicacion);
 
@@ -44,6 +48,8 @@ public class MapaServiceImplementacion implements MapaService
                 {
                     entrenadorAMoverse.moverse(ubicacionAMoverse);
                     entrenadorAMoverse.sacarDeBilletera(caminoATransitar.getCosto());
+
+                    eventoDAO.guardar(new EventoDeArribo(entrenador, ubicacionVieja.getNombre(), ubicacion));
 
                     this.getEntrenadorDAO().actualizar(entrenadorAMoverse);
                     this.getUbicacionDAO().actualizar(ubicacionVieja);
@@ -110,11 +116,12 @@ public class MapaServiceImplementacion implements MapaService
     }
 
     /*[--------]Constructors[--------]*/
-    public MapaServiceImplementacion(EntrenadorDAO unEntrenadorDAO, UbicacionDAO unUbicacionDAO, UbicacionDAONEO4J ubicacionDAONEO4J)
+    public MapaServiceImplementacion(EntrenadorDAO unEntrenadorDAO, UbicacionDAO unUbicacionDAO, UbicacionDAONEO4J ubicacionDAONEO4J, EventoDAO unEventoDao)
     {
         this.setEntrenadorDAO(unEntrenadorDAO);
         this.setUbicacionDAO(unUbicacionDAO);
         this.setUbicacionDAONEO4J(ubicacionDAONEO4J);
+        this.setEventoDAO(unEventoDao);
     }
 
 /*[--------]Getters & Setters[--------]*/
@@ -126,6 +133,9 @@ public class MapaServiceImplementacion implements MapaService
 
     private UbicacionDAONEO4J getUbicacionDAONEO4J(){return ubicacionDAONEO4J;}
     private void setUbicacionDAONEO4J(UbicacionDAONEO4J ubicacionDAONEO4J){this.ubicacionDAONEO4J=ubicacionDAONEO4J;}
+
+    public EventoDAO getEventoDAO() {   return eventoDAO;   }
+    public void setEventoDAO(EventoDAO eventoDAO) { this.eventoDAO = eventoDAO; }
 
 /*[--------]Neo4J[--------]*/
 
@@ -179,5 +189,4 @@ public class MapaServiceImplementacion implements MapaService
             return null;
         });
     }
-
 }

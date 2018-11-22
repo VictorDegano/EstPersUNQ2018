@@ -1,13 +1,16 @@
 package ar.edu.unq.epers.test.bichomon.service;
 
 import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.EventoDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EntrenadorDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EspecieDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.UbicacionDAOHibernate;
+import ar.edu.unq.epers.bichomon.backend.dao.mongoDB.EventoDAOMongoDB;
 import ar.edu.unq.epers.bichomon.backend.dao.neo4j.UbicacionDAONEO4J;
 import ar.edu.unq.epers.bichomon.backend.excepcion.CaminoMuyCostoso;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionMuyLejanaException;
+import ar.edu.unq.epers.bichomon.backend.model.Evento.Evento;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Campeon;
 import ar.edu.unq.epers.bichomon.backend.model.camino.TipoCamino;
@@ -26,6 +29,7 @@ import org.junit.Test;
 
 import javax.persistence.NoResultException;
 import java.sql.Timestamp;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -42,6 +46,7 @@ public class MapaServiceImplementacionTest
     private Entrenador pepeEmpepeado;
     private Bootstrap bootstraper;
     private BootstrapNeo4J bootstraperneo4j;
+    private EventoDAO eventoDAOMongoDB;
 
     @Before
     public void setUp() throws Exception
@@ -55,7 +60,8 @@ public class MapaServiceImplementacionTest
         entrenadorDAO       = new EntrenadorDAOHibernate();
         ubicacionDAO        = new UbicacionDAOHibernate();
         ubicacionDAONEO4J   = new UbicacionDAONEO4J();
-        mapaServiceSUT      = new MapaServiceImplementacion(entrenadorDAO, ubicacionDAO, ubicacionDAONEO4J);
+        eventoDAOMongoDB    = new EventoDAOMongoDB();
+        mapaServiceSUT      = new MapaServiceImplementacion(entrenadorDAO, ubicacionDAO, ubicacionDAONEO4J, eventoDAOMongoDB);
         pepePrueba          = new Entrenador();
         unaUbicacion        = new Pueblo();
         unaUbicacion.setNombre("El Origen 2");
@@ -94,6 +100,7 @@ public class MapaServiceImplementacionTest
     {
         bootstraper.limpiarTabla();
         bootstraperneo4j.limpiarTabla();
+        eventoDAOMongoDB.deleteAll();
     }
 
     @Test
@@ -352,6 +359,22 @@ public class MapaServiceImplementacionTest
     public void NoPuedoMoverUnEntrenadorMasDeUnaUbicacionConMoverMasCortoSiElCostoDeTodosLosViajesSuperanLaBilleteraDelEntrenador()
     {
         this.mapaServiceSUT.moverMasCorto("Pepe Empepado","Dojo Lavanda");
+    }
+
+    @Test
+    public void siUnEntrenadorSeMueveSeGeneraUnEventoDeArribo()
+    {
+        //Setup(Given)
+        List<Evento> eventoDeMovimiento;
+        //Exercise(When)
+        mapaServiceSUT.mover("Pepe DePrueba", "Dojo Deshabitado");
+        eventoDeMovimiento  = eventoDAOMongoDB.feedDeEntrenador("Pepe DePrueba");
+
+        //Test(Then)
+        assertEquals(1, eventoDeMovimiento.size());
+        assertEquals("Pepe DePrueba", eventoDeMovimiento.get(0).getEntrenador());
+        assertEquals("Dojo Deshabitado", eventoDeMovimiento.get(0).getUbicacion());
+        assertEquals("El Origen 2", eventoDeMovimiento.get(0).getUbicacionPartida());
     }
 
 
