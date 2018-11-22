@@ -7,6 +7,7 @@ import ar.edu.unq.epers.bichomon.backend.dao.neo4j.UbicacionDAONEO4J;
 import ar.edu.unq.epers.bichomon.backend.excepcion.BichoRecuperarException;
 import ar.edu.unq.epers.bichomon.backend.excepcion.EvolucionException;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
+import ar.edu.unq.epers.bichomon.backend.model.Evento.Evento;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.camino.TipoCamino;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
@@ -76,15 +77,17 @@ public class BichoServiceImplementacionTest {
         bichoDao          = new BichoDAOHibernate();
         especieDao        = new EspecieDAOHibernate();
         experienciaDao    = new ExperienciaDAOHibernate();
-        bichoServiceSut   = new BichoServiceImplementacion(entrenadorDao, ubicacionDao, bichoDao, especieDao, experienciaDao);
+        bichoServiceSut   = new BichoServiceImplementacion(entrenadorDao, ubicacionDao, bichoDao, especieDao, experienciaDao, eventoDAOMongoDB);
         condicionDao      = new CondicionDeEvolucionDAOHibernate();
         mapaService       = new MapaServiceImplementacion(entrenadorDao, ubicacionDao, ubicacionDAONEO4J, eventoDAOMongoDB);
     }
 
     @After
     public void tearDown() throws Exception
-    {bootstraper.limpiarTabla();
-                                    bootstraperNeo4j.limpiarTabla();
+    {
+        bootstraper.limpiarTabla();
+        bootstraperNeo4j.limpiarTabla();
+        eventoDAOMongoDB.deleteAll();
     }
 
     @Test
@@ -364,5 +367,24 @@ public class BichoServiceImplementacionTest {
                                     bichoDao.guardar(lagortito);
                                     entrenadorDao.guardar(entrenadorPepe);
                                     return null;});
+    }
+
+    @Test
+    public void siSeAbandonaUnBichomonEnUnaGuarderiaSeGeneraUnEventoDeAbandono()
+    {
+        //Setup(Given)
+        List<Evento> eventoDeAbandono;
+        mapaService.mover("Pepe Pepon", "La Guarderia");
+        eventoDAOMongoDB.deleteAll();
+
+        //Exercise(When)
+        bichoServiceSut.abandonar("Pepe Pepon",1);
+        eventoDeAbandono  = eventoDAOMongoDB.feedDeEntrenador("Pepe Pepon");
+
+        //Test(Then)
+        assertEquals(1, eventoDeAbandono.size());
+        assertEquals("Pepe Pepon", eventoDeAbandono.get(0).getEntrenador());
+        assertEquals("La Guarderia", eventoDeAbandono.get(0).getUbicacion());
+        assertEquals("Fortmon", eventoDeAbandono.get(0).getBichoAbandonado());
     }
 }

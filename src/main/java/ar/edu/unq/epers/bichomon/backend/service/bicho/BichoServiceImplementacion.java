@@ -5,6 +5,7 @@ import ar.edu.unq.epers.bichomon.backend.dao.hibernate.*;
 import ar.edu.unq.epers.bichomon.backend.excepcion.BichoRecuperarException;
 import ar.edu.unq.epers.bichomon.backend.excepcion.BusquedaFallida;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
+import ar.edu.unq.epers.bichomon.backend.model.Evento.EventoDeAbandono;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.TipoExperiencia;
@@ -13,6 +14,7 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Registro;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 
 import javax.persistence.NoResultException;
+import java.time.LocalDateTime;
 
 public class BichoServiceImplementacion implements BichoService
 {
@@ -21,6 +23,7 @@ public class BichoServiceImplementacion implements BichoService
     private BichoDAO bichoDao;
     private EspecieDAO especieDao;
     private ExperienciaDAO experienciaDao;
+    private EventoDAO eventoDAO;
 
     /**
      * Busca un bicho en la ubicacion actual del entrenador especificado.
@@ -58,6 +61,9 @@ public class BichoServiceImplementacion implements BichoService
                                     Bicho unBicho           = this.getBichoDao().recuperar(bicho);
                                     Entrenador unEntrenador = this.getEntrenadorDao().recuperar(entrenador);
                                     unEntrenador.abandonarBicho(unBicho);
+
+                                    eventoDAO.guardar(new EventoDeAbandono(entrenador, unEntrenador.getUbicacion().getNombre(), unBicho.getEspecie().getNombre(), LocalDateTime.now()));
+
                                     this.getEntrenadorDao().actualizar(unEntrenador);
                                     return null;
                                   });
@@ -142,13 +148,14 @@ public class BichoServiceImplementacion implements BichoService
     /*[--------]Constructors[--------]*/
     public BichoServiceImplementacion() {   }
 
-    public BichoServiceImplementacion(EntrenadorDAOHibernate entrenadorDao, UbicacionDAOHibernate ubicacionDao, BichoDAOHibernate bichoDao, EspecieDAOHibernate especieDao, ExperienciaDAOHibernate experienciaDao)
+    public BichoServiceImplementacion(EntrenadorDAOHibernate entrenadorDao, UbicacionDAOHibernate ubicacionDao, BichoDAOHibernate bichoDao, EspecieDAOHibernate especieDao, ExperienciaDAOHibernate experienciaDao, EventoDAO unEventoDao)
     {
         this.entrenadorDao  = entrenadorDao;
         this.ubicacionDao   = ubicacionDao;
         this.bichoDao       = bichoDao;
         this.especieDao     = especieDao;
         this.experienciaDao = experienciaDao;
+        this.eventoDAO      = unEventoDao;
     }
 
     /*[--------]Getters & Setters[--------]*/
@@ -163,4 +170,10 @@ public class BichoServiceImplementacion implements BichoService
 
     public EspecieDAO getEspecieDao() { return especieDao;  }
     public void setEspecieDao(EspecieDAO especieDao) {  this.especieDao = especieDao;   }
+
+    public ExperienciaDAO getExperienciaDao() { return experienciaDao;  }
+    public void setExperienciaDao(ExperienciaDAO experienciaDao) {  this.experienciaDao = experienciaDao;   }
+
+    public EventoDAO getEventoDAO() {   return eventoDAO;   }
+    public void setEventoDAO(EventoDAO eventoDAO) { this.eventoDAO = eventoDAO; }
 }

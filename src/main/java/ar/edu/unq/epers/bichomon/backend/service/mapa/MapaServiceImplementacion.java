@@ -15,6 +15,7 @@ import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class MapaServiceImplementacion implements MapaService
                     entrenadorAMoverse.moverse(ubicacionAMoverse);
                     entrenadorAMoverse.sacarDeBilletera(caminoATransitar.getCosto());
 
-                    eventoDAO.guardar(new EventoDeArribo(entrenador, ubicacionVieja.getNombre(), ubicacion));
+                    eventoDAO.guardar(new EventoDeArribo(entrenador, ubicacionVieja.getNombre(), ubicacion, LocalDateTime.now()));
 
                     this.getEntrenadorDAO().actualizar(entrenadorAMoverse);
                     this.getUbicacionDAO().actualizar(ubicacionVieja);
