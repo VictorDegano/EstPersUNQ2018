@@ -12,6 +12,7 @@ import ar.edu.unq.epers.bichomon.backend.model.entrenador.TipoExperiencia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Registro;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
+import ar.edu.unq.epers.bichomon.backend.service.runner.RunnerMongoDB;
 
 import javax.persistence.NoResultException;
 import java.time.LocalDateTime;
@@ -43,6 +44,7 @@ public class BichoServiceImplementacion implements BichoService
                 {
                     this.getEntrenadorDao().actualizar(unEntrenador);
                     unEntrenador.subirExperiencia(this.experienciaDao.recuperar(TipoExperiencia.CAPTURA).getExperiencia());
+
                     eventoDAO.guardar(new EventoDeCaptura(  entrenador,
                                                             unEntrenador.getUbicacion().getNombre(),
                                                             bicho.getEspecie().getNombre(),
@@ -68,7 +70,10 @@ public class BichoServiceImplementacion implements BichoService
                                     Entrenador unEntrenador = this.getEntrenadorDao().recuperar(entrenador);
                                     unEntrenador.abandonarBicho(unBicho);
 
-                                    eventoDAO.guardar(new EventoDeAbandono(entrenador, unEntrenador.getUbicacion().getNombre(), unBicho.getEspecie().getNombre(), LocalDateTime.now()));
+                                    eventoDAO.guardar(new EventoDeAbandono(entrenador,
+                                                                           unEntrenador.getUbicacion().getNombre(),
+                                                                           unBicho.getEspecie().getNombre(),
+                                                                           LocalDateTime.now()));
 
                                     this.getEntrenadorDao().actualizar(unEntrenador);
                                     return null;
@@ -145,7 +150,10 @@ public class BichoServiceImplementacion implements BichoService
                     {
                         unEntrenador.subirExperiencia(this.experienciaDao.recuperar(TipoExperiencia.COMBATE).getExperiencia());
                         this.getEntrenadorDao().actualizar(unEntrenador);
-                        this.crearEventosDeDuelo(entrenador, campeonAntesDeDuelo, unEntrenador.getUbicacion());
+
+                        this.crearEventosDeDuelo(entrenador,
+                                                 campeonAntesDeDuelo,
+                                                 unEntrenador.getUbicacion());
                     }
 
                     this.getUbicacionDao().actualizar(unEntrenador.getUbicacion());

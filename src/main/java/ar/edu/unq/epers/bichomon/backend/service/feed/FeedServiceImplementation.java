@@ -28,7 +28,7 @@ public class FeedServiceImplementation implements FeedService
     @Override
     public List<Evento> feedEntrenador(String entrenador)
     {
-        return Runner.runInSession(() -> {
+        return Runner.runInSessionHibernateMongo(() -> {
             Entrenador entrenadorRecuperado = this.entrenadorDAO.recuperar(entrenador);
             return this.eventoDAO.feedDeEntrenador(entrenadorRecuperado);
         });
@@ -37,7 +37,7 @@ public class FeedServiceImplementation implements FeedService
     @Override
     public List<Evento> feedUbicacion(String entrenador)
     {
-        return Runner.runInSession(() -> {
+        return Runner.runInSessionHibernateMongo(() -> {
                     Entrenador entrenadorRecuperado = this.entrenadorDAO.recuperar(entrenador);
 
                     ArrayList<String> ubicacionesABuscarEventos  = new ArrayList<>();

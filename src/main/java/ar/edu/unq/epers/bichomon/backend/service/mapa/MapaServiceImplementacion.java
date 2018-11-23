@@ -2,7 +2,6 @@ package ar.edu.unq.epers.bichomon.backend.service.mapa;
 
 import ar.edu.unq.epers.bichomon.backend.dao.EventoDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.mongoDB.EventoDAOMongoDB;
 import ar.edu.unq.epers.bichomon.backend.dao.neo4j.UbicacionDAONEO4J;
 import ar.edu.unq.epers.bichomon.backend.excepcion.CaminoMuyCostoso;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
@@ -15,6 +14,7 @@ import ar.edu.unq.epers.bichomon.backend.model.camino.TipoCamino;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
+import ar.edu.unq.epers.bichomon.backend.service.runner.RunnerMongoDB;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,12 +39,11 @@ public class MapaServiceImplementacion implements MapaService
     @Override
     public void mover(String entrenador, String ubicacion)
     {
-        Runner.runInSession(() -> {
+        Runner.runInSessionHibernateMongo(() -> {
                 Entrenador entrenadorAMoverse   = this.getEntrenadorDAO().recuperar(entrenador);
                 Ubicacion ubicacionAMoverse     = this.getUbicacionDAO().recuperar(ubicacion);
                 Ubicacion ubicacionVieja        = entrenadorAMoverse.getUbicacion();
 
-                // TODO: 22/11/2018 cuando se haga el fix de caminoA para que devuelva una lista de caminos se tendria que usar el crearEventosDeArriboPara
                 Camino caminoATransitar         = this.getUbicacionDAONEO4J().caminoA(entrenadorAMoverse.getUbicacion().getNombre(),ubicacion);
 
                 if (entrenadorAMoverse.puedeCostearViaje(caminoATransitar.getCosto()))
@@ -52,6 +51,11 @@ public class MapaServiceImplementacion implements MapaService
                     entrenadorAMoverse.moverse(ubicacionAMoverse);
                     entrenadorAMoverse.sacarDeBilletera(caminoATransitar.getCosto());
 
+//                    RunnerMongoDB.runInSession(()->{eventoDAO.guardar(new EventoDeArribo(entrenador,
+//                                                                                         ubicacionVieja.getNombre(),
+//                                                                                         ubicacion,
+//                                                                                         LocalDateTime.now()));
+//                                                                      return null;});
                     eventoDAO.guardar(new EventoDeArribo(entrenador, ubicacionVieja.getNombre(), ubicacion, LocalDateTime.now()));
 
                     this.getEntrenadorDAO().actualizar(entrenadorAMoverse);
@@ -144,7 +148,7 @@ public class MapaServiceImplementacion implements MapaService
 
     @Override
     public void moverMasCorto(String entrenador, String ubicacion) {
-        Runner.runInSession(() -> {
+        Runner.runInSessionHibernateMongo(() -> {
             Entrenador    entrenadorRecuperado  = this.entrenadorDAO.recuperar(entrenador);
             Ubicacion     ubicacionActual       = entrenadorRecuperado.getUbicacion();
             Ubicacion     ubicacionDestino      = this.ubicacionDAO.recuperar(ubicacion);
@@ -155,6 +159,8 @@ public class MapaServiceImplementacion implements MapaService
                 entrenadorRecuperado.moverse(ubicacionDestino);
                 entrenadorRecuperado.sacarDeBilletera(costo);
 
+//                RunnerMongoDB.runInSession(()->{this.crearEventosDeArriboPara(entrenador, caminos);
+//                                                return null;});
                 this.crearEventosDeArriboPara(entrenador, caminos);
 
                 this.getEntrenadorDAO().actualizar(entrenadorRecuperado);
