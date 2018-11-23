@@ -43,12 +43,12 @@ public class EventoDAOMongoDB implements EventoDAO
 
     public List<Evento> feedDeEntrenador(String entrenador)
     {
-        String query        = "{ entrenador: # }";
+        String query        = "{ $or: [ { entrenador: # }, { entrenadorDestronado: # }, { entrenadorCoronado: # } ]}";
         String querySort    = "{ fechaDeEvento: -1}";
         List<Evento> resultado  = new ArrayList<>();
         try
         {
-            MongoCursor<Evento> all = this.mongoCollection.find(query,entrenador).sort(querySort).as(Evento.class);
+            MongoCursor<Evento> all = this.mongoCollection.find(query,entrenador,entrenador,entrenador).sort(querySort).as(Evento.class);
 
             all.forEach(x -> resultado.add(x));
 
@@ -59,6 +59,28 @@ public class EventoDAOMongoDB implements EventoDAO
         catch (IOException e)
         {   throw new RuntimeException(e);  }
     }
+
+    public List<Evento> feedDeUbicaciones(List<String> ubicaciones)
+    {
+        String query        = "{ $or: [ { ubicacion: { $in: # } }, { ubicacionPartida: { $in: # } } ]}";
+        String querySort    = "{ fechaDeEvento: -1}";
+        List<Evento> resultado  = new ArrayList<>();
+        try
+        {
+            MongoCursor<Evento> all = this.mongoCollection.find(query, ubicaciones, ubicaciones).sort(querySort).as(Evento.class);
+
+            all.forEach(x -> resultado.add(x));
+
+            all.close();
+
+            return resultado;
+        }
+        catch (IOException e)
+        {   throw new RuntimeException(e);  }
+    }
+
+    @Override
+    public void guardarTodos(List<Evento> eventos) {   this.mongoCollection.insert(eventos.toArray());    }
 
     @Override
     public void actualizar(Evento evento)
