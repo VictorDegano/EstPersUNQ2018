@@ -306,10 +306,12 @@ public class BichoServiceImplementacionTest {
         List<Evento> eventoDeAbandono;
         mapaService.mover("Pepe Pepon", "La Guarderia");
         eventoDAOMongoDB.deleteAll();
+        Entrenador unEntrenadorPepon    = new Entrenador();
+        unEntrenadorPepon.setNombre("Pepe Pepon");
 
         //Exercise(When)
         bichoServiceSut.abandonar("Pepe Pepon",1);
-        eventoDeAbandono  = eventoDAOMongoDB.feedDeEntrenador("Pepe Pepon");
+        eventoDeAbandono  = eventoDAOMongoDB.feedDeEntrenador(unEntrenadorPepon);
 
         //Test(Then)
         assertEquals(1, eventoDeAbandono.size());
@@ -325,10 +327,12 @@ public class BichoServiceImplementacionTest {
         List<Evento> eventoDeDuelo;
         mapaService.mover("Pepe Pepon", "Dojo Desert");
         eventoDAOMongoDB.deleteAll();
+        Entrenador unEntrenadorPepon    = new Entrenador();
+        unEntrenadorPepon.setNombre("Pepe Pepon");
 
         //Exercise(When)
         bichoServiceSut.duelo("Pepe Pepon", 2);
-        eventoDeDuelo   = this.eventoDAOMongoDB.feedDeEntrenador("Pepe Pepon");
+        eventoDeDuelo   = this.eventoDAOMongoDB.feedDeEntrenador(unEntrenadorPepon);
 
         //Test(Then)
         assertEquals(1, eventoDeDuelo.size());
@@ -342,11 +346,38 @@ public class BichoServiceImplementacionTest {
     {
         //Setup(Given)
         Entrenador retador  = new Entrenador();
+        Entrenador defensor = new Entrenador();
+        Bicho bichoRetador = this.SetUpEventoDuelo(retador, defensor);
+
+        //Exercise(When)
+        bichoServiceSut.duelo("Retador", bichoRetador.getId());
+        List<Evento> eventoDeDueloRetador   = this.eventoDAOMongoDB.feedDeEntrenador(retador);
+        List<Evento> eventoDeDueloDefensor  = this.eventoDAOMongoDB.feedDeEntrenador(defensor);
+
+        //Test(Then)
+        assertEquals(2, eventoDeDueloRetador.size());
+        assertEquals("Defensor", eventoDeDueloRetador.get(0).getEntrenador());
+        assertEquals("Dojo RD", eventoDeDueloRetador.get(0).getUbicacion());
+        assertEquals("Retador", eventoDeDueloRetador.get(0).getEntrenadorCoronado());
+        assertEquals("Retador", eventoDeDueloRetador.get(1).getEntrenador());
+        assertEquals("Dojo RD", eventoDeDueloRetador.get(1).getUbicacion());
+        assertEquals("Defensor", eventoDeDueloRetador.get(1).getEntrenadorDestronado());
+
+        assertEquals(2, eventoDeDueloDefensor.size());
+        assertEquals("Defensor", eventoDeDueloRetador.get(0).getEntrenador());
+        assertEquals("Dojo RD", eventoDeDueloRetador.get(0).getUbicacion());
+        assertEquals("Retador", eventoDeDueloRetador.get(0).getEntrenadorCoronado());
+        assertEquals("Retador", eventoDeDueloRetador.get(1).getEntrenador());
+        assertEquals("Dojo RD", eventoDeDueloRetador.get(1).getUbicacion());
+        assertEquals("Defensor", eventoDeDueloRetador.get(1).getEntrenadorDestronado());
+    }
+
+    private Bicho SetUpEventoDuelo(Entrenador retador, Entrenador defensor)
+    {
         retador.setNombre("Retador");
         retador.setExperiencia(0);
         retador.setNivel(new Nivel(1, 1, 99, 4));
 
-        Entrenador defensor = new Entrenador();
         defensor.setNombre("Defensor");
         defensor.setExperiencia(990);
         defensor.setNivel(new Nivel(3, 400, 999, 6));
@@ -391,30 +422,8 @@ public class BichoServiceImplementacionTest {
 
         bichoServiceSut.duelo("Defensor", bichoDefensor.getId());
         eventoDAOMongoDB.deleteAll();
-
-        //Exercise(When)
-        bichoServiceSut.duelo("Retador", bichoRetador.getId());
-        List<Evento> eventoDeDueloRetador   = this.eventoDAOMongoDB.feedDeEntrenador("Retador");
-        List<Evento> eventoDeDueloDefensor  = this.eventoDAOMongoDB.feedDeEntrenador("Defensor");
-
-        //Test(Then)
-        assertEquals(2, eventoDeDueloRetador.size());
-        assertEquals("Defensor", eventoDeDueloRetador.get(0).getEntrenador());
-        assertEquals("Dojo RD", eventoDeDueloRetador.get(0).getUbicacion());
-        assertEquals("Retador", eventoDeDueloRetador.get(0).getEntrenadorCoronado());
-        assertEquals("Retador", eventoDeDueloRetador.get(1).getEntrenador());
-        assertEquals("Dojo RD", eventoDeDueloRetador.get(1).getUbicacion());
-        assertEquals("Defensor", eventoDeDueloRetador.get(1).getEntrenadorDestronado());
-
-        assertEquals(2, eventoDeDueloDefensor.size());
-        assertEquals("Defensor", eventoDeDueloRetador.get(0).getEntrenador());
-        assertEquals("Dojo RD", eventoDeDueloRetador.get(0).getUbicacion());
-        assertEquals("Retador", eventoDeDueloRetador.get(0).getEntrenadorCoronado());
-        assertEquals("Retador", eventoDeDueloRetador.get(1).getEntrenador());
-        assertEquals("Dojo RD", eventoDeDueloRetador.get(1).getUbicacion());
-        assertEquals("Defensor", eventoDeDueloRetador.get(1).getEntrenadorDestronado());
+        return bichoRetador;
     }
-
 
     private void setUpBichoSinCondicion()
     {   setUpBichoPuedeEvolucionar(Collections.emptyList());    }
