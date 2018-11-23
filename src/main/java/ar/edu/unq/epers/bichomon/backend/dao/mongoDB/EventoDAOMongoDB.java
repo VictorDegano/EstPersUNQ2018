@@ -3,6 +3,7 @@ package ar.edu.unq.epers.bichomon.backend.dao.mongoDB;
 import ar.edu.unq.epers.bichomon.backend.dao.EventoDAO;
 import ar.edu.unq.epers.bichomon.backend.excepcion.EventoRecuperarException;
 import ar.edu.unq.epers.bichomon.backend.model.Evento.Evento;
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.service.MongoConnection;
 import org.bson.types.ObjectId;
 import org.jongo.Jongo;
@@ -38,23 +39,23 @@ public class EventoDAOMongoDB implements EventoDAO
         {   return resultado;   }
         else
         {   throw new EventoRecuperarException(id); }
-
     }
 
-    public List<Evento> feedDeEntrenador(String entrenador)
+    public List<Evento> feedDeEntrenador(Entrenador entrenador)
     {
-        String query        = "{ $or: [ { entrenador: # }, { entrenadorDestronado: # }, { entrenadorCoronado: # } ]}";
-        String querySort    = "{ fechaDeEvento: -1}";
+        String entrandoNombre   = entrenador.getNombre();
+        String query            = "{ $or: [ { entrenador: # }, { entrenadorDestronado: # }, { entrenadorCoronado: # } ]}";
+        String querySort        = "{ fechaDeEvento: -1}";
         List<Evento> resultado  = new ArrayList<>();
         try
         {
-            MongoCursor<Evento> all = this.mongoCollection.find(query,entrenador,entrenador,entrenador).sort(querySort).as(Evento.class);
+            MongoCursor<Evento> all = this.mongoCollection.find(query,entrandoNombre,entrandoNombre,entrandoNombre).sort(querySort).as(Evento.class);
 
             all.forEach(x -> resultado.add(x));
 
             all.close();
 
-                return resultado;
+            return resultado;
         }
         catch (IOException e)
         {   throw new RuntimeException(e);  }

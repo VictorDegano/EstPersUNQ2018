@@ -44,6 +44,7 @@ public class MapaServiceImplementacion implements MapaService
                 Ubicacion ubicacionAMoverse     = this.getUbicacionDAO().recuperar(ubicacion);
                 Ubicacion ubicacionVieja        = entrenadorAMoverse.getUbicacion();
 
+                // TODO: 22/11/2018 cuando se haga el fix de caminoA para que devuelva una lista de caminos se tendria que usar el crearEventosDeArriboPara
                 Camino caminoATransitar         = this.getUbicacionDAONEO4J().caminoA(entrenadorAMoverse.getUbicacion().getNombre(),ubicacion);
 
                 if (entrenadorAMoverse.puedeCostearViaje(caminoATransitar.getCosto()))

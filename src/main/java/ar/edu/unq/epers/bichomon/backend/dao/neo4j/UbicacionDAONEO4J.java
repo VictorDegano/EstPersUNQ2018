@@ -53,7 +53,6 @@ public class UbicacionDAONEO4J
         try{
             String query = "MATCH (ubicacion1:Ubicacion {nombre:{elNombre1} }) "+
                            "MATCH (ubicacion2:Ubicacion {nombre:{elNombre2}}) " +
-                           //"MERGE (ubicacion1) -[:CaminoA{tipo:{tipoDeCamino}, costo:{unCosto}}] -> (ubicacion2) ";
                            "CREATE (ubicacion1) -[:CaminoA{tipo:{tipoDeCamino}, costo:{unCosto}}] -> (ubicacion2) ";
 
             session.run(query,Values.parameters(

@@ -3,6 +3,7 @@ package ar.edu.unq.epers.test.bichomon.dao.Mongodb;
 import ar.edu.unq.epers.bichomon.backend.dao.mongoDB.EventoDAOMongoDB;
 import ar.edu.unq.epers.bichomon.backend.excepcion.EventoRecuperarException;
 import ar.edu.unq.epers.bichomon.backend.model.Evento.*;
+import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import org.bson.types.ObjectId;
 import org.junit.After;
 import org.junit.Before;
@@ -16,11 +17,14 @@ import static org.junit.Assert.*;
 public class EventoDaoTestMongoDb
 {
     private EventoDAOMongoDB eventoDAOSut;
+    private Entrenador entrenadorPepinator;
 
     @Before
     public void setUp()
     {
-        this.eventoDAOSut   = new EventoDAOMongoDB();
+        this.entrenadorPepinator= new Entrenador();
+        entrenadorPepinator.setNombre("Pepinator");
+        this.eventoDAOSut       = new EventoDAOMongoDB();
     }
 
     @After
@@ -68,6 +72,9 @@ public class EventoDaoTestMongoDb
     public void SiSeBuscaLosEventosCorrespondientesAPepinatorYLuegoLosDeJosefoSeConsiguen2ListasDeTamanio3y2Respectivamente()
     {
         //Setup(Given)
+        Entrenador entrenadorJosefo   = new Entrenador();
+        entrenadorJosefo.setNombre("Josefo");
+
         LocalDateTime   fechaDeEventoCaptura= LocalDateTime.of(2018,10,23,20,0,0);
         EventoDeCaptura eventoCaptura       = new EventoDeCaptura();
         eventoCaptura.setEspecieBichoCapturado("Amarillomon");
@@ -110,8 +117,8 @@ public class EventoDaoTestMongoDb
         this.eventoDAOSut.guardar(eventoDeArribo);
 
         //Exercise(When)
-        List<Evento> eventosDePepinator = this.eventoDAOSut.feedDeEntrenador("Pepinator");
-        List<Evento> eventosDeJosefo    = this.eventoDAOSut.feedDeEntrenador("Josefo");
+        List<Evento> eventosDePepinator = this.eventoDAOSut.feedDeEntrenador(this.entrenadorPepinator);
+        List<Evento> eventosDeJosefo    = this.eventoDAOSut.feedDeEntrenador(entrenadorJosefo);
 
         //Test(Then)
         assertEquals(2, eventosDePepinator.size());
@@ -145,7 +152,7 @@ public class EventoDaoTestMongoDb
         //Setup(Given)
 
         //Exercise(When)
-        List<Evento> eventosDePepinator = this.eventoDAOSut.feedDeEntrenador("Pepinator");
+        List<Evento> eventosDePepinator = this.eventoDAOSut.feedDeEntrenador(this.entrenadorPepinator);
 
         //Test(Then)
         assertEquals(0, eventosDePepinator.size());

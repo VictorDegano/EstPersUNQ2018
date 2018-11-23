@@ -370,7 +370,7 @@ public class MapaServiceImplementacionTest
         List<Evento> eventoDeMovimiento;
         //Exercise(When)
         mapaServiceSUT.mover("Pepe DePrueba", "Dojo Deshabitado");
-        eventoDeMovimiento  = eventoDAOMongoDB.feedDeEntrenador("Pepe DePrueba");
+        eventoDeMovimiento  = eventoDAOMongoDB.feedDeEntrenador(pepePrueba);
 
         //Test(Then)
         assertEquals(1, eventoDeMovimiento.size());
@@ -386,7 +386,7 @@ public class MapaServiceImplementacionTest
         List<Evento> eventoDeMovimiento;
         //Exercise(When)
         mapaServiceSUT.moverMasCorto("Pepe DePrueba", "Volcano");
-        eventoDeMovimiento  = eventoDAOMongoDB.feedDeEntrenador("Pepe DePrueba");
+        eventoDeMovimiento  = eventoDAOMongoDB.feedDeEntrenador(pepePrueba);
 
         //Test(Then)
         assertEquals(2, eventoDeMovimiento.size());
