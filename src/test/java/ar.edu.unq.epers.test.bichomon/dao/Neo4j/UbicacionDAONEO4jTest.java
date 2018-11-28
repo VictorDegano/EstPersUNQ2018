@@ -69,8 +69,8 @@ public class UbicacionDAONEO4jTest {
 
         ubicacionDAONEO4J.create(guarderiaSut);
         ubicacionDAONEO4J.create(dojoConCampeon);
-        ubicacionDAONEO4J.conectar(guarderiaSut.getNombre(),dojoConCampeon.getNombre(),TipoCamino.AEREO);
-        assertTrue(ubicacionDAONEO4J.estanConectados(guarderiaSut.getNombre(),dojoConCampeon.getNombre()));
+        ubicacionDAONEO4J.conectar(guarderiaSut, dojoConCampeon, TipoCamino.AEREO);
+        assertTrue(ubicacionDAONEO4J.estanConectados(guarderiaSut,dojoConCampeon));
 
     }
 
@@ -129,9 +129,11 @@ public class UbicacionDAONEO4jTest {
     public void AlPreguntarLasUbicacionesConectadasPorCaminosTerrestresAPuebloLavandaRespondePuebloOrigenYDojoLavanda()
     {
         //Setup (Given)
+        Pueblo puebloLavanda    = new Pueblo();
+        puebloLavanda.setNombre("Pueblo Lavanda");
         List<String> ubicacionesConectadas;
         //Exercise (When)
-        ubicacionesConectadas   = this.ubicacionDAONEO4J.conectados(TipoCamino.TERRESTRE.name(), "Pueblo Lavanda");
+        ubicacionesConectadas   = this.ubicacionDAONEO4J.conectados(puebloLavanda, TipoCamino.TERRESTRE);
         //Test (Then)
         assertEquals(2, ubicacionesConectadas.size());
         assertTrue(ubicacionesConectadas.containsAll(Arrays.asList("Dojo Lavanda","Pueblo Origen")));
@@ -141,9 +143,11 @@ public class UbicacionDAONEO4jTest {
     public void AlPreguntarLasUbicacionesConectadasPorCaminosAereosADojoLavandaRespondeDojoOrigen()
     {
         //Setup (Given)
+        Dojo dojoLavanda    = new Dojo();
+        dojoLavanda.setNombre("Dojo Lavanda");
         List<String> ubicacionesConectadas;
         //Exercise (When)
-        ubicacionesConectadas   = this.ubicacionDAONEO4J.conectados(TipoCamino.AEREO.name(), "Dojo Lavanda");
+        ubicacionesConectadas   = this.ubicacionDAONEO4J.conectados(dojoLavanda, TipoCamino.AEREO);
         //Test (Then)
         assertArrayEquals(new String[]{"Pueblo Lavanda"}, ubicacionesConectadas.toArray());
     }
@@ -152,9 +156,11 @@ public class UbicacionDAONEO4jTest {
     public void AlPreguntarLasUbicacionesConectadasPorCaminosMaritimosAPuebloOrigenRespondeDojoLavanda()
     {
         //Setup (Given)
+        Pueblo puebloOrigen    = new Pueblo();
+        puebloOrigen.setNombre("Pueblo Origen");
         List<String> ubicacionesConectadas;
         //Exercise (When)
-        ubicacionesConectadas   = this.ubicacionDAONEO4J.conectados(TipoCamino.MARITIMO.name(), "Pueblo Origen");
+        ubicacionesConectadas   = this.ubicacionDAONEO4J.conectados(puebloOrigen, TipoCamino.MARITIMO);
         //Test (Then)
         assertArrayEquals(new String[]{"Dojo Lavanda"}, ubicacionesConectadas.toArray());
     }
@@ -163,9 +169,11 @@ public class UbicacionDAONEO4jTest {
     public void AlPreguntarLasUbicacionesConectadasPorCaminosTerrestresALaGuarderiaRespondeUnaListaVacia()
     {
         //Setup (Given)
+        Guarderia laGuarderia   = new Guarderia();
+        laGuarderia.setNombre("La Guarderia");
         List<String> ubicacionesConectadas;
         //Exercise (When)
-        ubicacionesConectadas   = this.ubicacionDAONEO4J.conectados(TipoCamino.TERRESTRE.name(), "La Guarderia");
+        ubicacionesConectadas   = this.ubicacionDAONEO4J.conectados(laGuarderia, TipoCamino.TERRESTRE);
         //Test (Then)
         assertArrayEquals(new String[]{}, ubicacionesConectadas.toArray());
     }

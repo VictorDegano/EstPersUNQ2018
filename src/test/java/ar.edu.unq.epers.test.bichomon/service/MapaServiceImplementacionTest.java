@@ -91,8 +91,8 @@ public class MapaServiceImplementacionTest
                                     this.ubicacionDAONEO4J.create(unaUbicacion);
                                     this.ubicacionDAONEO4J.create(dojoDeshabitado);
                                     this.ubicacionDAONEO4J.create(unaUbicacionNueva);
-                                    this.ubicacionDAONEO4J.conectar("El Origen 2", "Dojo Deshabitado", TipoCamino.TERRESTRE);
-                                    this.ubicacionDAONEO4J.conectar("Dojo Deshabitado", "Volcano", TipoCamino.TERRESTRE);
+                                    this.ubicacionDAONEO4J.conectar(unaUbicacion, dojoDeshabitado, TipoCamino.TERRESTRE);
+                                    this.ubicacionDAONEO4J.conectar(dojoDeshabitado, unaUbicacionNueva, TipoCamino.TERRESTRE);
                                     return null; });
 
 

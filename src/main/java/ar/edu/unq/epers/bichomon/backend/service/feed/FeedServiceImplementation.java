@@ -43,9 +43,9 @@ public class FeedServiceImplementation implements FeedService
                     ArrayList<String> ubicacionesABuscarEventos  = new ArrayList<>();
                     ubicacionesABuscarEventos.add(entrenadorRecuperado.getUbicacion().getNombre());
 
-                    ubicacionesABuscarEventos.addAll(this.ubicacionDAONEO4J.conectados(TipoCamino.TERRESTRE.name(), entrenadorRecuperado.getUbicacion().getNombre()));
-                    ubicacionesABuscarEventos.addAll(this.ubicacionDAONEO4J.conectados(TipoCamino.MARITIMO.name(), entrenadorRecuperado.getUbicacion().getNombre()));
-                    ubicacionesABuscarEventos.addAll(this.ubicacionDAONEO4J.conectados(TipoCamino.AEREO.name(), entrenadorRecuperado.getUbicacion().getNombre()));
+                    ubicacionesABuscarEventos.addAll(this.ubicacionDAONEO4J.conectados(entrenadorRecuperado.getUbicacion(), TipoCamino.TERRESTRE));
+                    ubicacionesABuscarEventos.addAll(this.ubicacionDAONEO4J.conectados(entrenadorRecuperado.getUbicacion(), TipoCamino.MARITIMO));
+                    ubicacionesABuscarEventos.addAll(this.ubicacionDAONEO4J.conectados(entrenadorRecuperado.getUbicacion(), TipoCamino.AEREO));
 
                     return this.eventoDAO.feedDeUbicaciones(ubicacionesABuscarEventos);
                 });

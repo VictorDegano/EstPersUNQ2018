@@ -19,6 +19,7 @@ import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionEvolucion;
 import ar.edu.unq.epers.bichomon.backend.model.evolucion.CondicionVictoria;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Registro;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.BichoServiceImplementacion;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.MapaService;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.MapaServiceImplementacion;
@@ -65,11 +66,14 @@ public class BichoServiceImplementacionTest {
         ubicacionDao      = new UbicacionDAOHibernate();
         eventoDAOMongoDB  = new EventoDAOMongoDB();
         Runner.runInSession(()-> {  bootstraper.crearDatos();
-                                    ubicacionDAONEO4J.create(ubicacionDao.recuperar("El Origen"));
-                                    ubicacionDAONEO4J.create(ubicacionDao.recuperar("Dojo Desert"));
-                                    ubicacionDAONEO4J.create(ubicacionDao.recuperar("La Guarderia"));
-                                    ubicacionDAONEO4J.conectar("El Origen", "La Guarderia", TipoCamino.TERRESTRE);
-                                    ubicacionDAONEO4J.conectar("El Origen", "Dojo Desert", TipoCamino.TERRESTRE);
+                                    Ubicacion elOrigen      = ubicacionDao.recuperar("El Origen");
+                                    Ubicacion dojoDesert    = ubicacionDao.recuperar("Dojo Desert");
+                                    Ubicacion laGuarderia   = ubicacionDao.recuperar("La Guarderia");
+                                    ubicacionDAONEO4J.create(elOrigen);
+                                    ubicacionDAONEO4J.create(dojoDesert);
+                                    ubicacionDAONEO4J.create(laGuarderia);
+                                    ubicacionDAONEO4J.conectar(elOrigen, laGuarderia, TipoCamino.TERRESTRE);
+                                    ubicacionDAONEO4J.conectar(elOrigen, dojoDesert, TipoCamino.TERRESTRE);
                                     return null;});
         entrenadorDao     = new EntrenadorDAOHibernate();
 

@@ -47,7 +47,7 @@ public class UbicacionDAONEO4J
     }
 
 
-    public void conectar(String ubicacion1 , String ubicacion2 , TipoCamino tipoCamino){
+    public void conectar(Ubicacion ubicacion1 , Ubicacion ubicacion2 , TipoCamino tipoCamino){
 
         Session session = this.driver.session();
         try{
@@ -56,24 +56,26 @@ public class UbicacionDAONEO4J
                            "CREATE (ubicacion1) -[:CaminoA{tipo:{tipoDeCamino}, costo:{unCosto}}] -> (ubicacion2) ";
 
             session.run(query,Values.parameters(
-                    "elNombre1",ubicacion1,
-                                   "elNombre2",ubicacion2,
+                    "elNombre1",ubicacion1.getNombre(),
+                                   "elNombre2",ubicacion2.getNombre(),
                                    "tipoDeCamino", tipoCamino.name(),
                                    "unCosto", tipoCamino.costo()));
         }
         finally
         {   session.close();    }
     }
-    public Boolean estanConectados(String ubicacion1,String ubicacion2){
+    public Boolean estanConectados(Ubicacion ubicacion1,Ubicacion ubicacion2){
             Session session = this.driver.session();
             try{
                 String query = "MATCH (u:Ubicacion{nombre:{laUbicacion1}})" +
                                "MATCH (u2 : Ubicacion{nombre:{laUbicacion2}})"+
                                "MATCH (u)-[r]->(u2)"+
                                "return r";
-                StatementResult result =  session.run(query,Values.parameters(
-                        "laUbicacion1",ubicacion1,
-                        "laUbicacion2",ubicacion2));
+                StatementResult result =  session.run(  query,
+                                                        Values.parameters(  "laUbicacion1",
+                                                                            ubicacion1.getNombre(),
+                                                                            "laUbicacion2",
+                                                                        ubicacion2.getNombre()));
                return result.hasNext();
             }
             finally {
@@ -146,7 +148,7 @@ public class UbicacionDAONEO4J
     }
 
 
-    public List<String> conectados(String tipoDeCamino, String ubicacion)
+    public List<String> conectados(Ubicacion ubicacion, TipoCamino tipoDeCamino)
     {
         Session session = this.driver.session();
         try {
@@ -154,7 +156,7 @@ public class UbicacionDAONEO4J
                             "MATCH (ubicacion:Ubicacion)-[:CaminoA{tipo:{tipoDeCamino}}]->(u1) " +
                             "RETURN ubicacion";
 
-            StatementResult result = session.run(query, Values.parameters("tipoDeCamino", tipoDeCamino, "ubicacion", ubicacion));
+            StatementResult result = session.run(query, Values.parameters("tipoDeCamino", tipoDeCamino.name(), "ubicacion", ubicacion.getNombre()));
 
             return result.list(record -> {  return record.get(0).asNode().get("nombre").asString();  });
         }

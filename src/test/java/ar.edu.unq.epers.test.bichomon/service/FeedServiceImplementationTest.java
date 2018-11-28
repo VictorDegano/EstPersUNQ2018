@@ -115,8 +115,8 @@ public class FeedServiceImplementationTest
     {
         //Setup(Given)
         List<Evento> eventosDeUbicacion;
-        Runner.runInSession(()-> {  ubicacionDAONEO4J.conectar(unaGuarderia.getNombre(), unPueblo.getNombre(), TipoCamino.TERRESTRE);
-                                    ubicacionDAONEO4J.conectar(unDojo.getNombre(), unaGuarderia.getNombre(), TipoCamino.AEREO);
+        Runner.runInSession(()-> {  ubicacionDAONEO4J.conectar(unaGuarderia, unPueblo, TipoCamino.TERRESTRE);
+                                    ubicacionDAONEO4J.conectar(unDojo, unaGuarderia, TipoCamino.AEREO);
                                     return null;});
 
         LocalDateTime fechaDeEventoCaptura  = LocalDateTime.of(2018,10,23,20,0,0);

@@ -5,6 +5,7 @@ import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.neo4j.UbicacionDAONEO4J;
 import ar.edu.unq.epers.bichomon.backend.excepcion.CaminoMuyCostoso;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionIncorrectaException;
+import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionesInexistentesException;
 import ar.edu.unq.epers.bichomon.backend.model.Evento.Evento;
 import ar.edu.unq.epers.bichomon.backend.model.Evento.EventoDeArribo;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
@@ -190,8 +191,16 @@ public class MapaServiceImplementacion implements MapaService
     @Override
     public List<Ubicacion> conectados(String ubicacion, String tipoCamino) {
         return Runner.runInSession(() -> {
-            List<String> nombresDeUbicaciones = this.ubicacionDAONEO4J.conectados(ubicacion, tipoCamino);
-            return  this.ubicacionDAO.recuperarUbicaciones(nombresDeUbicaciones);
+            Ubicacion unaUbicacion  = this.ubicacionDAO.recuperar(ubicacion);
+
+            if (unaUbicacion != null)
+            {
+                List<String> nombresDeUbicaciones = this.ubicacionDAONEO4J.conectados(unaUbicacion, TipoCamino.valueOf(tipoCamino));
+                return  this.ubicacionDAO.recuperarUbicaciones(nombresDeUbicaciones);
+            }
+            else
+            {   throw new UbicacionIncorrectaException(ubicacion);   }
+
         });
     }
 
@@ -209,7 +218,13 @@ public class MapaServiceImplementacion implements MapaService
     @Override
     public void conectar(String ubicacion1, String ubicacion2, String tipoCamino) {
         Runner.runInSession(() -> {
-            this.ubicacionDAONEO4J.conectar(ubicacion1, ubicacion2, TipoCamino.valueOf(tipoCamino));
+            Ubicacion unaUbicacion  = this.ubicacionDAO.recuperar(ubicacion1);
+            Ubicacion otraUbicacion = this.ubicacionDAO.recuperar(ubicacion2);
+
+            if (unaUbicacion != null && otraUbicacion != null)
+            {   this.ubicacionDAONEO4J.conectar(unaUbicacion, otraUbicacion, TipoCamino.valueOf(tipoCamino));   }
+            else
+            {   throw new UbicacionesInexistentesException(ubicacion1 + ", " + ubicacion2);   }
             return null;
         });
     }
