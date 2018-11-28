@@ -100,10 +100,14 @@ public class UbicacionDAONEO4jTest {
     @Test
     public void SiLePidoElCaminoMasCortoADojoLavandaDesdePuebloOrigenMeDevuelveUnaListaDeDosCaminos()
     {
-        //Setup (Given)
+        //Setup
+        Pueblo puebloOrigen = new Pueblo();
+        puebloOrigen.setNombre("Pueblo Origen");
+        Dojo dojoLavanda    = new Dojo();
+        dojoLavanda.setNombre("Dojo Lavanda");
         List<Camino> caminos;
         //Exercise (When)
-        caminos = this.ubicacionDAONEO4J.caminoMasCortoA("Pueblo Origen", "Dojo Lavanda");
+        caminos = this.ubicacionDAONEO4J.caminoMasCortoA(puebloOrigen, dojoLavanda);
         //Test (Then)
         assertEquals(2, caminos.size());
         assertEquals("Pueblo Origen", caminos.get(0).getDesdeUbicacion());
@@ -120,8 +124,13 @@ public class UbicacionDAONEO4jTest {
     public void SiLePidoElCaminoMasCortoADojoLavandaDesdeLaGuarderiaMeDaUnaExcepcion()
     {
         //Setup (Given)
+        Dojo dojoLavanda    = new Dojo();
+        dojoLavanda.setNombre("Dojo Lavanda");
+        Guarderia laGuarderia   = new Guarderia();
+        laGuarderia.setNombre("La Guarderia");
+
         //Exercise (When)
-        this.ubicacionDAONEO4J.caminoMasCortoA("La Guarderia", "Dojo Lavanda");
+        this.ubicacionDAONEO4J.caminoMasCortoA(laGuarderia, dojoLavanda);
         //Test (Then)
     }
 

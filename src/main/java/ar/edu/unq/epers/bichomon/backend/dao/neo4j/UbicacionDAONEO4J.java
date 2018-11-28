@@ -118,18 +118,18 @@ public class UbicacionDAONEO4J
     }
 
 
-    public List<Camino> caminoMasCortoA(String nombreUbicacionOrigen, String nombreUbicacionDestino) {
+    public List<Camino> caminoMasCortoA(Ubicacion ubicacionOrigen, Ubicacion ubicacionDestino) {
         Session session = this.driver.session();
         try {
             String query =  "MATCH (u1:Ubicacion {nombre: {ubicacionOrigen}}) " +
                             "MATCH (u2:Ubicacion {nombre: {ubicacionDonde}}) " +
                             "RETURN shortestPath( (u1)-[*1..]->(u2))";
 
-            StatementResult result = session.run(query, Values.parameters("ubicacionOrigen", nombreUbicacionOrigen, "ubicacionDonde", nombreUbicacionDestino));
+            StatementResult result = session.run(query, Values.parameters("ubicacionOrigen", ubicacionOrigen.getNombre(), "ubicacionDonde", ubicacionDestino.getNombre()));
 
             Value resultRecord  = result.single().get(0);
             if (resultRecord.isNull())
-            {   throw new UbicacionMuyLejanaException(nombreUbicacionDestino);  }
+            {   throw new UbicacionMuyLejanaException(ubicacionDestino.getNombre());  }
 
             Path ruta           = resultRecord.asPath();
             List<Camino> caminos= new ArrayList<>();

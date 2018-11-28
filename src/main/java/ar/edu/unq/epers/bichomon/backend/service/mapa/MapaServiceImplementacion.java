@@ -15,8 +15,6 @@ import ar.edu.unq.epers.bichomon.backend.model.camino.TipoCamino;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
-import ar.edu.unq.epers.bichomon.backend.service.runner.RunnerMongoDB;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,12 +49,6 @@ public class MapaServiceImplementacion implements MapaService
                 {
                     entrenadorAMoverse.moverse(ubicacionAMoverse);
                     entrenadorAMoverse.sacarDeBilletera(caminoATransitar.getCosto());
-
-//                    RunnerMongoDB.runInSession(()->{eventoDAO.guardar(new EventoDeArribo(entrenador,
-//                                                                                         ubicacionVieja.getNombre(),
-//                                                                                         ubicacion,
-//                                                                                         LocalDateTime.now()));
-//                                                                      return null;});
                     eventoDAO.guardar(new EventoDeArribo(entrenador, ubicacionVieja.getNombre(), ubicacion, LocalDateTime.now()));
 
                     this.getEntrenadorDAO().actualizar(entrenadorAMoverse);
@@ -153,15 +145,18 @@ public class MapaServiceImplementacion implements MapaService
             Entrenador    entrenadorRecuperado  = this.entrenadorDAO.recuperar(entrenador);
             Ubicacion     ubicacionActual       = entrenadorRecuperado.getUbicacion();
             Ubicacion     ubicacionDestino      = this.ubicacionDAO.recuperar(ubicacion);
-            List<Camino>  caminos               = this.ubicacionDAONEO4J.caminoMasCortoA(ubicacionActual.getNombre(), ubicacion);
+
+            if (ubicacionDestino == null)
+            {   throw new UbicacionIncorrectaException(ubicacion);  }
+
+            List<Camino>  caminos               = this.ubicacionDAONEO4J.caminoMasCortoA(ubicacionActual, ubicacionDestino);
             int costo                           = caminos.stream().mapToInt(camino -> camino.getCosto()).sum();
+
             if (entrenadorRecuperado.puedeCostearViaje(costo))
             {
                 entrenadorRecuperado.moverse(ubicacionDestino);
                 entrenadorRecuperado.sacarDeBilletera(costo);
 
-//                RunnerMongoDB.runInSession(()->{this.crearEventosDeArriboPara(entrenador, caminos);
-//                                                return null;});
                 this.crearEventosDeArriboPara(entrenador, caminos);
 
                 this.getEntrenadorDAO().actualizar(entrenadorRecuperado);
