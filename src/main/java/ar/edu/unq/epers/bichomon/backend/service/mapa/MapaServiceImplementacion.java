@@ -43,13 +43,16 @@ public class MapaServiceImplementacion implements MapaService
                 Ubicacion ubicacionAMoverse     = this.getUbicacionDAO().recuperar(ubicacion);
                 Ubicacion ubicacionVieja        = entrenadorAMoverse.getUbicacion();
 
-                Camino caminoATransitar         = this.getUbicacionDAONEO4J().caminoA(entrenadorAMoverse.getUbicacion().getNombre(),ubicacion);
+                List<Camino> caminosATransitar  = this.getUbicacionDAONEO4J().caminoA(entrenadorAMoverse.getUbicacion(), ubicacionAMoverse);
+                int costo                       = caminosATransitar.stream().mapToInt(camino -> camino.getCosto()).sum();
 
-                if (entrenadorAMoverse.puedeCostearViaje(caminoATransitar.getCosto()))
+                if (entrenadorAMoverse.puedeCostearViaje(costo))
                 {
                     entrenadorAMoverse.moverse(ubicacionAMoverse);
-                    entrenadorAMoverse.sacarDeBilletera(caminoATransitar.getCosto());
-                    eventoDAO.guardar(new EventoDeArribo(entrenador, ubicacionVieja.getNombre(), ubicacion, LocalDateTime.now()));
+                    entrenadorAMoverse.sacarDeBilletera(costo);
+
+                    this.crearEventosDeArriboPara(entrenador, caminosATransitar);
+                    //eventoDAO.guardar(new EventoDeArribo(entrenador, ubicacionVieja.getNombre(), ubicacion, LocalDateTime.now()));
 
                     this.getEntrenadorDAO().actualizar(entrenadorAMoverse);
                     this.getUbicacionDAO().actualizar(ubicacionVieja);

@@ -75,7 +75,7 @@ public class UbicacionDAONEO4J
                                                         Values.parameters(  "laUbicacion1",
                                                                             ubicacion1.getNombre(),
                                                                             "laUbicacion2",
-                                                                        ubicacion2.getNombre()));
+                                                                            ubicacion2.getNombre()));
                return result.hasNext();
             }
             finally {
@@ -84,7 +84,7 @@ public class UbicacionDAONEO4J
         }
 
 
-    public Camino caminoA(String nombreUbicacionOrigen, String nombreUbicacionDestino)
+    public List<Camino> caminoA(Ubicacion ubicacionOrigen, Ubicacion ubicacionDestino)
     {
         Session session = this.driver.session();
         try
@@ -92,29 +92,49 @@ public class UbicacionDAONEO4J
             String query =  "MATCH (u1:Ubicacion {nombre: {ubicacionOrigen}}) " +
                             "MATCH (u2:Ubicacion {nombre: {ubicacionDonde}}) " +
                             "MATCH path = (u1)-[*1]->(u2) " +
-                            "WITH path, EXTRACT(p in relationships(path) | p.costo) AS costo " +
+                            "WITH path, " +
+                            "REDUCE(costo=0, x IN EXTRACT(p IN RELATIONSHIPS(path) | p.costo) | costo + x ) AS costo " +
                             "RETURN path " +
                             "ORDER BY costo " +
                             "LIMIT 1";
 
-            StatementResult result = session.run(query, Values.parameters("ubicacionOrigen", nombreUbicacionOrigen, "ubicacionDonde", nombreUbicacionDestino));
+            StatementResult result = session.run(query, Values.parameters("ubicacionOrigen", ubicacionOrigen.getNombre(), "ubicacionDonde", ubicacionDestino.getNombre()));
 
-            if (result.hasNext())
-                return result.list(record -> {
-                                        Value ruta          = record.get(0);
-                                        Relationship camino = ruta.asPath().relationships().iterator().next();
+            if (! result.hasNext())
+            {   throw new UbicacionMuyLejanaException(ubicacionDestino.getNombre());  }
 
-                                        String inicio   = ruta.asPath().start().get("nombre").asString();
-                                        String tipo     = camino.get("tipo").asString();
-                                        int costo       = camino.get("costo").asInt();
-                                        String donde    = ruta.asPath().end().get("nombre").asString();
-                                        return new Camino(inicio, donde, tipo, costo);
-                                    }).get(0);
-            else
-            {   throw new UbicacionMuyLejanaException(nombreUbicacionDestino);  }
+            Value resultRecord  = result.single().get(0);
+            Path ruta           = resultRecord.asPath();
+            List<Camino> caminos= new ArrayList<>();
+            for (Segment segmento : ruta)
+            {
+                String inicio = segmento.start().get("nombre").asString();
+                String tipo = segmento.relationship().get("tipo").asString();
+                int costo = segmento.relationship().get("costo").asInt();
+                String donde = segmento.end().get("nombre").asString();
+                caminos.add(new Camino(inicio, donde, tipo, costo));
+            }
+            return caminos;
         }
         finally
         {   session.close();    }
+
+//            if (result.hasNext())
+//                return result.list(record -> {
+//                                        Value ruta          = record.get(0);
+//                                        Relationship camino = ruta.asPath().relationships().iterator().next();
+//
+//                                        String inicio   = ruta.asPath().start().get("nombre").asString();
+//                                        String tipo     = camino.get("tipo").asString();
+//                                        int costo       = camino.get("costo").asInt();
+//                                        String donde    = ruta.asPath().end().get("nombre").asString();
+//                                        return new Camino(inicio, donde, tipo, costo);
+//                                    }).get(0);
+//            else
+//            {   throw new UbicacionMuyLejanaException(ubicacionDestino.getNombre());  }
+//        }
+//        finally
+//        {   session.close();    }
     }
 
 

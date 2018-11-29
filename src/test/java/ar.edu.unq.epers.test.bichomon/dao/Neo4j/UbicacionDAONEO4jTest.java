@@ -78,22 +78,34 @@ public class UbicacionDAONEO4jTest {
     public void SiLePidoElCaminoADojoOrigenDesdePuebloOrigenMeDevuelveElCaminoMasBarato()
     {
         //Setup (Given)
-        Camino camino;
+        Pueblo puebloOrigen = new Pueblo();
+        puebloOrigen.setNombre("Pueblo Origen");
+
+        Dojo dojoOrigen = new Dojo();
+        dojoOrigen.setNombre("Dojo Origen");
+
+        List<Camino> camino;
         //Exercise (When)
-        camino  = this.ubicacionDAONEO4J.caminoA("Pueblo Origen", "Dojo Origen");
+        camino  = this.ubicacionDAONEO4J.caminoA(puebloOrigen, dojoOrigen);
         //Test (Then)
-        assertEquals("Pueblo Origen", camino.getDesdeUbicacion());
-        assertEquals(TipoCamino.TERRESTRE, camino.getTipo());
-        assertEquals(1, camino.getCosto());
-        assertEquals("Dojo Origen", camino.getHastaUbicacion());
+        assertEquals("Pueblo Origen", camino.get(0).getDesdeUbicacion());
+        assertEquals(TipoCamino.TERRESTRE, camino.get(0).getTipo());
+        assertEquals(1, camino.get(0).getCosto());
+        assertEquals("Dojo Origen", camino.get(0).getHastaUbicacion());
     }
 
     @Test(expected = UbicacionMuyLejanaException.class)
     public void SiLePidoElCaminoADojoLavandaDesdePuebloOrigenMeDevuelveUnaExcepcion()
     {
         //Setup (Given)
+        Pueblo puebloOrigen = new Pueblo();
+        puebloOrigen.setNombre("Pueblo Origen");
+
+        Dojo dojoLavanda = new Dojo();
+        dojoLavanda.setNombre("Dojo Lavanda");
+
         //Exercise (When)
-        this.ubicacionDAONEO4J.caminoA("Pueblo Origen", "Dojo Lavanda");
+        this.ubicacionDAONEO4J.caminoA(puebloOrigen, dojoLavanda);
         //Test (Then)
     }
 
