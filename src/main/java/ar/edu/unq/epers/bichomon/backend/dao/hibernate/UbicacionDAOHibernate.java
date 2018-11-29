@@ -74,12 +74,14 @@ public class UbicacionDAOHibernate implements UbicacionDAO
     }
 
     @Override
-    public List<Ubicacion> recuperarUbicaciones(List<String> nombresDeUbicaciones) {
-        List<Ubicacion> ubicaciones = new ArrayList<Ubicacion>();
-        for(String nombreUbicacion: nombresDeUbicaciones){
-            ubicaciones.add(this.recuperar(nombreUbicacion));
-        }
-        return ubicaciones;
+    public List<Ubicacion> recuperarUbicaciones(List<String> nombresDeUbicaciones)
+    {
+        Session session = Runner.getCurrentSession();
+        String hql      =   "FROM Ubicacion u " +
+                            "WHERE u.nombre IN :listaDeNombres";
+        Query<Ubicacion> query = session.createQuery(hql, Ubicacion.class);
+        query.setParameter("listaDeNombres", nombresDeUbicaciones);
+        return query.getResultList();
     }
 
 }
