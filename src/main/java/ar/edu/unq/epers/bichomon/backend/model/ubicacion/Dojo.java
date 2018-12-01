@@ -49,10 +49,10 @@ public class Dojo extends Ubicacion
         // si hay un campeon comienza un duelo
         if(campeonActual != null)
         {
-            int contadorDeTurno = 0;
-            int energiaInicialCampeon = campeonActual.getBichoCampeon().getEnergia();
-            int energiaInicialRetador = bichoRetador.getEnergia();
-            Bicho campeon = this.campeonActual.getBichoCampeon();
+            int contadorDeTurno         = 0;
+            int energiaInicialCampeon   = campeonActual.getBichoCampeon().getEnergia();
+            int energiaInicialRetador   = bichoRetador.getEnergia();
+            Bicho campeon               = this.campeonActual.getBichoCampeon();
 
             //inicia el duelo
             while (campeon.getEnergia() > 0 && bichoRetador.getEnergia() > 0 && contadorDeTurno != 10)
@@ -64,12 +64,12 @@ public class Dojo extends Ubicacion
 
             // se corona al nuevo campeon
             if (campeon.getEnergia() <= 0)
-            {
-                registroDeLucha.setGanador(bichoRetador);
-                this.coronarANuevoCampeon(registroDeLucha.getGanador());
-            }
+            {   this.declararGanadorARetador(bichoRetador, registroDeLucha);    }
             else
-            {   registroDeLucha.setGanador(campeon);    }
+            {
+                registroDeLucha.setGanador(campeon);
+                campeon.nuevaVictoria();
+            }
 
             // se restaura la vida de los bichos
             Double randVal= Math.random() * 5;
@@ -77,14 +77,18 @@ public class Dojo extends Ubicacion
             bichoRetador.setEnergia(energiaInicialRetador + randVal.intValue());
         }
         else // si no hay campeon, es coronado el retador
-        {
-            coronarANuevoCampeon(bichoRetador);
-            registroDeLucha.setGanador(bichoRetador);
-        }
+        {   this.declararGanadorARetador(bichoRetador, registroDeLucha);    }
 
         // se agrega el combate al historial de combates
         historial.add(registroDeLucha);
         return registroDeLucha;
+    }
+
+    private void declararGanadorARetador(Bicho bichoRetador, Registro registroDeLucha)
+    {
+        registroDeLucha.setGanador(bichoRetador);
+        this.coronarANuevoCampeon(registroDeLucha.getGanador());
+        bichoRetador.nuevaVictoria();
     }
 
     @Override

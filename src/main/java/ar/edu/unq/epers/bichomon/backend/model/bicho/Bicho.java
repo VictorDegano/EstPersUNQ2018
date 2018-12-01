@@ -75,6 +75,8 @@ public class Bicho {
         {   this.setEnergia(this.getEspecie().getEnergiaInicial());  }
     }
 
+    public void nuevaVictoria()    {   this.setVictorias(this.getVictorias()+1);   }
+
     public Bicho() {}
 
 	public Bicho(Especie especie, String nombre)
@@ -131,4 +133,13 @@ public class Bicho {
     public void setPoder(int poder) {   this.poder = poder; }
 
 	public List<Entrenador> getEntrenadoresAntiguos() { return entrenadoresAntiguos;   }
+
+	public List<String> nombresDeEntrenadoresAntiguos()
+	{
+		List<String>    nombres = new ArrayList<>();
+		for (Entrenador e : this.getEntrenadoresAntiguos())
+		{   nombres.add(e.getNombre()); }
+
+		return nombres;
+	}
 }

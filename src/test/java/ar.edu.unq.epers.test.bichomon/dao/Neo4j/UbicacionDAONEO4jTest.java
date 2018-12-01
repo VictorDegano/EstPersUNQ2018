@@ -2,12 +2,8 @@ package ar.edu.unq.epers.test.bichomon.dao.Neo4j;
 
 import ar.edu.unq.epers.bichomon.backend.dao.neo4j.UbicacionDAONEO4J;
 import ar.edu.unq.epers.bichomon.backend.excepcion.UbicacionMuyLejanaException;
-import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.camino.Camino;
 import ar.edu.unq.epers.bichomon.backend.model.camino.TipoCamino;
-import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
-import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
-import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo;
@@ -15,8 +11,6 @@ import extra.BootstrapNeo4J;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
