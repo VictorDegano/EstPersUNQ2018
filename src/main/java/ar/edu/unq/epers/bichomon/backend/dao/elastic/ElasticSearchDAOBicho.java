@@ -17,7 +17,7 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ElasticSearchDAO
+public class ElasticSearchDAOBicho
 {
     public IndexResponse indexar(Bicho unBichoAIndexar)
     {

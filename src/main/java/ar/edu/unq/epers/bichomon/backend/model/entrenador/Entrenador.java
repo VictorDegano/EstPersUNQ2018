@@ -105,6 +105,15 @@ public class Entrenador
 
     public void sacarDeBilletera(int monedasAGastar)
     {   this.setBilletera(this.getBilletera() - monedasAGastar);    }
+
+    public List<String> nombreDeBichos()
+    {
+        List<String>    nombres = new ArrayList<>();
+        for (Bicho e : this.getBichosCapturados())
+        {   nombres.add(e.getNombre()); }
+
+        return nombres;
+    }
 }
 
 

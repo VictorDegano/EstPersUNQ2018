@@ -1,7 +1,7 @@
 package ar.edu.unq.epers.test.bichomon.dao.Elastic;
 
 
-import ar.edu.unq.epers.bichomon.backend.dao.elastic.ElasticSearchDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.elastic.ElasticSearchDAOBicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
@@ -18,15 +18,15 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-public class ElasticSearchDAOTest
+public class ElasticSearchDAOBichoTest
 {
-    private ElasticSearchDAO elasticSearchDAOSUT;
+    private ElasticSearchDAOBicho elasticSearchDAOSUTBicho;
     private Bicho unBichoAIndexar;
 
     @Before
     public void setUp() throws Exception
     {
-        this.elasticSearchDAOSUT= new ElasticSearchDAO();
+        this.elasticSearchDAOSUTBicho = new ElasticSearchDAOBicho();
 
         Entrenador pepe         = new Entrenador();
         pepe.setNombre("Pepe Empepado Super Fiesta");
@@ -45,14 +45,14 @@ public class ElasticSearchDAOTest
 
     @After
     public void tearDown() throws Exception
-    {   this.elasticSearchDAOSUT.deleteAll();   }
+    {   this.elasticSearchDAOSUTBicho.deleteAll();   }
 
     @Test
     public void IndexarBicho()
     {
         //Setup(Given)
         //Exercise(When)
-        IndexResponse respuesta = this.elasticSearchDAOSUT.indexar(unBichoAIndexar);
+        IndexResponse respuesta = this.elasticSearchDAOSUTBicho.indexar(unBichoAIndexar);
 
         assertEquals(1, respuesta.getShardInfo().getSuccessful());
         assertEquals("CREATED", respuesta.getResult().name());
@@ -62,10 +62,10 @@ public class ElasticSearchDAOTest
     public void siBorroUnBichoIndexadoEsteSeBorra()
     {
         //Setup(Given)
-        IndexResponse indexacion = this.elasticSearchDAOSUT.indexar(unBichoAIndexar);
+        IndexResponse indexacion = this.elasticSearchDAOSUTBicho.indexar(unBichoAIndexar);
 
         //Exercise(When)
-        DeleteResponse respuesta = this.elasticSearchDAOSUT.borrar(indexacion.getId());
+        DeleteResponse respuesta = this.elasticSearchDAOSUTBicho.borrar(indexacion.getId());
 
         assertEquals(1, respuesta.getShardInfo().getSuccessful());
         assertEquals("DELETED", respuesta.getResult().name());
@@ -76,7 +76,7 @@ public class ElasticSearchDAOTest
     {
         //Setup(Given)
         //Exercise(When)
-        DeleteResponse respuesta = this.elasticSearchDAOSUT.borrar("22");
+        DeleteResponse respuesta = this.elasticSearchDAOSUTBicho.borrar("22");
 
         assertEquals(1, respuesta.getShardInfo().getSuccessful());
         assertEquals("NOT_FOUND", respuesta.getResult().name());
@@ -86,10 +86,10 @@ public class ElasticSearchDAOTest
     public void siRecuperoUnBichoMeDevuelveElJson()
     {
         //Setup(Given)
-        IndexResponse indexacion= this.elasticSearchDAOSUT.indexar(unBichoAIndexar);
+        IndexResponse indexacion= this.elasticSearchDAOSUTBicho.indexar(unBichoAIndexar);
 
         //Exercise(When)
-        GetResponse respuesta   = this.elasticSearchDAOSUT.get(indexacion.getId());
+        GetResponse respuesta   = this.elasticSearchDAOSUTBicho.get(indexacion.getId());
 
         assertEquals(33,respuesta.getSource().get("modelId"));
         assertEquals("Rojomon", respuesta.getSource().get("especie"));
@@ -106,7 +106,7 @@ public class ElasticSearchDAOTest
         //Setup(Given)
         this.prepararIndexParaBusqueda();
         //Exercise(When)
-        SearchResponse unaRespuesta = this.elasticSearchDAOSUT.buscarPorDuenio("Pepe");
+        SearchResponse unaRespuesta = this.elasticSearchDAOSUTBicho.buscarPorDuenio("Pepe");
         //Test(Then)
         assertEquals(2, unaRespuesta.getHits().totalHits);
         assertEquals("Pepe Locura", unaRespuesta.getHits().getAt(0).getSourceAsMap().get("duenio"));
@@ -157,9 +157,9 @@ public class ElasticSearchDAOTest
         unBichoAIndexar4.setEnergia(10);
         unBichoAIndexar4.setFechaDeCaptura(Timestamp.valueOf(LocalDateTime.of(1980,10,10,10,10,10)));
 
-        this.elasticSearchDAOSUT.indexar(unBichoAIndexar);
-        this.elasticSearchDAOSUT.indexar(unBichoAIndexar2);
-        this.elasticSearchDAOSUT.indexar(unBichoAIndexar3);
-        this.elasticSearchDAOSUT.indexar(unBichoAIndexar4);
+        this.elasticSearchDAOSUTBicho.indexar(unBichoAIndexar);
+        this.elasticSearchDAOSUTBicho.indexar(unBichoAIndexar2);
+        this.elasticSearchDAOSUTBicho.indexar(unBichoAIndexar3);
+        this.elasticSearchDAOSUTBicho.indexar(unBichoAIndexar4);
     }
 }
