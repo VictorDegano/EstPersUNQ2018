@@ -7,8 +7,6 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import org.neo4j.driver.v1.*;
 import org.neo4j.driver.v1.types.Path;
 import org.neo4j.driver.v1.types.Path.Segment;
-import org.neo4j.driver.v1.types.Relationship;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -157,6 +155,22 @@ public class UbicacionDAONEO4J
                             "RETURN ubicacion";
 
             StatementResult result = session.run(query, Values.parameters("tipoDeCamino", tipoDeCamino.name(), "ubicacion", ubicacion.getNombre()));
+
+            return result.list(record -> {  return record.get(0).asNode().get("nombre").asString();  });
+        }
+        finally
+        {   session.close();    }
+    }
+
+    public List<String> conectadosPorAlgunCamino(Ubicacion ubicacion)
+    {
+        Session session = this.driver.session();
+        try {
+            String query =  "MATCH (u1:Ubicacion {nombre: {ubicacion}}) " +
+                            "MATCH (ubicacion:Ubicacion)-[]->(u1) " +
+                            "RETURN ubicacion";
+
+            StatementResult result = session.run(query, Values.parameters( "ubicacion", ubicacion.getNombre()));
 
             return result.list(record -> {  return record.get(0).asNode().get("nombre").asString();  });
         }

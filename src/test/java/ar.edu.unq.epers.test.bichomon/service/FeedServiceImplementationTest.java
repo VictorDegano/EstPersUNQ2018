@@ -2,9 +2,7 @@ package ar.edu.unq.epers.test.bichomon.service;
 
 import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.EventoDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.hibernate.EntrenadorDAOHibernate;
-import ar.edu.unq.epers.bichomon.backend.dao.hibernate.UbicacionDAOHibernate;
 import ar.edu.unq.epers.bichomon.backend.dao.mongoDB.EventoDAOMongoDB;
 import ar.edu.unq.epers.bichomon.backend.dao.neo4j.UbicacionDAONEO4J;
 import ar.edu.unq.epers.bichomon.backend.model.Evento.Evento;
@@ -36,7 +34,6 @@ public class FeedServiceImplementationTest
     private Bootstrap bootstraper;
     private BootstrapNeo4J bootstraperneo4j;
     private EntrenadorDAO entrenadorDAO;
-    private UbicacionDAO ubicacionDAO;
     private UbicacionDAONEO4J ubicacionDAONEO4J;
     private EventoDAO eventoDAOMongoDB;
     private FeedService feedServiceSUT;
@@ -51,7 +48,6 @@ public class FeedServiceImplementationTest
         this.bootstraper        = new Bootstrap();
         this.bootstraperneo4j   = new BootstrapNeo4J();
         this.entrenadorDAO      = new EntrenadorDAOHibernate();
-        this.ubicacionDAO       = new UbicacionDAOHibernate();
         this.ubicacionDAONEO4J  = new UbicacionDAONEO4J();
         this.eventoDAOMongoDB   = new EventoDAOMongoDB();
 
@@ -164,7 +160,6 @@ public class FeedServiceImplementationTest
 
         LocalDateTime fechaEventoDeCoronacion   = LocalDateTime.of(2018,11,10,22,12,0);
         EventoDeCoronacion eventoDeCoronacion   = new EventoDeCoronacion();
-        eventoDeCoronacion.setEntrenadorDestronado("Pepe Ventosa");
         eventoDeCoronacion.setEntrenador("Josefo");
         eventoDeCoronacion.setUbicacion("Dojo Final");
         eventoDeCoronacion.setFechaDeEvento(fechaEventoDeCoronacion);
@@ -177,11 +172,9 @@ public class FeedServiceImplementationTest
         eventosDeEntrenador  = this.feedServiceSUT.feedEntrenador("Pepe Ventosa");
 
         //Test(Then)
-        assertEquals(2, eventosDeEntrenador.size());
-        assertEquals(fechaEventoDeCoronacion, eventosDeEntrenador.get(0).getFechaDeEvento());
-        assertEquals("Pepe Ventosa", eventosDeEntrenador.get(0).getEntrenadorDestronado());
-        assertEquals(fechaDeEventoCaptura, eventosDeEntrenador.get(1).getFechaDeEvento());
-        assertEquals("Pepe Ventosa", eventosDeEntrenador.get(1).getEntrenador());
+        assertEquals(1, eventosDeEntrenador.size());
+        assertEquals(fechaDeEventoCaptura, eventosDeEntrenador.get(0).getFechaDeEvento());
+        assertEquals("Pepe Ventosa", eventosDeEntrenador.get(0).getEntrenador());
     }
 
 

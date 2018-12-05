@@ -359,21 +359,13 @@ public class BichoServiceImplementacionTest {
         List<Evento> eventoDeDueloDefensor  = this.eventoDAOMongoDB.feedDeEntrenador(defensor);
 
         //Test(Then)
-        assertEquals(2, eventoDeDueloRetador.size());
-        assertEquals("Defensor", eventoDeDueloRetador.get(0).getEntrenador());
+        assertEquals(1, eventoDeDueloRetador.size());
+        assertEquals("Retador", eventoDeDueloRetador.get(0).getEntrenador());
         assertEquals("Dojo RD", eventoDeDueloRetador.get(0).getUbicacion());
-        assertEquals("Retador", eventoDeDueloRetador.get(0).getEntrenadorCoronado());
-        assertEquals("Retador", eventoDeDueloRetador.get(1).getEntrenador());
-        assertEquals("Dojo RD", eventoDeDueloRetador.get(1).getUbicacion());
-        assertEquals("Defensor", eventoDeDueloRetador.get(1).getEntrenadorDestronado());
 
-        assertEquals(2, eventoDeDueloDefensor.size());
-        assertEquals("Defensor", eventoDeDueloRetador.get(0).getEntrenador());
-        assertEquals("Dojo RD", eventoDeDueloRetador.get(0).getUbicacion());
-        assertEquals("Retador", eventoDeDueloRetador.get(0).getEntrenadorCoronado());
-        assertEquals("Retador", eventoDeDueloRetador.get(1).getEntrenador());
-        assertEquals("Dojo RD", eventoDeDueloRetador.get(1).getUbicacion());
-        assertEquals("Defensor", eventoDeDueloRetador.get(1).getEntrenadorDestronado());
+        assertEquals(1, eventoDeDueloDefensor.size());
+        assertEquals("Defensor", eventoDeDueloDefensor.get(0).getEntrenador());
+        assertEquals("Dojo RD", eventoDeDueloDefensor.get(0).getUbicacion());
     }
 
     private Bicho SetUpEventoDuelo(Entrenador retador, Entrenador defensor)
