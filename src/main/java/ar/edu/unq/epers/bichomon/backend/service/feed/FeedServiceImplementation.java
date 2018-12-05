@@ -4,12 +4,9 @@ import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.EventoDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.neo4j.UbicacionDAONEO4J;
 import ar.edu.unq.epers.bichomon.backend.model.Evento.Evento;
-import ar.edu.unq.epers.bichomon.backend.model.camino.TipoCamino;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class FeedServiceImplementation implements FeedService
@@ -42,10 +39,7 @@ public class FeedServiceImplementation implements FeedService
 
                     ArrayList<String> ubicacionesABuscarEventos  = new ArrayList<>();
                     ubicacionesABuscarEventos.add(entrenadorRecuperado.getUbicacion().getNombre());
-
-                    ubicacionesABuscarEventos.addAll(this.ubicacionDAONEO4J.conectados(entrenadorRecuperado.getUbicacion(), TipoCamino.TERRESTRE));
-                    ubicacionesABuscarEventos.addAll(this.ubicacionDAONEO4J.conectados(entrenadorRecuperado.getUbicacion(), TipoCamino.MARITIMO));
-                    ubicacionesABuscarEventos.addAll(this.ubicacionDAONEO4J.conectados(entrenadorRecuperado.getUbicacion(), TipoCamino.AEREO));
+                    ubicacionesABuscarEventos.addAll(this.ubicacionDAONEO4J.conectadosPorAlgunCamino(entrenadorRecuperado.getUbicacion()));
 
                     return this.eventoDAO.feedDeUbicaciones(ubicacionesABuscarEventos);
                 });

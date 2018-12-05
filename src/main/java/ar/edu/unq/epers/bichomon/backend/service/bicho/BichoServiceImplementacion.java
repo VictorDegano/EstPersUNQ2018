@@ -12,8 +12,6 @@ import ar.edu.unq.epers.bichomon.backend.model.entrenador.TipoExperiencia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Registro;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
-import ar.edu.unq.epers.bichomon.backend.service.runner.RunnerMongoDB;
-
 import javax.persistence.NoResultException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -179,15 +177,12 @@ public class BichoServiceImplementacion implements BichoService
         List<Evento> eventosAAgregar            = new ArrayList<>();
         EventoDeCoronacion eventoDeCoronacion   = new EventoDeCoronacion(   entrenadorRetador,
                                                                             unaUbicacion.getNombre(),
-                                                        "",
                                                                             fechaDeDuelo);
         if (campeonAntesDeDuelo != null)
         {
             Evento eventoDeDescoronacion    = new EventoDeDescoronacion(campeonAntesDeDuelo.getDuenio().getNombre(),
                                                                         unaUbicacion.getNombre(),
-                                                                        entrenadorRetador,
                                                                         fechaDeDuelo);
-            eventoDeCoronacion.setEntrenadorDestronado(campeonAntesDeDuelo.getDuenio().getNombre());
             eventosAAgregar.add(eventoDeDescoronacion);
         }
         eventosAAgregar.add(eventoDeCoronacion);

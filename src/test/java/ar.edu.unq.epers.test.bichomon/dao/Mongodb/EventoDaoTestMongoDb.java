@@ -91,14 +91,12 @@ public class EventoDaoTestMongoDb
 
         LocalDateTime fechaEventoDeCoronacion   = LocalDateTime.of(2018,11,10,22,12,0);
         EventoDeCoronacion eventoDeCoronacion   = new EventoDeCoronacion();
-        eventoDeCoronacion.setEntrenadorDestronado("Mirage");
         eventoDeCoronacion.setEntrenador("Josefo");
         eventoDeCoronacion.setUbicacion("Dojo Last Trial");
         eventoDeCoronacion.setFechaDeEvento(fechaEventoDeCoronacion);
 
         LocalDateTime fechaEventoDeDescoronacion    = LocalDateTime.of(2018,11,12,23,0,0);
         EventoDeDescoronacion eventoDeDescoronacion = new EventoDeDescoronacion();
-        eventoDeDescoronacion.setEntrenadorCoronado("Josefo");
         eventoDeDescoronacion.setEntrenador("Mirage");
         eventoDeDescoronacion.setUbicacion("Dojo Last Trial");
         eventoDeDescoronacion.setFechaDeEvento(fechaEventoDeDescoronacion);
@@ -131,19 +129,14 @@ public class EventoDaoTestMongoDb
         assertEquals("Pueblo Paleta", eventosDePepinator.get(1).getUbicacionPartida());
         assertEquals("Pepinator", eventosDePepinator.get(1).getEntrenador());
 
-        assertEquals(3, eventosDeJosefo.size());
-        assertEquals(fechaEventoDeDescoronacion, eventosDeJosefo.get(0).getFechaDeEvento());
+        assertEquals(2, eventosDeJosefo.size());
+        assertEquals(fechaEventoDeCoronacion, eventosDeJosefo.get(0).getFechaDeEvento());
         assertEquals("Dojo Last Trial", eventosDeJosefo.get(0).getUbicacion());
-        assertEquals("Mirage", eventosDeJosefo.get(0).getEntrenador());
-        assertEquals("Josefo", eventosDeJosefo.get(0).getEntrenadorCoronado());
-        assertEquals(fechaEventoDeCoronacion, eventosDeJosefo.get(1).getFechaDeEvento());
-        assertEquals("Dojo Last Trial", eventosDeJosefo.get(1).getUbicacion());
-        assertEquals("Mirage", eventosDeJosefo.get(1).getEntrenadorDestronado());
+        assertEquals("Josefo", eventosDeJosefo.get(0).getEntrenador());
+        assertEquals(fechaDeEventoAbandono, eventosDeJosefo.get(1).getFechaDeEvento());
+        assertEquals("Guarderia El Terror", eventosDeJosefo.get(1).getUbicacion());
+        assertEquals("Rojomon", eventosDeJosefo.get(1).getBichoAbandonado());
         assertEquals("Josefo", eventosDeJosefo.get(1).getEntrenador());
-        assertEquals(fechaDeEventoAbandono, eventosDeJosefo.get(2).getFechaDeEvento());
-        assertEquals("Guarderia El Terror", eventosDeJosefo.get(2).getUbicacion());
-        assertEquals("Rojomon", eventosDeJosefo.get(2).getBichoAbandonado());
-        assertEquals("Josefo", eventosDeJosefo.get(2).getEntrenador());
     }
 
     @Test
