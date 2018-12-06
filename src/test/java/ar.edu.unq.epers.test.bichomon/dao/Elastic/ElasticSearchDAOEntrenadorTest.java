@@ -11,6 +11,7 @@ import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
+import java.util.concurrent.ThreadLocalRandom;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -133,6 +134,21 @@ public class ElasticSearchDAOEntrenadorTest {
         //Test(Then)
         assertEquals("Marcelo Tinelli", unaRespuesta.getHits().getAt(0).getSourceAsMap().get("nombre"));
 
+    }
+
+    @Test
+    public void crearEntrenadoresAleatorios(){
+        int entrenadores = 200;
+        while(entrenadores != 0){
+            Entrenador entrenador = new Entrenador();
+            entrenador.setNombre("entrenador" + entrenadores);
+            entrenador.setExperiencia( ThreadLocalRandom.current().nextInt(0, 1000));
+            entrenador.setBilletera(ThreadLocalRandom.current().nextInt(0, 500));
+            this.elasticSearchDAOSUTEntrenador.indexar(entrenador);
+            entrenadores -= 1;
+        }
+
+        assertTrue(true);
     }
 
 
