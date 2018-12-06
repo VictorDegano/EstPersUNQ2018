@@ -6,11 +6,15 @@ import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 
 import java.net.InetAddress;
@@ -86,12 +90,24 @@ public class ElasticSearchDAOEntrenador {
         TransportClient client = getClient();
 
         SearchResponse respuesta    = client.prepareSearch("entrenadorindex")
-                .setQuery(QueryBuilders.matchQuery("nombre", nombre)) //Esta query da los resultados de cualquier registro cuyo entrenador contenga la palabra "nombre
+                .setQuery(QueryBuilders.matchQuery("nombre",nombre))//Esta query da los resultados de cualquier registro cuyo entrenador contenga la palabra "nombre
                 .get();
 
         client.close();
 
         return respuesta;
+    }
+
+
+    public SearchResponse buscarEntrenadoresConCiertaExperiencia(int desde , int hasta){
+        TransportClient client = getClient();
+        SearchResponse respuesta = client.prepareSearch("entrenadorindex").setSearchType(SearchType.DEFAULT)
+                .setQuery(QueryBuilders.matchQuery("_type","entrenador"))
+                .setPostFilter(QueryBuilders.rangeQuery("exp").from(desde).to(hasta)).addSort("exp", SortOrder.ASC).get();
+
+        client.close();
+        return respuesta;
+
     }
 
 
