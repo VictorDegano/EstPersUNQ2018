@@ -20,17 +20,21 @@ import java.util.Map;
 
 public class ElasticSearchDAOEntrenador {
 
-    public IndexResponse indexar(Entrenador unEntrenadorAIndexar)
-    {
-        //Conexion a la base, como hay un solo nodo solo se agrega ese
-        TransportClient client = null;
+    private TransportClient getClient(){
         try
         {
-            client = new PreBuiltTransportClient(Settings.EMPTY)
+            return  new PreBuiltTransportClient(Settings.EMPTY)
                     .addTransportAddress(new TransportAddress(InetAddress.getByName("localhost"), 9300));
         }
         catch (UnknownHostException e)
         {   e.printStackTrace();    }
+        return null;
+    }
+
+    public IndexResponse indexar(Entrenador unEntrenadorAIndexar)
+    {
+        //Conexion a la base, como hay un solo nodo solo se agrega ese
+        TransportClient client = getClient();
 
         //hacemos lo que tengamos que hacer...
         //Transformar el objeto en JSON, podemos usar un map, serializarlo o utilizar librerias como jakson, O hacer el Json a mano como un string
@@ -54,14 +58,7 @@ public class ElasticSearchDAOEntrenador {
     public DeleteResponse borrar(String id)
     {
         //Conexion a la base, como hay un solo nodo solo se agrega ese
-        TransportClient client = null;
-        try
-        {
-            client = new PreBuiltTransportClient(Settings.EMPTY)
-                    .addTransportAddress(new TransportAddress(InetAddress.getByName("localhost"), 9300));
-        }
-        catch (UnknownHostException e)
-        {   e.printStackTrace();    }
+        TransportClient client = getClient();
 
         DeleteResponse respuesta    = client.prepareDelete("entrenadorindex","entrenador", id).get();
 
@@ -74,14 +71,7 @@ public class ElasticSearchDAOEntrenador {
     public GetResponse get(String id)
     {
         //Conexion a la base, como hay un solo nodo solo se agrega ese
-        TransportClient client = null;
-        try
-        {
-            client = new PreBuiltTransportClient(Settings.EMPTY)
-                    .addTransportAddress(new TransportAddress(InetAddress.getByName("localhost"), 9300));
-        }
-        catch (UnknownHostException e)
-        {   e.printStackTrace();    }
+        TransportClient client = getClient();
 
         GetResponse respuesta    = client.prepareGet("entrenadorindex","entrenador", id).get();
 
@@ -93,14 +83,7 @@ public class ElasticSearchDAOEntrenador {
     public SearchResponse buscarPorNombre(String nombre)
     {
         //Conexion a la base, como hay un solo nodo solo se agrega ese
-        TransportClient client = null;
-        try
-        {
-            client = new PreBuiltTransportClient(Settings.EMPTY)
-                    .addTransportAddress(new TransportAddress(InetAddress.getByName("localhost"), 9300));
-        }
-        catch (UnknownHostException e)
-        {   e.printStackTrace();    }
+        TransportClient client = getClient();
 
         SearchResponse respuesta    = client.prepareSearch("entrenadorindex")
                 .setQuery(QueryBuilders.matchQuery("nombre", nombre)) //Esta query da los resultados de cualquier registro cuyo entrenador contenga la palabra "nombre
@@ -115,14 +98,7 @@ public class ElasticSearchDAOEntrenador {
     public void deleteAll()
     {
         //Conexion a la base, como hay un solo nodo solo se agrega ese
-        TransportClient client = null;
-        try
-        {
-            client = new PreBuiltTransportClient(Settings.EMPTY)
-                    .addTransportAddress(new TransportAddress(InetAddress.getByName("localhost"), 9300));
-        }
-        catch (UnknownHostException e)
-        {   e.printStackTrace();    }
+        TransportClient client = getClient();
 
         //Borra el Indice
         AcknowledgedResponse deleteResponse = client.admin().indices().delete(new DeleteIndexRequest("entrenadorindex")).actionGet();
