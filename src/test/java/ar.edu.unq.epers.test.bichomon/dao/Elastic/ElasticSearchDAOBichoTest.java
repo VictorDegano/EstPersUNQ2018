@@ -113,6 +113,25 @@ public class ElasticSearchDAOBichoTest
         assertEquals("Pepe Empepado Super Fiesta", unaRespuesta.getHits().getAt(1).getSourceAsMap().get("duenio"));
     }
 
+    @Test
+    public void siBuscoLosTresBichosConMasVictoriasMeLosTrae()
+    {
+        //Setup(Given)
+        this.prepararIndexParaBusqueda();
+        //Exercise(When)
+        SearchResponse respuesta = this.elasticSearchDAOSUTBicho.topTres();
+
+        assertEquals(500 , respuesta.getHits().getAt(0).getSourceAsMap().get("victorias"));
+
+        assertEquals(20  , respuesta.getHits().getAt(1).getSourceAsMap().get("victorias"));
+
+        assertEquals(3   , respuesta.getHits().getAt(2).getSourceAsMap().get("victorias"));
+
+    }
+
+
+
+
     private void prepararIndexParaBusqueda()
     {
         Entrenador pepeLocura   = new Entrenador();

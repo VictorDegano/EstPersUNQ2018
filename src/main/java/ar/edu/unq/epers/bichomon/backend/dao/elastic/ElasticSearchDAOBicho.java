@@ -11,6 +11,7 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -108,5 +109,17 @@ public class ElasticSearchDAOBicho
         client.admin().indices().prepareCreate("bichosindex").get();
 
         client.close();
+    }
+
+    public SearchResponse topTres() {
+        TransportClient client = getClient();
+        SearchResponse respuesta = client.prepareSearch("bichosindex")
+                .setQuery(QueryBuilders.matchQuery("_type","bicho"))
+                .addSort("victorias", SortOrder.DESC)
+                .setSize(3) // retorna solo 3 elementos
+                .get();
+
+        client.close();
+        return respuesta;
     }
 }
