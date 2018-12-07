@@ -92,8 +92,8 @@ public class ElasticSearchDAOEntrenador {
         TransportClient client = getClient();
 
         SearchResponse respuesta    = client.prepareSearch("entrenadorindex")
-                                            .setQuery(QueryBuilders.matchQuery("nombre",nombre))
-                                            .get();
+                .setQuery(QueryBuilders.matchQuery("nombre",nombre))
+                .get();
 
         client.close();
 
@@ -133,5 +133,18 @@ public class ElasticSearchDAOEntrenador {
         client.admin().indices().prepareCreate("entrenadorindex").get();
 
         client.close();
+    }
+
+    public SearchResponse buscarEntrenadoresDeNivel(int level) {
+        //Conexion a la base, como hay un solo nodo solo se agrega ese
+        TransportClient client = getClient();
+
+        SearchResponse respuesta    = client.prepareSearch("entrenadorindex")
+                .setQuery(QueryBuilders.matchQuery("nivel",level))
+                .get();
+
+        client.close();
+
+        return respuesta;
     }
 }

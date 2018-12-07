@@ -11,9 +11,7 @@ import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
-import java.util.concurrent.ThreadLocalRandom;
 
-import org.elasticsearch.action.search.SearchType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,25 +26,34 @@ import static org.junit.Assert.assertTrue;
 
 public class ElasticSearchDAOEntrenadorTest {
     private ElasticSearchDAOEntrenador elasticSearchDAOSUTEntrenador;
-    private Entrenador unEntrenadorAIndexar;
+    private Entrenador entrenadorUno;
     private Nivel nivel10;
+    private Nivel nivel1;
     private List<Bicho> bichos;
     private Ubicacion puebloElOrigen;
-    private Entrenador otroEntrenadorAIndexar;
-    private Entrenador otroEntrenadorMasAIndexar;
+    private Entrenador entrenadorDos;
+    private Entrenador entrenadorTres;
+    private Entrenador entrenadorCuatro;
+
     @Before
     public void setUp() throws Exception{
         this.elasticSearchDAOSUTEntrenador = new ElasticSearchDAOEntrenador();
 
-        unEntrenadorAIndexar = new Entrenador();
-        unEntrenadorAIndexar.setNombre("Marcelo Tinelli");
+        entrenadorUno = new Entrenador();
+        entrenadorUno.setNombre("Marcelo Tinelli");
         nivel10 = new Nivel(10, 7000, 7999, 13);
+        nivel1  = new Nivel(1, 0, 400, 0);
 
-        otroEntrenadorAIndexar = new Entrenador();
-        otroEntrenadorAIndexar.setNombre("Miguel");
+        entrenadorDos = new Entrenador();
+        entrenadorDos.setNombre("Miguel");
 
-        otroEntrenadorMasAIndexar = new Entrenador();
-        otroEntrenadorMasAIndexar.setNombre("Nestor");
+        entrenadorTres = new Entrenador();
+        entrenadorTres.setNombre("Nestor");
+
+        entrenadorCuatro = new Entrenador();
+        entrenadorCuatro.setNombre("Mauricio");
+
+
 
         Especie unaEspecie      = new Especie();
         unaEspecie.setNombre("Rojomon");
@@ -58,7 +65,7 @@ public class ElasticSearchDAOEntrenadorTest {
         unBicho.setNombre("pikachu");
         unBicho.setId(33);
         unBicho.setVictorias(3);
-        unBicho.setDuenio(unEntrenadorAIndexar);
+        unBicho.setDuenio(entrenadorUno);
         unBicho.setEspecie(unaEspecie);
         unBicho.setEnergia(1500);
         unBicho.setFechaDeCaptura(Timestamp.valueOf(LocalDateTime.of(1998,12,11,23,22,2)));
@@ -67,7 +74,7 @@ public class ElasticSearchDAOEntrenadorTest {
         otroBicho.setNombre("charmander");
         otroBicho.setId(34);
         otroBicho.setVictorias(3);
-        otroBicho.setDuenio(unEntrenadorAIndexar);
+        otroBicho.setDuenio(entrenadorUno);
         otroBicho.setEspecie(unaEspecie);
         otroBicho.setEnergia(1500);
         otroBicho.setFechaDeCaptura(Timestamp.valueOf(LocalDateTime.of(1992,12,11,23,22,2)));
@@ -77,29 +84,36 @@ public class ElasticSearchDAOEntrenadorTest {
         bichos.add(otroBicho);
 
 
-        unEntrenadorAIndexar.setId(30);
-        unEntrenadorAIndexar.setExperiencia(100);
-        unEntrenadorAIndexar.setNivel(nivel10);
-        unEntrenadorAIndexar.setUbicacion(puebloElOrigen);
-        unEntrenadorAIndexar.setBichosCapturados(bichos);
-        unEntrenadorAIndexar.setBilletera(100);
+        entrenadorUno.setId(30);
+        entrenadorUno.setExperiencia(100);
+        entrenadorUno.setNivel(nivel10);
+        entrenadorUno.setUbicacion(puebloElOrigen);
+        entrenadorUno.setBichosCapturados(bichos);
+        entrenadorUno.setBilletera(100);
 
 
-        otroEntrenadorAIndexar.setId(40);
-        otroEntrenadorAIndexar.setExperiencia(300);
-        otroEntrenadorAIndexar.setNivel(nivel10);
-        otroEntrenadorAIndexar.setUbicacion(puebloElOrigen);
-        otroEntrenadorAIndexar.setBichosCapturados(bichos);
-        otroEntrenadorAIndexar.setBilletera(500);
+        entrenadorDos.setId(40);
+        entrenadorDos.setExperiencia(300);
+        entrenadorDos.setNivel(nivel10);
+        entrenadorDos.setUbicacion(puebloElOrigen);
+        entrenadorDos.setBichosCapturados(bichos);
+        entrenadorDos.setBilletera(500);
 
 
-        otroEntrenadorMasAIndexar.setId(50);
-        otroEntrenadorMasAIndexar.setExperiencia(50);
-        otroEntrenadorMasAIndexar.setNivel(nivel10);
-        otroEntrenadorMasAIndexar.setUbicacion(puebloElOrigen);
-        otroEntrenadorMasAIndexar.setBichosCapturados(bichos);
-        otroEntrenadorMasAIndexar.setBilletera(600);
+        entrenadorTres.setId(50);
+        entrenadorTres.setExperiencia(50);
+        entrenadorTres.setNivel(nivel10);
+        entrenadorTres.setUbicacion(puebloElOrigen);
+        entrenadorTres.setBichosCapturados(bichos);
+        entrenadorTres.setBilletera(600);
+
+        entrenadorCuatro.setId(60);
+        entrenadorCuatro.setExperiencia(0);
+        entrenadorCuatro.setNivel(nivel1);
+        entrenadorCuatro.setUbicacion(puebloElOrigen);
+        entrenadorCuatro.setBilletera(0);
     }
+
    @After
    public void tearDown() throws Exception
    {   this.elasticSearchDAOSUTEntrenador.deleteAll();   }
@@ -109,7 +123,7 @@ public class ElasticSearchDAOEntrenadorTest {
     {
         //Setup(Given)
         //Exercise(When)
-        IndexResponse respuesta = this.elasticSearchDAOSUTEntrenador.indexar(unEntrenadorAIndexar);
+        IndexResponse respuesta = this.elasticSearchDAOSUTEntrenador.indexar(entrenadorUno);
 
         assertEquals(1, respuesta.getShardInfo().getSuccessful());
         assertEquals("CREATED", respuesta.getResult().name());
@@ -118,7 +132,7 @@ public class ElasticSearchDAOEntrenadorTest {
     @Test
     public void borrarUnEntrenador(){
         //Setup(Given)
-        IndexResponse indexacion = this.elasticSearchDAOSUTEntrenador.indexar(unEntrenadorAIndexar);
+        IndexResponse indexacion = this.elasticSearchDAOSUTEntrenador.indexar(entrenadorUno);
 
         //Exercise(When)
         DeleteResponse respuesta = this.elasticSearchDAOSUTEntrenador.borrar(indexacion.getId());
@@ -129,7 +143,7 @@ public class ElasticSearchDAOEntrenadorTest {
 
     @Test
     public void obtenerUnEntrenador(){
-        IndexResponse indexacion= this.elasticSearchDAOSUTEntrenador.indexar(unEntrenadorAIndexar);
+        IndexResponse indexacion= this.elasticSearchDAOSUTEntrenador.indexar(entrenadorUno);
         List<String> nombreBichos = new ArrayList<String>();
         nombreBichos.add("pikachu");
         nombreBichos.add("charmander");
@@ -175,9 +189,9 @@ public class ElasticSearchDAOEntrenadorTest {
     @Test
     public void buscarEntrenadoresDesde100DeExpHasta300(){
 
-        this.elasticSearchDAOSUTEntrenador.indexar(unEntrenadorAIndexar);
-        this.elasticSearchDAOSUTEntrenador.indexar(otroEntrenadorAIndexar);
-        this.elasticSearchDAOSUTEntrenador.indexar(otroEntrenadorMasAIndexar);
+        this.elasticSearchDAOSUTEntrenador.indexar(entrenadorUno);
+        this.elasticSearchDAOSUTEntrenador.indexar(entrenadorDos);
+        this.elasticSearchDAOSUTEntrenador.indexar(entrenadorTres);
 
         SearchResponse unaRespuesta = this.elasticSearchDAOSUTEntrenador.buscarEntrenadoresConCiertaExperiencia(100,300);
 
@@ -186,9 +200,24 @@ public class ElasticSearchDAOEntrenadorTest {
     }
 
     @Test
+    public void buscarEntrenadoresPorNivel(){
+
+        this.elasticSearchDAOSUTEntrenador.indexar(entrenadorUno);
+        this.elasticSearchDAOSUTEntrenador.indexar(entrenadorDos);
+        this.elasticSearchDAOSUTEntrenador.indexar(entrenadorTres);
+        this.elasticSearchDAOSUTEntrenador.indexar(entrenadorCuatro);
+
+        SearchResponse unaRespuesta = this.elasticSearchDAOSUTEntrenador.buscarEntrenadoresDeNivel(1);
+
+        assertEquals(unaRespuesta.getHits().getAt(0).getSourceAsMap().get("nombre"),"Mauricio");
+    }
+
+
+
+    @Test
     public void buscarEntrenadorPorNombre(){
 
-        this.elasticSearchDAOSUTEntrenador.indexar(unEntrenadorAIndexar);
+        this.elasticSearchDAOSUTEntrenador.indexar(entrenadorUno);
         //Exercise(When)
         SearchResponse unaRespuesta = this.elasticSearchDAOSUTEntrenador.buscarPorNombre("Marcelo Tinelli");
         //Test(Then)
