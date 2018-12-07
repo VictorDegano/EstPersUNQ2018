@@ -15,4 +15,6 @@ public interface EntrenadorDAO
     List<Entrenador> campeones();
 
     List<Entrenador> lideres();
+
+    List<Entrenador> recuperarEntrenadores(List<String> nombreDeEntrenadores);
 }

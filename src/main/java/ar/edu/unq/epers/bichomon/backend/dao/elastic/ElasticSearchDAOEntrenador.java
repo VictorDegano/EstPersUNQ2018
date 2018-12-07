@@ -12,8 +12,6 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.sort.FieldSortBuilder;
-import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 
@@ -52,7 +50,9 @@ public class ElasticSearchDAOEntrenador {
         jsonAIndexar.put("billetera", unEntrenadorAIndexar.getBilletera());
 
         //Indexa                                      //Indice,Tipo,Id(El Id es Opcional)
-        IndexResponse respuesta = client.prepareIndex("entrenadorindex","entrenador").setSource(jsonAIndexar).get();
+        IndexResponse respuesta = client.prepareIndex("entrenadorindex","entrenador")
+                                        .setSource(jsonAIndexar)
+                                        .get();
 
         client.close();
 
@@ -64,7 +64,8 @@ public class ElasticSearchDAOEntrenador {
         //Conexion a la base, como hay un solo nodo solo se agrega ese
         TransportClient client = getClient();
 
-        DeleteResponse respuesta    = client.prepareDelete("entrenadorindex","entrenador", id).get();
+        DeleteResponse respuesta    = client.prepareDelete("entrenadorindex","entrenador", id)
+                                            .get();
 
         client.close();
 
@@ -77,7 +78,8 @@ public class ElasticSearchDAOEntrenador {
         //Conexion a la base, como hay un solo nodo solo se agrega ese
         TransportClient client = getClient();
 
-        GetResponse respuesta    = client.prepareGet("entrenadorindex","entrenador", id).get();
+        GetResponse respuesta    = client.prepareGet("entrenadorindex","entrenador", id)
+                                         .get();
 
         client.close();
 
@@ -90,8 +92,8 @@ public class ElasticSearchDAOEntrenador {
         TransportClient client = getClient();
 
         SearchResponse respuesta    = client.prepareSearch("entrenadorindex")
-                .setQuery(QueryBuilders.matchQuery("nombre",nombre))//Esta query da los resultados de cualquier registro cuyo entrenador contenga la palabra "nombre
-                .get();
+                                            .setQuery(QueryBuilders.matchQuery("nombre",nombre))
+                                            .get();
 
         client.close();
 
@@ -101,9 +103,14 @@ public class ElasticSearchDAOEntrenador {
 
     public SearchResponse buscarEntrenadoresConCiertaExperiencia(int desde , int hasta){
         TransportClient client = getClient();
-        SearchResponse respuesta = client.prepareSearch("entrenadorindex").setSearchType(SearchType.DEFAULT)
-                .setQuery(QueryBuilders.matchQuery("_type","entrenador"))
-                .setPostFilter(QueryBuilders.rangeQuery("exp").from(desde).to(hasta)).addSort("exp", SortOrder.ASC).get();
+        SearchResponse respuesta = client.prepareSearch("entrenadorindex")
+                                         .setSearchType(SearchType.DEFAULT)
+                                         .setQuery(QueryBuilders.matchQuery("_type","entrenador"))
+                                         .setPostFilter(QueryBuilders.rangeQuery("exp")
+                                                                     .from(desde)
+                                                                     .to(hasta))
+                                         .addSort("exp", SortOrder.ASC)
+                                         .get();
 
         client.close();
         return respuesta;
@@ -117,7 +124,10 @@ public class ElasticSearchDAOEntrenador {
         TransportClient client = getClient();
 
         //Borra el Indice
-        AcknowledgedResponse deleteResponse = client.admin().indices().delete(new DeleteIndexRequest("entrenadorindex")).actionGet();
+        AcknowledgedResponse deleteResponse = client.admin()
+                                                    .indices()
+                                                    .delete(new DeleteIndexRequest("entrenadorindex"))
+                                                    .actionGet();
 
         //Vuelve a crear el Indice
         client.admin().indices().prepareCreate("entrenadorindex").get();

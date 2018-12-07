@@ -48,4 +48,7 @@ public class EntrenadorDAOMock implements EntrenadorDAO
 
     @Override
     public List<Entrenador> lideres() { return null;    }
+
+    @Override
+    public List<Entrenador> recuperarEntrenadores(List<String> nombreDeEntrenadores) {  return null;    }
 }
