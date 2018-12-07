@@ -4,8 +4,10 @@ import ar.edu.unq.epers.bichomon.backend.dao.BichoDAO;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import javax.persistence.PersistenceException;
+import java.util.List;
 
 public class BichoDAOHibernate implements BichoDAO
 {
@@ -44,5 +46,20 @@ public class BichoDAOHibernate implements BichoDAO
     {
         Session session = Runner.getCurrentSession();
         session.update(bicho);
+    }
+
+    @Override
+    public List<Bicho> recuperarBichos(List<Integer> idsDeLosBichos)
+    {
+        {
+            Session session = Runner.getCurrentSession();
+            String hql      = "FROM Bicho bicho " +
+                              "WHERE bicho.id IN :listaDeIds";
+
+            Query<Bicho> query = session.createQuery(hql, Bicho.class);
+            query.setParameter("listaDeIds", idsDeLosBichos);
+
+            return query.getResultList();
+        }
     }
 }

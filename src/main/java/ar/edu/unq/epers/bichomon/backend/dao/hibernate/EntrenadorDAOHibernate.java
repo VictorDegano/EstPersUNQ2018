@@ -67,4 +67,19 @@ public class EntrenadorDAOHibernate implements EntrenadorDAO {
         return query.getResultList();
     }
 
+    @Override
+    public List<Entrenador> recuperarEntrenadores(List<String> nombreDeEntrenadores)
+    {
+        {
+            Session session = Runner.getCurrentSession();
+            String hql      = "FROM Entrenador entrenador " +
+                              "WHERE entrenador.nombre IN :listaDeNombres";
+
+            Query<Entrenador> query = session.createQuery(hql, Entrenador.class);
+            query.setParameter("listaDeNombres", nombreDeEntrenadores);
+
+            return query.getResultList();
+        }
+    }
+
 }
