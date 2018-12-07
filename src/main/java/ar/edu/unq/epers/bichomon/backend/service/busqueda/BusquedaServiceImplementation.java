@@ -78,4 +78,26 @@ public class BusquedaServiceImplementation implements BusquedaService
                         return bichoDAO.recuperarBichos(idsDeLosBichos);
                     });
     }
+
+
+    @Override
+    public List<Entrenador> BuscarEntrenadoresPorNivel(int nivel){
+        return Runner.runInSession(()->{
+            SearchHits aciertos = this.elasticSearchDAOEntrenador.buscarEntrenadoresDeNivel(nivel).getHits();
+            List<String> nombreEntrenadores = new ArrayList<>();
+            aciertos.forEach((x)->{nombreEntrenadores.add(x.getSourceAsMap().get("nombre").toString());});
+            return entrenadorDAO.recuperarEntrenadores(nombreEntrenadores);
+        });
+
+    }
+
+    @Override
+    public List<Bicho>TopTres(){
+        return Runner.runInSession(()->{
+            SearchHits aciertos = this.elasticSearchDAOBicho.topTres().getHits();
+            List<Integer>  idDeLosBichos = new ArrayList<>();
+            aciertos.forEach((x)->idDeLosBichos.add(Integer.valueOf(x.getSourceAsMap().get("modelId").toString())));
+            return bichoDAO.recuperarBichos(idDeLosBichos);
+        });
+    }
 }

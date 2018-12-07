@@ -345,8 +345,22 @@ public class Bootstrap
 
         Bicho unBicho = new Bicho(red,"");
         unBicho.setEnergia(red.getEnergiaInicial());
-        unBicho.setPoder(40);
-        vampiron.setCantidadBichos(2);
+        unBicho.setVictorias(10);
+        unBicho.setPoder(41);
+        red.setCantidadBichos(2);
+
+        Bicho otroBicho = new Bicho(red,"");
+        otroBicho.setEnergia(red.getEnergiaInicial());
+        otroBicho.setVictorias(9);
+        otroBicho.setPoder(42);
+        red.setCantidadBichos(3);
+
+        Bicho otroBichoMas = new Bicho(red,"");
+        otroBichoMas.setEnergia(red.getEnergiaInicial());
+        otroBichoMas.setVictorias(8);
+        otroBichoMas.setPoder(43);
+        red.setCantidadBichos(4);
+
 
         /* Setear  Bichos a Entrenadores */
 
@@ -532,6 +546,8 @@ public class Bootstrap
         session.save(otroEntrenadorAIndexar);
         session.save(otroEntrenadorMasAIndexar);
         session.save(unBicho);
+        session.save(otroBicho);
+        session.save(otroBichoMas);
     }
 
     public void limpiarTabla()

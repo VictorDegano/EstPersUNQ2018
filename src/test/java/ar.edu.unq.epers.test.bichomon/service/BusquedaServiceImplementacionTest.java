@@ -79,12 +79,22 @@ public class BusquedaServiceImplementacionTest {
 
         Bicho otroBicho = new Bicho();
         otroBicho.setNombre("charmander");
-        otroBicho.setId(34);
-        otroBicho.setVictorias(3);
-        otroBicho.setDuenio(unEntrenadorAIndexar);
+        otroBicho.setId(25);
+        otroBicho.setVictorias(5);
+        otroBicho.setDuenio(otroEntrenadorAIndexar);
         otroBicho.setEspecie(unaEspecie);
         otroBicho.setEnergia(1500);
         otroBicho.setFechaDeCaptura(Timestamp.valueOf(LocalDateTime.of(1992, 12, 11, 23, 22, 2)));
+
+
+        Bicho otroBichoMas = new Bicho();
+        otroBichoMas.setNombre("rojo");
+        otroBichoMas.setId(26);
+        otroBichoMas.setVictorias(10);
+        otroBichoMas.setDuenio(otroEntrenadorMasAIndexar);
+        otroBichoMas.setEspecie(unaEspecie);
+        otroBichoMas.setEnergia(10);
+        otroBichoMas.setFechaDeCaptura(Timestamp.valueOf(LocalDateTime.of(1992, 12, 11, 23, 22, 2)));
 
         bichos = new ArrayList<Bicho>();
         bichos.add(unBicho);
@@ -118,6 +128,8 @@ public class BusquedaServiceImplementacionTest {
         this.bootstraper.crearDatos();
         return null;});
         this.elasticSearchDAOBicho.indexar(unBicho);
+        this.elasticSearchDAOBicho.indexar(otroBicho);
+        this.elasticSearchDAOBicho.indexar(otroBichoMas);
         this.elasticSearchDAOSUTEntrenador.indexar(unEntrenadorAIndexar);
         this.elasticSearchDAOSUTEntrenador.indexar(otroEntrenadorAIndexar);
         this.elasticSearchDAOSUTEntrenador.indexar(otroEntrenadorMasAIndexar);
@@ -149,7 +161,7 @@ public class BusquedaServiceImplementacionTest {
     }
 
     @Test
-    public void BuscarPorDuenio(){
+    public void BuscarBichoPorDuenio(){
         List<Bicho> bichos = busquedaServiceImplementacion.BuscarPorDuenio("Marcelo");
 
         assertEquals(bichos.size(),1);
@@ -157,8 +169,24 @@ public class BusquedaServiceImplementacionTest {
     }
 
 
+    @Test
+    public void BuscarEntrenadorPorNivel(){
+        List<Entrenador> entrenadores = busquedaServiceImplementacion.BuscarEntrenadoresPorNivel(10);
 
+        assertEquals(entrenadores.size(),3);
+        assertEquals(entrenadores.get(0).getNombre(),"Marcelo Tinelli");
+        assertEquals(entrenadores.get(1).getNombre(),"Miguel");
+        assertEquals(entrenadores.get(2).getNombre(),"Nestor");
+    }
 
+    @Test
+    public void TopTresVictorias(){
+        List<Bicho> bichos = busquedaServiceImplementacion.TopTres();
+        assertEquals(bichos.size(),3);
+        assertEquals(bichos.get(0).getVictorias(),10);
+        assertEquals(bichos.get(1).getVictorias(),9);
+        assertEquals(bichos.get(2).getVictorias(),8);
+    }
 }
 
 

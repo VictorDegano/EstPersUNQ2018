@@ -12,4 +12,8 @@ public interface BusquedaService
     List<Entrenador> BuscarEntrenadorPorNombre(String nombre);
 
     List<Bicho> BuscarPorDuenio(String nombreDelEntrenador);
+
+    List<Entrenador>BuscarEntrenadoresPorNivel(int nivel);
+
+    List<Bicho>TopTres();
 }
