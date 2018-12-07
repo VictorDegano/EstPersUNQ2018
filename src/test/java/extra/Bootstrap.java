@@ -137,6 +137,41 @@ public class Bootstrap
         entrenador5.setBilletera(60);
         entrenador6.setBilletera(70);
 
+
+
+        /*--- Para testear Elastic*/
+
+        Entrenador unEntrenadorAIndexar = new Entrenador();
+        unEntrenadorAIndexar.setNombre("Marcelo Tinelli");
+
+        Entrenador otroEntrenadorAIndexar = new Entrenador();
+        otroEntrenadorAIndexar.setNombre("Miguel");
+
+        Entrenador otroEntrenadorMasAIndexar = new Entrenador();
+        otroEntrenadorMasAIndexar.setNombre("Nestor");
+
+
+        unEntrenadorAIndexar.setId(30);
+        unEntrenadorAIndexar.setExperiencia(100);
+        unEntrenadorAIndexar.setNivel(nivel10);
+        unEntrenadorAIndexar.setUbicacion(puebloElOrigen);
+        unEntrenadorAIndexar.setBilletera(100);
+
+
+        otroEntrenadorAIndexar.setId(40);
+        otroEntrenadorAIndexar.setExperiencia(300);
+        otroEntrenadorAIndexar.setNivel(nivel10);
+        otroEntrenadorAIndexar.setUbicacion(puebloElOrigen);
+        otroEntrenadorAIndexar.setBilletera(500);
+
+        otroEntrenadorMasAIndexar.setId(50);
+        otroEntrenadorMasAIndexar.setExperiencia(50);
+        otroEntrenadorMasAIndexar.setNivel(nivel10);
+        otroEntrenadorMasAIndexar.setUbicacion(puebloElOrigen);
+        otroEntrenadorMasAIndexar.setBilletera(600);
+
+
+
         /*----------[CREACION DE ESPECIES]----------*/
         Especie red = new Especie();
         red.setNombre("Rojomon");
@@ -308,7 +343,12 @@ public class Bootstrap
         elChupaCabras.setPoder(40);
         vampiron.setCantidadBichos(1);
 
-                        /* Setear  Bichos a Entrenadores */
+        Bicho unBicho = new Bicho(red,"");
+        unBicho.setEnergia(red.getEnergiaInicial());
+        unBicho.setPoder(40);
+        vampiron.setCantidadBichos(2);
+
+        /* Setear  Bichos a Entrenadores */
 
         Campeon campeon = new Campeon();
         campeon.setBichoCampeon(elChupaCabras);
@@ -318,6 +358,9 @@ public class Bootstrap
 
         fortinator.setDuenio(entrenador1);
         entrenador1.getBichosCapturados().add(fortinator);
+
+        unBicho.setDuenio(unEntrenadorAIndexar);
+        unEntrenadorAIndexar.getBichosCapturados().add(unBicho);
 
         dientudo.setDuenio(entrenador2);
         entrenador2.getBichosCapturados().add(dientudo);
@@ -485,6 +528,10 @@ public class Bootstrap
         session.save(campeon);
         session.save(dojo);
         session.save (entrenador6);
+        session.save(unEntrenadorAIndexar);
+        session.save(otroEntrenadorAIndexar);
+        session.save(otroEntrenadorMasAIndexar);
+        session.save(unBicho);
     }
 
     public void limpiarTabla()
