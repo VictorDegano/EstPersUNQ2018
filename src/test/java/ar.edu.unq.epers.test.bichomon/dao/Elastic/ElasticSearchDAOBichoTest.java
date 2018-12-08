@@ -109,8 +109,8 @@ public class ElasticSearchDAOBichoTest
         SearchResponse unaRespuesta = this.elasticSearchDAOSUTBicho.buscarPorDuenio("Pepe");
         //Test(Then)
         assertEquals(2, unaRespuesta.getHits().totalHits);
-        assertEquals("Pepe Empepado Super Fiesta", unaRespuesta.getHits().getAt(0).getSourceAsMap().get("duenio"));
-        assertEquals("Pepe Locura", unaRespuesta.getHits().getAt(1).getSourceAsMap().get("duenio"));
+        assertTrue(unaRespuesta.getHits().getAt(0).getSourceAsMap().get("duenio").toString().contains("Pepe"));
+        assertTrue(unaRespuesta.getHits().getAt(1).getSourceAsMap().get("duenio").toString().contains("Pepe"));
     }
 
     @Test

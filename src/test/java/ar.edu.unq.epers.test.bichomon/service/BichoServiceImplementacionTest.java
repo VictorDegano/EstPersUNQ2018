@@ -142,7 +142,7 @@ public class BichoServiceImplementacionTest {
         setUpBichoCumpleCondicion();
         //Exercise(When)
         //Test(Then)
-        assertTrue(bichoServiceSut.puedeEvolucionar("Pepe Enpepado", 24));
+        assertTrue(bichoServiceSut.puedeEvolucionar("Pepe Enpepado", 27));
     }
 
     @Test(expected = BichoRecuperarException.class)
@@ -161,7 +161,7 @@ public class BichoServiceImplementacionTest {
         setUpBichoSinCondicion();
         //Exercise(When)
         //Test(Then)
-        assertTrue(bichoServiceSut.puedeEvolucionar("Pepe Enpepado", 24));
+        assertTrue(bichoServiceSut.puedeEvolucionar("Pepe Enpepado", 27));
     }
 
     @Test(expected = BichoRecuperarException.class)
@@ -197,8 +197,8 @@ public class BichoServiceImplementacionTest {
         Especie especieNueva;
         setUpBichoCumpleCondicion();
         //Exercise(When)
-        bichoEvolucionado   = bichoServiceSut.evolucionar("Pepe Enpepado", 24);
-        bichoRecuperado     = Runner.runInSession(()-> { return bichoDao.recuperar(24);});
+        bichoEvolucionado   = bichoServiceSut.evolucionar("Pepe Enpepado", 27);
+        bichoRecuperado     = Runner.runInSession(()-> { return bichoDao.recuperar(27);});
         entrenadorRecuperado= Runner.runInSession(()-> { return entrenadorDao.recuperar("Pepe Enpepado");});
         especieVieja        = Runner.runInSession(()-> { return especieDao.recuperar("Lagartomon");});
         especieNueva        = Runner.runInSession(()-> { return especieDao.recuperar("Reptilmon");});
@@ -229,10 +229,10 @@ public class BichoServiceImplementacionTest {
         setUpBichoSinCumplirCondicion();
         //Exercise(When)
         try
-        {   bichoEvolucionado   = bichoServiceSut.evolucionar("Pepe Enpepado", 24); }
+        {   bichoEvolucionado   = bichoServiceSut.evolucionar("Pepe Enpepado", 27); }
         catch (EvolucionException e)
-        {   bichoEvolucionado   = Runner.runInSession(()-> { return bichoDao.recuperar(24);});  }
-        bichoRecuperado     = Runner.runInSession(()-> { return bichoDao.recuperar(24);});
+        {   bichoEvolucionado   = Runner.runInSession(()-> { return bichoDao.recuperar(27);});  }
+        bichoRecuperado     = Runner.runInSession(()-> { return bichoDao.recuperar(27);});
         entrenadorRecuperado= Runner.runInSession(()-> { return entrenadorDao.recuperar("Pepe Enpepado");});
         especieVieja        = Runner.runInSession(()-> { return especieDao.recuperar("Lagartomon");});
         especieNueva        = Runner.runInSession(()-> { return especieDao.recuperar("Reptilmon");});

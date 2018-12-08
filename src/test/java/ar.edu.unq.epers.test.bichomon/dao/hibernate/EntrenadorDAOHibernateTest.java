@@ -209,7 +209,7 @@ public class EntrenadorDAOHibernateTest {
         Dojo unDojoConCampeon   = new Dojo();
         Dojo unDojoConCampeon1  = new Dojo();
         Entrenador pepePepon    = Runner.runInSession(() -> {   return entrenadorDAOSut.recuperar("Pepe Pepon"); });
-        Entrenador elLoquillo    = Runner.runInSession(() -> {   return entrenadorDAOSut.recuperar("El Loquillo"); });
+        Entrenador elLoquillo   = Runner.runInSession(() -> {   return entrenadorDAOSut.recuperar("El Loquillo"); });
         unNuevoCampeon.setFechaInicioDeCampeon(Timestamp.valueOf(LocalDateTime.of(2018,4,20,12,50)));
         unNuevoCampeon.setBichoCampeon(pepePepon.getBichosCapturados().get(0));
         unDojoConCampeon.setNombre("Dojo Champion");
@@ -219,10 +219,13 @@ public class EntrenadorDAOHibernateTest {
         unDojoConCampeon1.setNombre("Dojo Champion Fiesta");
         unDojoConCampeon1.setCampeonActual(unNuevoCampeon1);
         Runner.runInSession(() -> { testService.crearEntidad(unNuevoCampeon);
-                                    testService.crearEntidad(unNuevoCampeon1);
                                     testService.crearEntidad(unDojoConCampeon);
+                                    return null; });
+        Runner.runInSession(() -> { testService.crearEntidad(unNuevoCampeon1);
                                     testService.crearEntidad(unDojoConCampeon1);
                                     return null; });
+
+
         //Exercise(when)
         listaDeCampeones    = Runner.runInSession(() -> {   return entrenadorDAOSut.campeones();});
         //Test(Then)
@@ -262,8 +265,9 @@ public class EntrenadorDAOHibernateTest {
         unDojoConCampeon2.setNombre("Dojo Champion Super Fieta");
         unDojoConCampeon2.setCampeonActual(unNuevoCampeon2);
         Runner.runInSession(() -> { testService.crearEntidad(unNuevoCampeon);
-                                    testService.crearEntidad(unNuevoCampeon1);
                                     testService.crearEntidad(unDojoConCampeon);
+                                    return null; });
+        Runner.runInSession(() -> { testService.crearEntidad(unNuevoCampeon1);
                                     testService.crearEntidad(unDojoConCampeon1);
                                     return null; });
         Runner.runInSession(() -> { testService.crearEntidad(unNuevoCampeon2);

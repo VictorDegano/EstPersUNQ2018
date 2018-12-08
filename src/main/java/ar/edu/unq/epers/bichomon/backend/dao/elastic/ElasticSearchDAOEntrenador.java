@@ -12,12 +12,15 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.SortOrder;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ElasticSearchDAOEntrenador {
@@ -146,5 +149,40 @@ public class ElasticSearchDAOEntrenador {
         client.close();
 
         return respuesta;
+    }
+
+    public List<String> nombresDeEntrenadoresConCiertaExperiencia(int desde , int hasta)
+    {
+        SearchHits aciertos = this.buscarEntrenadoresConCiertaExperiencia(desde, hasta)
+                                  .getHits();
+
+        List<String> nombreDeEntrenadores = new ArrayList<>();
+        aciertos.forEach((x)->{nombreDeEntrenadores.add(x.getSourceAsMap()
+                                                   .get("nombre")
+                                                   .toString());});
+        return nombreDeEntrenadores;
+    }
+
+    public List<String> nombresDeEntrenadoresConCiertoNombre(String nombre)
+    {
+        SearchHits aciertos = this.buscarPorNombre(nombre)
+                                  .getHits();
+
+        List<String> nombreDeEntrenadores = new ArrayList<>();
+        aciertos.forEach((x)->{nombreDeEntrenadores.add(x.getSourceAsMap()
+                                                   .get("nombre")
+                                                   .toString());});
+        return nombreDeEntrenadores;
+    }
+
+    public List<String> nombresDeEntrenadoresConCiertoNivel(int nivel)
+    {
+        SearchHits aciertos = this.buscarEntrenadoresDeNivel(nivel).getHits();
+        List<String> nombreEntrenadores = new ArrayList<>();
+        aciertos.forEach((x)->{nombreEntrenadores.add(x.getSourceAsMap()
+                                                       .get("nombre")
+                                                       .toString());});
+
+        return nombreEntrenadores;
     }
 }

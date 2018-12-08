@@ -11,11 +11,14 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.SortOrder;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ElasticSearchDAOBicho
@@ -112,14 +115,38 @@ public class ElasticSearchDAOBicho
     }
 
     public SearchResponse topTres() {
-        TransportClient client = getClient();
-        SearchResponse respuesta = client.prepareSearch("bichosindex")
-                .setQuery(QueryBuilders.matchQuery("_type","bicho"))
-                .addSort("victorias", SortOrder.DESC)
-                .setSize(3) // retorna solo 3 elementos
-                .get();
+        TransportClient client  = getClient();
+        SearchResponse respuesta= client.prepareSearch("bichosindex")
+                                        .setQuery(QueryBuilders.matchQuery("_type","bicho"))
+                                        .addSort("victorias", SortOrder.DESC)
+                                        .setSize(3) // retorna solo 3 elementos
+                                        .get();
 
         client.close();
         return respuesta;
+    }
+
+    public List<Integer> idsDeBichosConDuenioDeCiertoNombre(String nombre)
+    {
+        SearchHits aciertos         = this.buscarPorDuenio(nombre).getHits();
+
+        List<Integer> idsDeLosBichos= new ArrayList<>();
+        aciertos.forEach((x)->{ idsDeLosBichos.add(Integer.valueOf(x.getSourceAsMap()
+                                                                    .get("modelId")
+                                                                    .toString()));});
+
+        return idsDeLosBichos;
+    }
+
+    public List<Integer> idsDeBichosEnElTopTresDeVictorias()
+    {
+        SearchHits aciertos         = this.topTres().getHits();
+        List<Integer> idDeLosBichos = new ArrayList<>();
+
+        aciertos.forEach((x)->idDeLosBichos.add(Integer.valueOf(x.getSourceAsMap()
+                                                                 .get("modelId")
+                                                                 .toString())));
+
+        return idDeLosBichos;
     }
 }

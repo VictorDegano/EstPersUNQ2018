@@ -7,9 +7,6 @@ import ar.edu.unq.epers.bichomon.backend.dao.elastic.ElasticSearchDAOEntrenador;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.entrenador.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.service.runner.Runner;
-import org.elasticsearch.search.SearchHits;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class BusquedaServiceImplementation implements BusquedaService
@@ -35,15 +32,9 @@ public class BusquedaServiceImplementation implements BusquedaService
     public List<Entrenador> BuscarEntrenadoresPorExperiencia(int desde, int hasta)
     {
         return Runner.runInSession(() -> {
-                        SearchHits aciertos = this.elasticSearchDAOEntrenador.buscarEntrenadoresConCiertaExperiencia(desde, hasta)
-                                                                             .getHits();
-
-                        List<String> nombreDeEntrenadores = new ArrayList<>();
-                        aciertos.forEach((x)->{nombreDeEntrenadores.add(x.getSourceAsMap()
-                                                                         .get("nombre")
-                                                                         .toString());});
-
-                        return entrenadorDAO.recuperarEntrenadores(nombreDeEntrenadores);
+                        return this.entrenadorDAO
+                                   .recuperarEntrenadores(this.elasticSearchDAOEntrenador
+                                                              .nombresDeEntrenadoresConCiertaExperiencia(desde,hasta));
                     });
     }
 
@@ -51,15 +42,9 @@ public class BusquedaServiceImplementation implements BusquedaService
     public List<Entrenador> BuscarEntrenadorPorNombre(String nombre)
     {
         return Runner.runInSession(() -> {
-                        SearchHits aciertos = this.elasticSearchDAOEntrenador.buscarPorNombre(nombre)
-                                                                             .getHits();
-
-                        List<String> nombreDeEntrenadores = new ArrayList<>();
-                        aciertos.forEach((x)->{nombreDeEntrenadores.add(x.getSourceAsMap()
-                                                                         .get("nombre")
-                                                                         .toString());});
-
-                        return entrenadorDAO.recuperarEntrenadores(nombreDeEntrenadores);
+                        return this.entrenadorDAO
+                                   .recuperarEntrenadores(this.elasticSearchDAOEntrenador
+                                                              .nombresDeEntrenadoresConCiertoNombre(nombre));
                     });
     }
 
@@ -67,15 +52,9 @@ public class BusquedaServiceImplementation implements BusquedaService
     public List<Bicho> BuscarPorDuenio(String nombreDelEntrenador)
     {
         return Runner.runInSession(() -> {
-                        SearchHits aciertos = this.elasticSearchDAOBicho.buscarPorDuenio(nombreDelEntrenador)
-                                                                        .getHits();
-
-                        List<Integer> idsDeLosBichos = new ArrayList<>();
-                        aciertos.forEach((x)->{ idsDeLosBichos.add(Integer.valueOf(x.getSourceAsMap()
-                                                                                    .get("modelId")
-                                                                                    .toString()));});
-
-                        return bichoDAO.recuperarBichos(idsDeLosBichos);
+                       return this.bichoDAO
+                                  .recuperarBichos(this.elasticSearchDAOBicho
+                                                       .idsDeBichosConDuenioDeCiertoNombre(nombreDelEntrenador));
                     });
     }
 
@@ -83,21 +62,19 @@ public class BusquedaServiceImplementation implements BusquedaService
     @Override
     public List<Entrenador> BuscarEntrenadoresPorNivel(int nivel){
         return Runner.runInSession(()->{
-            SearchHits aciertos = this.elasticSearchDAOEntrenador.buscarEntrenadoresDeNivel(nivel).getHits();
-            List<String> nombreEntrenadores = new ArrayList<>();
-            aciertos.forEach((x)->{nombreEntrenadores.add(x.getSourceAsMap().get("nombre").toString());});
-            return entrenadorDAO.recuperarEntrenadores(nombreEntrenadores);
-        });
+                        return this.entrenadorDAO
+                                   .recuperarEntrenadores(this.elasticSearchDAOEntrenador
+                                                              .nombresDeEntrenadoresConCiertoNivel(nivel));
+                    });
 
     }
 
     @Override
     public List<Bicho>TopTres(){
         return Runner.runInSession(()->{
-            SearchHits aciertos = this.elasticSearchDAOBicho.topTres().getHits();
-            List<Integer>  idDeLosBichos = new ArrayList<>();
-            aciertos.forEach((x)->idDeLosBichos.add(Integer.valueOf(x.getSourceAsMap().get("modelId").toString())));
-            return bichoDAO.recuperarBichos(idDeLosBichos);
-        });
+                        return this.bichoDAO
+                                   .recuperarBichos(this.elasticSearchDAOBicho
+                                                        .idsDeBichosEnElTopTresDeVictorias());
+                    });
     }
 }
